@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import naeilmolae.global.common.base.BaseEntity;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -28,7 +30,7 @@ public class Member extends BaseEntity {
 
     private String clientId;
 
-    private DateTime birth;
+    private LocalDateTime birth;
 
     private String deviceId;
 
@@ -47,7 +49,7 @@ public class Member extends BaseEntity {
     public Member(
             String name, Gender gender, String profileImage
             , Role role, LoginType loginType, String clientId
-            , DateTime birth, String deviceId) {
+            , LocalDateTime birth, String deviceId) {
         this.name = name;
         this.gender = gender;
         this.profileImage = profileImage;
