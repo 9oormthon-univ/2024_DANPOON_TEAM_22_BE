@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: naeilmolae
+    name: naeilmolae-dev
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
 
