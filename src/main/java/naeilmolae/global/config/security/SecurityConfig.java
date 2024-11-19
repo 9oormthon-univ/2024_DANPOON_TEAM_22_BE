@@ -39,7 +39,6 @@ public class SecurityConfig {
                         .requestMatchers("/s3/**").permitAll()
                         .requestMatchers("/auth/login/**").permitAll()
                         .requestMatchers("/chatgpt/**").permitAll()
-                        .requestMatchers("/h2-console/**", "/h2-console").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
