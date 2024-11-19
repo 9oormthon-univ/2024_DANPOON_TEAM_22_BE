@@ -1,10 +1,7 @@
 package naeilmolae.domain.member.domain;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import naeilmolae.global.common.base.BaseEntity;
 
 @Entity
@@ -16,10 +13,48 @@ public class Member extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private Gender gender;
+
     @Setter
     private String name;
+
+    private String profileImage;
 
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    @Enumerated(EnumType.STRING)
+    private LoginType loginType;
+
+    private String clientId;
+
+    private DateTime birth;
+
+    private String deviceId;
+
+    private String fcmToken;
+
+    // 편의상 DB에 저장, 실제로는 저장하지 않게 해야 함
+    @Setter
+    private String refreshToken;
+
+    @Setter
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "youth_member_info_id") // 외래 키 설정
+    private YouthMemberInfo youthMemberInfo;
+
+    @Builder
+    public Member(
+            String name, Gender gender, String profileImage
+            , Role role, LoginType loginType, String clientId
+            , DateTime birth, String deviceId) {
+        this.name = name;
+        this.gender = gender;
+        this.profileImage = profileImage;
+        this.role = role;
+        this.loginType = loginType;
+        this.clientId = clientId;
+        this.birth = birth;
+        this.deviceId = deviceId;
+    }
 }
