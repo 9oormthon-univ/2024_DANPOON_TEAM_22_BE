@@ -1,7 +1,7 @@
 package naeilmolae.domain.member.service;
 
 import lombok.RequiredArgsConstructor;
-import naeilmolae.domain.member.doman.Member;
+import naeilmolae.domain.member.domain.Member;
 import naeilmolae.domain.member.status.MemberErrorStatus;
 import naeilmolae.domain.member.repository.MemberRepository;
 import naeilmolae.global.common.exception.RestApiException;

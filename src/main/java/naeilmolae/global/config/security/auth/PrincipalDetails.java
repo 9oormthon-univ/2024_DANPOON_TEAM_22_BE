@@ -2,7 +2,7 @@ package naeilmolae.global.config.security.auth;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import naeilmolae.domain.member.doman.Member;
+import naeilmolae.domain.member.domain.Member;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
