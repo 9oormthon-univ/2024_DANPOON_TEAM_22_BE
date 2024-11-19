@@ -1,7 +1,7 @@
 package naeilmolae.global.config.security.auth;
 
 import lombok.RequiredArgsConstructor;
-import naeilmolae.domain.member.doman.Member;
+import naeilmolae.domain.member.domain.Member;
 import naeilmolae.domain.member.service.MemberService;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

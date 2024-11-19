@@ -1,4 +1,4 @@
-package naeilmolae.domain.member.doman;
+package naeilmolae.domain.member.domain;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
