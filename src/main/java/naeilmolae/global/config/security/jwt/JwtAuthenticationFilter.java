@@ -8,7 +8,7 @@ import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import naeilmolae.domain.member.doman.Member;
+import naeilmolae.domain.member.domain.Member;
 import naeilmolae.domain.member.service.MemberService;
 import naeilmolae.global.config.security.auth.PrincipalDetails;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
