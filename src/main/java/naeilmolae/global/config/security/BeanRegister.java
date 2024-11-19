@@ -2,6 +2,7 @@ package naeilmolae.global.config.security;
 
 import lombok.RequiredArgsConstructor;
 import naeilmolae.domain.member.service.MemberService;
+import naeilmolae.domain.member.service.MemberServiceImpl;
 import naeilmolae.global.config.security.auth.CustomAccessDeniedHandler;
 import naeilmolae.global.config.security.jwt.JwtAuthenticationFilter;
 import naeilmolae.global.config.security.jwt.JwtExceptionFilter;
