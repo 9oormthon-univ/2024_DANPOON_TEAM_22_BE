@@ -7,6 +7,7 @@ import naeilmolae.domain.member.domain.Member;
 import naeilmolae.domain.member.dto.response.MemberGenerateTokenResponseDto;
 import naeilmolae.domain.member.dto.response.MemberIdResponseDto;
 import naeilmolae.domain.member.dto.response.MemberLoginResponseDto;
+import naeilmolae.domain.member.mapper.MemberMapper;
 import naeilmolae.domain.member.repository.MemberRepository;
 import naeilmolae.global.common.exception.RestApiException;
 import naeilmolae.global.common.exception.code.status.AuthErrorStatus;
@@ -31,6 +32,8 @@ public class MemberAuthServiceImpl implements MemberAuthService {
     public final KakaoMemberClient kakaoMemberClient;
 
     public final JwtProvider jwtTokenProvider;
+
+    public final MemberMapper memberMapper;
 
     // 소셜 로그인을 수행하는 함수
     @Override
