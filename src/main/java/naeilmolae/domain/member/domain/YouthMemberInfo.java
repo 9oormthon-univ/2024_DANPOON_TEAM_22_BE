@@ -8,6 +8,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import naeilmolae.domain.member.dto.YouthMemberInfoDto;
 import naeilmolae.global.common.base.BaseEntity;
 
 import java.time.LocalDateTime;
@@ -39,5 +40,13 @@ public class YouthMemberInfo extends BaseEntity {
         this.breakfast = breakfast;
         this.lunch = lunch;
         this.dinner = dinner;
+    }
+
+    public void update(YouthMemberInfoDto youthMemberInfoDto) {
+        this.wakeUpTime = youthMemberInfoDto.getWakeUpTime();
+        this.sleepTime = youthMemberInfoDto.getSleepTime();
+        this.breakfast = youthMemberInfoDto.getBreakfast();
+        this.lunch = youthMemberInfoDto.getLunch();
+        this.dinner = youthMemberInfoDto.getDinner();
     }
 }

@@ -2,6 +2,7 @@ package naeilmolae.domain.member.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import naeilmolae.domain.member.dto.request.MemberInfoRequestDto;
 import naeilmolae.global.common.base.BaseEntity;
 
 import java.time.LocalDateTime;
@@ -58,5 +59,13 @@ public class Member extends BaseEntity {
         this.clientId = clientId;
         this.birth = birth;
         this.deviceId = deviceId;
+    }
+
+    public void updateMemberInfo (MemberInfoRequestDto request) {
+        this.name = request.name();
+        this.gender = request.gender();
+        this.profileImage = request.profileImage();
+        this.role = request.role();
+        this.birth = request.birth();
     }
 }

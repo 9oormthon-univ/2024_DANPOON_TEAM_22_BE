@@ -1,4 +1,4 @@
-package naeilmolae.domain.member.dto.response;
+package naeilmolae.domain.member.dto.client;
 
 import lombok.Getter;
 
