@@ -1,6 +1,6 @@
 package naeilmolae.domain.member.client;
 
-import naeilmolae.domain.member.dto.response.KakaoResponse;
+import naeilmolae.domain.member.dto.client.KakaoResponse;
 import naeilmolae.global.common.exception.RestApiException;
 import naeilmolae.global.common.exception.code.status.AuthErrorStatus;
 import org.springframework.stereotype.Component;
