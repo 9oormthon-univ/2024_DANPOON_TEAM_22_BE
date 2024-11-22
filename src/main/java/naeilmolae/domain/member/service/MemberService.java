@@ -1,9 +1,11 @@
 package naeilmolae.domain.member.service;
 
 import naeilmolae.domain.member.domain.Member;
+import naeilmolae.domain.member.domain.Role;
 import naeilmolae.domain.member.dto.request.MemberInfoRequestDto;
 import naeilmolae.domain.member.dto.response.MemberIdResponseDto;
 import naeilmolae.domain.member.dto.response.MemberInfoResponseDto;
+import naeilmolae.domain.member.dto.response.MemberNumResponseDto;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 public interface MemberService {
@@ -20,4 +22,6 @@ public interface MemberService {
     MemberIdResponseDto updateMemberInfo(Member member, MemberInfoRequestDto request);
     // 회원 정보 조회
     MemberInfoResponseDto getMemberInfo(Member member);
+    // 회원 수 조회
+    MemberNumResponseDto getMemberNum(Role role);
 }

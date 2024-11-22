@@ -7,6 +7,7 @@ import naeilmolae.domain.member.domain.YouthMemberInfo;
 import naeilmolae.domain.member.dto.request.MemberInfoRequestDto;
 import naeilmolae.domain.member.dto.response.MemberIdResponseDto;
 import naeilmolae.domain.member.dto.response.MemberInfoResponseDto;
+import naeilmolae.domain.member.dto.response.MemberNumResponseDto;
 import naeilmolae.domain.member.mapper.MemberMapper;
 import naeilmolae.domain.member.repository.YouthMemberInfoRepository;
 import naeilmolae.domain.member.status.MemberErrorStatus;
@@ -117,5 +118,10 @@ public class MemberServiceImpl implements MemberService {
         }
         // 청년이 아닌 경우(조력자)
         return MemberMapper.toMemberInfoResponseDto(loginMember);
+    }
+
+    @Override
+    public MemberNumResponseDto getMemberNum(Role role) {
+        return new MemberNumResponseDto(memberRepository.countAllByRole(role));
     }
 }
