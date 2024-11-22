@@ -7,9 +7,11 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import naeilmolae.domain.member.domain.Member;
+import naeilmolae.domain.member.domain.Role;
 import naeilmolae.domain.member.dto.request.MemberInfoRequestDto;
 import naeilmolae.domain.member.dto.response.MemberIdResponseDto;
 import naeilmolae.domain.member.dto.response.MemberInfoResponseDto;
+import naeilmolae.domain.member.dto.response.MemberNumResponseDto;
 import naeilmolae.domain.member.service.MemberService;
 import naeilmolae.global.common.base.BaseResponse;
 import naeilmolae.global.config.security.auth.CurrentMember;
@@ -59,5 +61,23 @@ public class MemberController {
     @GetMapping
     public BaseResponse<MemberInfoResponseDto> getMemberIfo(@CurrentMember Member member) {
         return BaseResponse.onSuccess(memberService.getMemberInfo(member));
+    }
+
+    @Operation(summary = "청년 회원 수 조회 API(메인)", description = "청년 회원 수 조회하는 API입니다.")
+    @ApiResponses( value = {
+            @ApiResponse(responseCode = "COMMON200", description = "성공")
+    })
+    @GetMapping("/youth-num")
+    public BaseResponse<MemberNumResponseDto> getYouthMemberNum(@CurrentMember Member member) {
+        return BaseResponse.onSuccess(memberService.getMemberNum(Role.YOUTH));
+    }
+
+    @Operation(summary = "조력자 회원 수 조회 API(메인)", description = "조력자 회원 수 조회하는 API입니다.")
+    @ApiResponses( value = {
+            @ApiResponse(responseCode = "COMMON200", description = "성공")
+    })
+    @GetMapping("/helper-num")
+    public BaseResponse<MemberNumResponseDto> getHelperMemberNum(@CurrentMember Member member) {
+        return BaseResponse.onSuccess(memberService.getMemberNum(Role.HELPER));
     }
 }
