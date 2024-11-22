@@ -5,10 +5,12 @@ import naeilmolae.domain.alarm.domain.Alarm;
 import naeilmolae.domain.alarm.service.AlarmService;
 import naeilmolae.domain.member.domain.Member;
 import naeilmolae.domain.member.service.MemberService;
+import naeilmolae.domain.voicefile.domain.AnalysisResult;
 import naeilmolae.domain.voicefile.domain.AnalysisResultStatus;
 import naeilmolae.domain.voicefile.domain.VoiceFile;
 import naeilmolae.domain.voicefile.dto.response.AnalysisResponseDto;
 import naeilmolae.domain.voicefile.evnets.VoiceFileAnalysisEvent;
+import naeilmolae.domain.voicefile.repository.AnalysisResultRepository;
 import naeilmolae.domain.voicefile.repository.VoiceFileRepository;
 import naeilmolae.global.common.exception.RestApiException;
 import naeilmolae.global.common.exception.code.status.AnalysisErrorStatus;
@@ -28,6 +30,8 @@ public class VoiceFileService {
     private final AlarmService alarmService;
     private final VoiceFileRepository voiceFileRepository;
     private final ApplicationEventPublisher publisher;
+    private final AnalysisResultRepository analysisResultRepository;
+
 
     // 음성 파일 저장
     @Transactional
@@ -93,6 +97,24 @@ public class VoiceFileService {
     public VoiceFile findById(Long fileId) {
         return voiceFileRepository.findById(fileId)
                 .orElseThrow(() -> new RestApiException(GlobalErrorStatus._NOT_FOUND));
+    }
+
+    // 분석 결과 조회
+    public AnalysisResult getAnalysisResultRepository(Long voiceFileId) {
+        AnalysisResult analysisResult = analysisResultRepository.findByVoiceFileId(voiceFileId)
+                .orElseThrow(() -> new RestApiException(GlobalErrorStatus._NOT_FOUND));
+        switch (analysisResult.getAnalysisResultStatus()) {
+            case INCLUDE_INAPPROPRIATE_CONTENT:
+                throw new RestApiException(AnalysisErrorStatus._INCLUDE_INAPPROPRIATE_CONTENT);
+            case NOT_READ_VOICE:
+                throw new RestApiException(AnalysisErrorStatus._NOT_READ_VOICE);
+            case ERROR:
+                throw new RestApiException(AnalysisErrorStatus._ERROR);
+            case SUCCESS:
+                return analysisResult;
+            default:
+                throw new RestApiException(GlobalErrorStatus._INTERNAL_SERVER_ERROR);
+        }
     }
 
 }
