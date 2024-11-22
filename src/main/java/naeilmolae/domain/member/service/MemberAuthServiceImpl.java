@@ -93,7 +93,10 @@ public class MemberAuthServiceImpl implements MemberAuthService {
         }
         // 2. 있으면 : 새로운 토큰 반환
         boolean isServiceMember = getMember.get().getName() != null;
-        return getNewToken(getMember.get(), isServiceMember);
+
+        MemberLoginResponseDto memberLoginResponseDto = getNewToken(getMember.get(), isServiceMember, getMember.get().getRole());
+
+        return memberLoginResponseDto;
     }
 
     public MemberLoginResponseDto loginByAnoymous(final String accessToken) {
@@ -104,7 +107,7 @@ public class MemberAuthServiceImpl implements MemberAuthService {
         }
         // 2. 있으면 : 새로운 토큰 반환
         boolean isServiceMember = getMember.get().getName() != null;
-        return getNewToken(getMember.get(), isServiceMember);
+        return getNewToken(getMember.get(), isServiceMember, getMember.get().getRole());
     }
 
     private MemberLoginResponseDto saveNewMember(String clientId, LoginType loginType) {
@@ -112,15 +115,16 @@ public class MemberAuthServiceImpl implements MemberAuthService {
         member.changeRole(Role.GUEST);
         Member newMember =  memberService.saveEntity(member);
 
-        return getNewToken(newMember, false);
+        return getNewToken(newMember, false, Role.GUEST);
     }
 
-    private MemberLoginResponseDto getNewToken(Member member, boolean isServiceMember) {
+    //todo: 분리 분리 롤 분리
+    private MemberLoginResponseDto getNewToken(Member member, boolean isServiceMember, Role role) {
         // jwt 토큰 생성
         TokenInfo tokenInfo = jwtTokenProvider.generateToken(member.getId().toString(), member.getRole().toString());
         // refreshToken 디비에 저장
         refreshTokenService.saveRefreshToken(tokenInfo.refreshToken(), member);
 
-        return MemberMapper.toLoginMember(member, tokenInfo, isServiceMember);
+        return MemberMapper.toLoginMember(member, tokenInfo, isServiceMember, role);
     }
 }
