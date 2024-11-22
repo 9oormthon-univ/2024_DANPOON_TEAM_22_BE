@@ -27,6 +27,7 @@ public class VoiceFileService {
     private final MemberService memberService;
     private final AlarmService alarmService;
     private final VoiceFileRepository voiceFileRepository;
+    private final ApplicationEventPublisher publisher;
 
     // 음성 파일 저장
     @Transactional
@@ -57,6 +58,24 @@ public class VoiceFileService {
 
         voiceFile.saveResult(AnalysisResultStatus.fromString(analysisResponseDto.analysisResultStatus()),
                 analysisResponseDto.sttContent());
+    }
+
+    // 음성 파일에 대해서 분석 요청
+    public Long requestAnalysis(Long voiceFileId) {
+        // 음성 파일 조회
+        VoiceFile voiceFile = voiceFileRepository.findById(voiceFileId)
+                .orElseThrow(() -> new RestApiException(GlobalErrorStatus._NOT_FOUND));
+
+        if (voiceFile.getFileUrl() == null) {
+            throw new RestApiException(GlobalErrorStatus._BAD_REQUEST);
+        }
+
+        // 분석 요청 이벤트 발행
+        publisher.publishEvent(new VoiceFileAnalysisEvent(voiceFile.getId(),
+                voiceFile.getFileUrl(),
+                voiceFile.getContent()));
+
+        return voiceFile.getId();
     }
 
 }
