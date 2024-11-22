@@ -49,5 +49,14 @@ public class VoiceFileService {
 //        }
     }
 
+    // 분석 결과 저장
+    @Transactional
+    public void saveResult(Long voiceFileId, AnalysisResponseDto analysisResponseDto) {
+        VoiceFile voiceFile = voiceFileRepository.findById(voiceFileId)
+                .orElseThrow(() -> new RestApiException(AnalysisErrorStatus._CANNOT_SAVE_ANALYSIS_RESULT));
+
+        voiceFile.saveResult(AnalysisResultStatus.fromString(analysisResponseDto.analysisResultStatus()),
+                analysisResponseDto.sttContent());
+    }
 
 }
