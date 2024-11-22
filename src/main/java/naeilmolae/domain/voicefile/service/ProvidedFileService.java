@@ -8,8 +8,12 @@ import naeilmolae.domain.voicefile.domain.VoiceFile;
 import naeilmolae.domain.voicefile.repository.ProvidedFileRepository;
 import naeilmolae.global.common.exception.RestApiException;
 import naeilmolae.global.common.exception.code.status.GlobalErrorStatus;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -32,6 +36,15 @@ public class ProvidedFileService {
         ProvidedFile providedFile = new ProvidedFile(voiceFile, consumer);
 
         return providedFileRepository.save(providedFile);
+    }
+
+    // 봉사자용 편지 조회
+    public Page<ProvidedFile> getProvidedFiles(Long memberId, Optional<Long> parentCategoryId, Pageable pageable) {
+        if (parentCategoryId.isEmpty()) {
+            return providedFileRepository.findByMemberId(memberId, pageable);
+        } else {
+            return providedFileRepository.findByMemberIdAndAlarmId(memberId, parentCategoryId.get(), pageable);
+        }
     }
 
 }
