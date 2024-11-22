@@ -48,4 +48,13 @@ public class VoiceFileController {
         // 성공 시, 파일의 S3 URL을 응답으로 반환
         return BaseResponse.onSuccess(fileUrl); // TODO 응답
     }
+
+    @Operation(summary = "[VALID] [봉사자] 녹음 5단계: 분석 결과 조회", description = "제공한 파일의 분석 결과를 조회합니다. N초마다 polling하여 분석 결과를 받아옵니다.")
+    @PostMapping("/analysis/{voiceFileId}")
+    public BaseResponse<String> analysisVoiceFile(@CurrentMember Member member,
+                                                  @PathVariable Long voiceFileId) {
+        voiceFileService.verifyUserFile(member.getId(), voiceFileId);
+        voiceFileService.getAnalysisResultRepository(voiceFileId);
+        return BaseResponse.onSuccess("OK");
+    }
 }
