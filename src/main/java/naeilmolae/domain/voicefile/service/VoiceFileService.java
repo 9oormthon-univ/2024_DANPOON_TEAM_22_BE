@@ -78,4 +78,10 @@ public class VoiceFileService {
         return voiceFile.getId();
     }
 
+    // 음성 파일 조회
+    public VoiceFile findById(Long fileId) {
+        return voiceFileRepository.findById(fileId)
+                .orElseThrow(() -> new RestApiException(GlobalErrorStatus._NOT_FOUND));
+    }
+
 }
