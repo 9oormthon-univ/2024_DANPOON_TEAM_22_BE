@@ -18,7 +18,7 @@ public class KakaoMemberClient {
                 .build();
     }
 
-    public String getkakaoClientID(final String accessToken) {
+    public String getClientId(final String accessToken) {
         KakaoResponse response = webClient.get()
                 .header("Authorization", "Bearer " + accessToken)
                 .retrieve()
