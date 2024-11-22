@@ -1,8 +1,9 @@
 package naeilmolae.domain.chatgpt.service;
 
 import lombok.RequiredArgsConstructor;
-import naeilmolae.domain.chatgpt.dto.request.ChatGptRequest;
-import naeilmolae.domain.chatgpt.dto.response.ChatGptResponse;
+import naeilmolae.global.infrastructure.ai.OpenAiApiClient;
+import naeilmolae.global.infrastructure.ai.dto.request.ChatGptRequest;
+import naeilmolae.global.infrastructure.ai.dto.response.ChatGptResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -12,38 +13,37 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ChatGptService {
 
-    private final WebClient webClient;
+    private final OpenAiApiClient openAiApiClient;
+
+    private final String model = "gpt-4o-mini";
+
+    private final String systemRole = "system";
+    private final String systemPrompt = "You are an assistant that checks whether a sentence contains offensive " +
+            "language. Respond only with 'true' if the sentence contains offensive language and 'false' otherwise.";
+
+    private final String userRole = "user";
+    private final String userPrompt = "Is this sentence offensive: ";
+
+    private final int maxTokens = 10;
+    private final double temperature = 0.0;
+
 
     public Boolean checkForOffensiveLanguage(String sentence) {
-        // 요청 데이터 생성
-        ChatGptRequest request = new ChatGptRequest(
-                "gpt-4o-mini",
+
+        ChatGptResponse response = openAiApiClient.sendRequestToModel(
+                model,
                 List.of(
-                        // 시스템 메시지
-                        // 문장이 욕설을 포함하는지 확인하는 도우미
-                        // 문자엥 부적절한 언어가 포함되어 있는지 확인하고, 포함되어 있다면 'true'를, 그렇지 않다면 'false'를 응답하세요.
-                        // todo: 스크립트 잘 작성
-                        new ChatGptRequest.ChatGptMessage("system",
-                                "You are an assistant that checks whether a sentence contains offensive " +
-                                        "language. Respond only with 'true' if the sentence contains offensive language and 'false' otherwise."),
-                        new ChatGptRequest.ChatGptMessage("user", "Is this sentence offensive: '" + sentence + "'?")
+                        new ChatGptRequest.ChatGptMessage(systemRole, systemPrompt),
+                        new ChatGptRequest.ChatGptMessage(userRole, userPrompt + "'" + sentence + "'?")
                 ),
-                10,
-                0.0
+                maxTokens,
+                temperature
         );
 
-        // API 호출
-        ChatGptResponse response =  webClient.post()
-                .uri("/chat/completions")
-                .bodyValue(request)
-                .retrieve()
-                .bodyToMono(ChatGptResponse.class)
-                .block();
-
-        // 응답 반환
-        // 응답에서 "true"(부적절) 또는 "false"(적절) 추출
         String content = response.getChoices().get(0).getMessage().getContent().trim().toLowerCase();
         return "true".equals(content);
+
+
     }
 }
 
