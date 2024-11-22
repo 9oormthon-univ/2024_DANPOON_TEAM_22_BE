@@ -1,22 +1,23 @@
 package naeilmolae.domain.member.service;
 
-import lombok.RequiredArgsConstructor;
-import naeilmolae.domain.member.doman.Member;
-import naeilmolae.domain.member.status.MemberErrorStatus;
-import naeilmolae.domain.member.repository.MemberRepository;
-import naeilmolae.global.common.exception.RestApiException;
+import naeilmolae.domain.member.domain.Member;
+import naeilmolae.domain.member.dto.request.MemberInfoRequestDto;
+import naeilmolae.domain.member.dto.response.MemberIdResponseDto;
+import naeilmolae.domain.member.dto.response.MemberInfoResponseDto;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-@Service
-@Transactional(readOnly = true)
-@RequiredArgsConstructor
-public class MemberService {
-    private final MemberRepository memberRepository;
+public interface MemberService {
 
-    public Member findById(Long id) throws UsernameNotFoundException {
-        return memberRepository.findById(id)
-                .orElseThrow(() -> new RestApiException(MemberErrorStatus.EMPTY_MEMBER));
-    }
+    Member findById(Long id) throws UsernameNotFoundException;
+
+    // 회원 저장
+    Member saveEntity(Member member);
+    // 회원가입
+    MemberIdResponseDto signUp(Member member, MemberInfoRequestDto request);
+    // 회원 탈퇴
+    MemberIdResponseDto withdrawal(Member member);
+    // 회원 정보 수정
+    MemberIdResponseDto updateMemberInfo(Member member, MemberInfoRequestDto request);
+    // 회원 정보 조회
+    MemberInfoResponseDto getMemberInfo(Member member);
 }
