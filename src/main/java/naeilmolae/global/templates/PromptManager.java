@@ -15,7 +15,6 @@ public class PromptManager {
         return template.fillTemplate(request, responseFormat);
     }
 
-    //todo: 상황 별 validation이 안되는 듯
     public String createCheckForOffensiveLanguagePrompt( String situation ) {
         PromptTemplate template = new PromptTemplate();
         return template.fillTemplate(
