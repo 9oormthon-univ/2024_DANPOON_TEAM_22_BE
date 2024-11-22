@@ -117,4 +117,10 @@ public class VoiceFileService {
         }
     }
 
+    // 음성 파일이 샤용자의 것이 맞는지
+    public VoiceFile verifyUserFile(Long memberId, Long fileId) {
+        return voiceFileRepository.findByMemberIdAndId(memberId, fileId)
+                .orElseThrow(() -> new RestApiException(GlobalErrorStatus._BAD_REQUEST));
+    }
+
 }
