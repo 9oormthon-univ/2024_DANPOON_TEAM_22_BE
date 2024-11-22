@@ -35,5 +35,6 @@ public interface ProvidedFileRepository extends JpaRepository<ProvidedFile, Long
             "where p.voiceFile.member.id = :memberId")
     Page<ProvidedFile> findByMemberId(Long memberId, Pageable pageable);
 
-
+    @Query("select p from ProvidedFile p join fetch p.consumer where p.consumer.id = :consumerId and p.id = :providedFileId")
+    Optional<ProvidedFile> findByConsumerId(Long consumerId, Long providedFileId);
 }

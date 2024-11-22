@@ -47,4 +47,18 @@ public class ProvidedFileService {
         }
     }
 
+    @Transactional
+    public boolean likeProvidedFile(Long consumerId, Long providedFileId, String message) {
+        ProvidedFile providedFile = providedFileRepository.findByConsumerId(consumerId,providedFileId)
+                .orElseThrow(() -> new RestApiException(GlobalErrorStatus._BAD_REQUEST));
+        return providedFile.addThanksMessage(message);
+    }
+
+    @Transactional
+    public boolean bookmarkProvidedFile(Long consumerId, Long providedFileId) {
+        ProvidedFile providedFile = providedFileRepository.findByConsumerId(consumerId,providedFileId)
+                .orElseThrow(() -> new RestApiException(GlobalErrorStatus._BAD_REQUEST));
+        return providedFile.setConsumerSaved();
+    }
+
 }
