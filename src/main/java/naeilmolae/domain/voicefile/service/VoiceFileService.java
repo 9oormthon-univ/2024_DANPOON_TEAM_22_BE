@@ -60,6 +60,17 @@ public class VoiceFileService {
                 analysisResponseDto.sttContent());
     }
 
+    // 음성 파일 URL 저장
+    @Transactional
+    public boolean saveVoiceFileUrl(Long voiceFileId, String fileUrl) {
+        VoiceFile voiceFile = voiceFileRepository.findById(voiceFileId)
+                .orElseThrow(() -> new RestApiException(VoiceFileErrorStatus._NO_SUCH_FILE));
+        voiceFile.saveFileUrl(fileUrl);
+        this.requestAnalysis(voiceFileId);
+
+        return true;
+    }
+
     // 음성 파일에 대해서 분석 요청
     public Long requestAnalysis(Long voiceFileId) {
         // 음성 파일 조회
