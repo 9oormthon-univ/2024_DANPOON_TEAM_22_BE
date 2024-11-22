@@ -17,7 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "멤버 API", description = "회원 가입, 회원 정보 조회/수정 등 회원 관리 관련 작업 담당 API")
-@Controller
+@RestController
 @RequestMapping("/api/v1/member")
 @RequiredArgsConstructor
 public class MemberController {
