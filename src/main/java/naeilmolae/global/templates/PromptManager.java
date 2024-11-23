@@ -15,22 +15,19 @@ public class PromptManager {
         return template.fillTemplate(request, responseFormat);
     }
 
-    public String createCheckForOffensiveLanguagePrompt( String situation ) {
+    public String createCheckForOffensiveLanguagePrompt( String situation, String statement ) {
         PromptTemplate template = new PromptTemplate();
         return template.fillTemplate(
                 """
-                You are an assistant that evaluates whether a given script is appropriate for a specific situation. 
-                Consider the following factors:
-                - Relevance: Does the script directly address the given situation?
-                - Appropriateness: Does the script avoid offensive, negative, or harmful language?
-                - Clarity: Is the script clear and easy to understand?
-        
-                ### Situation
-                \'%s\' 라는 스크립트를 작성하는 상황
-                """.formatted(situation),
+                ## 명령 
+                주어진 문장이 특정 상황에 처한 사람에게 적절한 응원이나 표현인지 판단해 주고, 부적절하다면 문장 작성자에게 왜 부적절한지 높임말로 reason에 간결히 작성해줘. reason 이 없어도 null로 채워줘
+                ## 상황
+                \'%s\' 
+                ## 문장
+                \'%s\' 
+                """.formatted(situation, statement),
                 """
-                Respond with 'true' if the script is appropriate for the situation based on the above criteria. 
-                Respond with 'false' otherwise.
+                {"is_proper":<boolean>, "reason": <부적절한 이유>}
                 """
         );
     }

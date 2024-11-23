@@ -3,6 +3,8 @@ package naeilmolae.domain.voicefile.service;
 import lombok.RequiredArgsConstructor;
 import naeilmolae.domain.alarm.domain.Alarm;
 import naeilmolae.domain.alarm.service.AlarmService;
+import naeilmolae.domain.chatgpt.dto.ScriptValidationResponseDto;
+import naeilmolae.domain.chatgpt.service.ChatGptService;
 import naeilmolae.domain.member.domain.Member;
 import naeilmolae.domain.member.service.MemberService;
 import naeilmolae.domain.voicefile.domain.AnalysisResult;
@@ -31,16 +33,19 @@ public class VoiceFileService {
     private final VoiceFileRepository voiceFileRepository;
     private final ApplicationEventPublisher publisher;
     private final AnalysisResultRepository analysisResultRepository;
+    private final ChatGptService chatGptService;
 
 
     // 음성 파일 저장
     @Transactional
     public VoiceFile saveContent(Long memberId, Long alarmId, String content) {
         // 스크립트 검증
-        verifyContent(content);
+        Alarm alarm = alarmService.findById(alarmId);
+        String title = alarm.getAlarmCategory().getTitle();
+        verifyContent(title, content);
 
         Member member = memberService.findById(memberId);
-        Alarm alarm = alarmService.findById(alarmId);
+
 
         VoiceFile voiceFile = new VoiceFile(member, alarm, content);
 
@@ -48,10 +53,12 @@ public class VoiceFileService {
     }
 
     // 음성 파일 스크립트 검증 (gpt 사용)
-    private void verifyContent(String content) {
-//        if(chatGptService.checkForOffensiveLanguage(content)){
-//            throw new RestApiException(AnalysisErrorStatus._INCLUDE_INAPPROPRIATE_CONTENT);
-//        }
+    private void verifyContent(String title, String content) {
+        ScriptValidationResponseDto checkScriptRelevancePrompt
+                = chatGptService.getCheckScriptRelevancePrompt(title, content);
+        if (!checkScriptRelevancePrompt.isProper()) {
+            throw new RestApiException(AnalysisErrorStatus._DENIED_BY_GPT); // TODO DNEY 이유도 제공해야함
+        }
     }
 
     // 분석 결과 저장
@@ -102,7 +109,7 @@ public class VoiceFileService {
     // 분석 결과 조회
     public AnalysisResult getAnalysisResultRepository(Long voiceFileId) {
         AnalysisResult analysisResult = analysisResultRepository.findByVoiceFileId(voiceFileId)
-                .orElseThrow(() -> new RestApiException(GlobalErrorStatus._NOT_FOUND));
+                .orElseThrow(() -> new RestApiException(AnalysisErrorStatus._NOT_YET));
         switch (analysisResult.getAnalysisResultStatus()) {
             case INCLUDE_INAPPROPRIATE_CONTENT:
                 throw new RestApiException(AnalysisErrorStatus._INCLUDE_INAPPROPRIATE_CONTENT);
