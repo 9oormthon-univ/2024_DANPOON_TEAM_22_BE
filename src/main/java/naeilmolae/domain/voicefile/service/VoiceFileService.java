@@ -131,10 +131,10 @@ public class VoiceFileService {
     }
 
     // 알람 Id로 사용자에게 제공되지 않은 데이터 조회
-    public VoiceFile getAvailableDataList(Long memberId, Long parentCategoryId) {
+    public VoiceFile getAvailableDataList(Long memberId, Long alarmId) {
         // TODO 청년만 통과할 수 있게
 
-        return voiceFileRepository.findUnprovided(memberId, parentCategoryId, LocalDateTime.now().minusWeeks(1))
+        return voiceFileRepository.findUnprovided(memberId, alarmId, LocalDateTime.now().minusWeeks(1))
                 .stream()
                 .findFirst()
                 .orElseThrow(() -> new RestApiException(VoiceFileErrorStatus._LACK_OF_MESSAGE)); // 제공할 수 있는 데이터가 없는 경우
