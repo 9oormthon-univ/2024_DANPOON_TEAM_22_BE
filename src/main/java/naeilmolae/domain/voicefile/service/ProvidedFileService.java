@@ -66,7 +66,6 @@ public class ProvidedFileService {
         return providedFile.setConsumerSaved();
     }
 
-    // TODO 청년의 반응, 이모티콘, 누적 청취수 추가해야함
     // 청년의 반응 보여주기
     public VoiceFileReactionSummaryResponseDto getTotalReaction(Long memberId) {
 
