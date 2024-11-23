@@ -1,12 +1,15 @@
 package naeilmolae.domain.alarm.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import naeilmolae.domain.alarm.domain.Alarm;
 import naeilmolae.domain.alarm.domain.CategoryType;
 import naeilmolae.domain.alarm.dto.AlarmCategoryCount;
+import naeilmolae.domain.alarm.dto.response.AlarmCategoryResponseDto;
 import naeilmolae.domain.alarm.dto.response.AlarmCategoryResponseDtoWithChildren;
 import naeilmolae.domain.alarm.dto.response.AlarmResponseDto;
 import naeilmolae.domain.alarm.service.AlarmService;
@@ -74,5 +77,20 @@ public class AlarmController {
         Long id = recommendedAlarm.getId();
         AlarmResponseDto alarmResponseDto = new AlarmResponseDto(id, title);
         return BaseResponse.onSuccess(alarmResponseDto);
+    }
+
+    @Operation(summary = "[VALID] [봉사자] 동기부여 1단계: 북두칠성 조회 API", description = "사용자의 북두칠성을 조회합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "COMMON200",
+                    description = "조회 성공",
+                    content = @Content(schema = @Schema(implementation = AlarmCategoryResponseDto.class)))
+    })
+    @GetMapping("/this-week")
+    public BaseResponse<List<AlarmCategoryResponseDto>> getDistinctAlarmTypesThisWeek(@CurrentMember Member member) {
+        List<AlarmCategoryResponseDto> collect = alarmViewService.findDistinctCreatedCategories(member.getId())
+                .stream()
+                .map(AlarmCategoryResponseDto::new)
+                .collect(Collectors.toList());
+        return BaseResponse.onSuccess(collect);
     }
 }
