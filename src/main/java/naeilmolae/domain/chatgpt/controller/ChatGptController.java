@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "ChatGpt API", description = "소셜 로그인, 토큰 발급/재발급, 로그아웃 등 인증 관련 작업을 수행하는 API")
+@Tag(name = "ChatGpt API", description = "chatGpt 테스트용 API")
 @Deprecated
 @RestController
 @RequiredArgsConstructor
