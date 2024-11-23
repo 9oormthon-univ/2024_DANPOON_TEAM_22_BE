@@ -32,4 +32,10 @@ public interface AlarmRepository extends JpaRepository<Alarm, Long> {
     List<Alarm> findByMemberIdAndBetween(@Param("memberId") Long memberId,
                                          @Param("startDay") LocalDateTime startDay,
                                          @Param("endDay") LocalDateTime endDay);
+
+    @Query("SELECT a FROM Alarm a " +
+            "JOIN FETCH a.alarmCategory ac " +
+            "JOIN FETCH ac.parent acp " +
+            "WHERE acp.id = :parentId")
+    List<Alarm> findAlarmsByParentCategoryId(@Param("parentId") Long parentId);
 }
