@@ -37,4 +37,16 @@ public interface ProvidedFileRepository extends JpaRepository<ProvidedFile, Long
 
     @Query("select p from ProvidedFile p join fetch p.consumer where p.consumer.id = :consumerId and p.id = :providedFileId")
     Optional<ProvidedFile> findByConsumerId(Long consumerId, Long providedFileId);
+
+    @Query("SELECT pf.thanksMessage " +
+            "FROM ProvidedFile pf " +
+            "JOIN pf.voiceFile vf " +
+            "WHERE vf.member.id = :memberId") // ProvidedFile의 voiceFile의 member의 id가 memberId인 ProvidedFile의 thanksMessage를 찾는 쿼리
+    List<String> findThankMessagesByMemberId(Long memberId);
+
+    @Query("SELECT COUNT(pf) " +
+            "FROM ProvidedFile pf " +
+            "JOIN pf.voiceFile vf " +
+            "WHERE vf.member.id = :memberId") // ProvidedFile의 voiceFile의 member의 id가 memberId인 ProvidedFile의 개수를 찾는 쿼리
+    Long findTotalListenersByMemberId(@Param("memberId") Long memberId);
 }

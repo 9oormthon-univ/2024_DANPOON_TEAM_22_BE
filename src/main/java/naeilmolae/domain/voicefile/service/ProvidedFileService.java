@@ -5,6 +5,8 @@ import naeilmolae.domain.member.domain.Member;
 import naeilmolae.domain.member.service.MemberService;
 import naeilmolae.domain.voicefile.domain.ProvidedFile;
 import naeilmolae.domain.voicefile.domain.VoiceFile;
+import naeilmolae.domain.voicefile.domain.VoiceReactionType;
+import naeilmolae.domain.voicefile.dto.response.VoiceFileReactionSummaryResponseDto;
 import naeilmolae.domain.voicefile.repository.ProvidedFileRepository;
 import naeilmolae.global.common.exception.RestApiException;
 import naeilmolae.global.common.exception.code.status.GlobalErrorStatus;
@@ -13,6 +15,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -62,4 +67,32 @@ public class ProvidedFileService {
     }
 
     // TODO 청년의 반응, 이모티콘, 누적 청취수 추가해야함
+    // 청년의 반응 보여주기
+    public VoiceFileReactionSummaryResponseDto getTotalReaction(Long memberId) {
+
+        Long totalListenCount = getTotalListenCount(memberId);
+        Map<VoiceReactionType, Integer> reactionSummary = getReactionSummary(memberId);
+
+        return new VoiceFileReactionSummaryResponseDto(totalListenCount, reactionSummary);
+    }
+
+    // 청년의 이모티콘 반응 요약
+    private Map<VoiceReactionType, Integer> getReactionSummary(Long memberId) {
+        List<String> reactionValues = providedFileRepository.findThankMessagesByMemberId(memberId);
+
+        Map<VoiceReactionType, Integer> reactionSummary = new HashMap<>();
+        for (VoiceReactionType reaction : VoiceReactionType.values()) {
+            long count = reactionValues.stream()
+                    .filter(value -> value.equals(reaction.getValue()))
+                    .count();
+            reactionSummary.put(reaction, (int) count);
+        }
+
+        return reactionSummary;
+    }
+
+    //청년 누적 청취 수 반환 (나중에 추가 로직 작성될 수도 있어서 메서드로 따로 뻄)
+    private long getTotalListenCount(Long memberId) {
+        return providedFileRepository.findTotalListenersByMemberId(memberId);
+    }
 }
