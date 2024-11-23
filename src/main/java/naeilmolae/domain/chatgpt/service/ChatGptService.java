@@ -28,7 +28,7 @@ public final class ChatGptService {
     private final String userPrompt = "Is this sentence offensive: ";
 
     private final int maxTokens = 100;
-    private final double temperature = 0.0;
+    private final double temperature = 0.5;
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 

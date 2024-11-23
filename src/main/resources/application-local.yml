@@ -20,6 +20,21 @@ spring:
         jdbc:
           time_zone: Asia/Seoul
 
+  kafka:
+    bootstrap-servers: localhost:9092  # Kafka 서버 주소
+    consumer:
+      properties:
+        spring.json.value.default.type: naeilmolae.domain.voicefile.dto.response.AnalysisResponseDto # TODO: Change this to your own DTO
+        spring.deserializer.key.delegate.class: org.apache.kafka.common.serialization.StringDeserializer
+        spring.deserializer.value.delegate.class: org.springframework.kafka.support.serializer.JsonDeserializer
+      # 기존 설정이 있다면 추가로 아래 설정을 넣어주세요
+      key-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      # ErrorHandlingDeserializer를 위한 delegate 설정
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
 logging:
   level:
     org.springframework.web: ERROR
