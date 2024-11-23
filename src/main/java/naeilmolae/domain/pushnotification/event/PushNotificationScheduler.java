@@ -13,6 +13,7 @@ public class PushNotificationScheduler {
 
     @Scheduled(cron = "0 * * * * *") // 매 분마다 실행
     public void schedulePushNotifications() {
+        System.out.println("schedulePushNotifications 실행중~~");
         pushNotificationService.sendNotificationsAtScheduledTime();
     }
 }

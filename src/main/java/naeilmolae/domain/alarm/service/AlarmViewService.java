@@ -74,4 +74,9 @@ public class AlarmViewService {
                 }).toList();
     }
 
+    // unqiue_id로 알람 카테고리 ID 조회
+    public Long getAlarmCategoryIdByUnqiueId(Long uniqueId){
+        return alarmCategoryRepository.findByUniqueId(uniqueId).get();
+    }
+
 }
