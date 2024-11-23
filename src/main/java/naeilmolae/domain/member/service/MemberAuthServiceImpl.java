@@ -92,7 +92,7 @@ public class MemberAuthServiceImpl implements MemberAuthService {
         if(getMember.isEmpty()) {
             return saveNewMember(clientId, LoginType.KAKAO);
         }
-        // 2. 있으면 : 새로운 토큰 반환
+        // 2. 있으면 : 새로운 토큰 반환 todo: 따로 뺴
         boolean isServiceMember = getMember.get().getName() != null;
 
         TokenInfo tokenInfo = getNewToken(getMember.get());
@@ -109,7 +109,9 @@ public class MemberAuthServiceImpl implements MemberAuthService {
         }
         // 2. 있으면 : 새로운 토큰 반환
         boolean isServiceMember = getMember.get().getName() != null;
+
         TokenInfo tokenInfo = getNewToken(getMember.get());
+
         return MemberMapper.toMemberLoginResponseDto(getMember.get(), tokenInfo, isServiceMember, getMember.get().getRole());
     }
 
