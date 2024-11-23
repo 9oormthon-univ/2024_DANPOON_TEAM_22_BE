@@ -20,21 +20,27 @@ public class RequestResponseLoggingFilter implements Filter {
         ResponseWrapper responseWrapper = new ResponseWrapper((HttpServletResponse) response);
         String requestURI = httpRequest.getRequestURI();
 
-        // Swagger 및 API Docs 요청 제외
-        if (requestURI.startsWith("/swagger-ui") || requestURI.startsWith("/v3/api-docs")) {
-            chain.doFilter(request, response);
-            return;
+        try {
+            // Swagger 및 API Docs 요청 제외
+            if (requestURI.startsWith("/swagger-ui") || requestURI.startsWith("/v3/api-docs")) {
+                chain.doFilter(request, response);
+                return;
+            }
+
+            // 요청 로깅
+            logger.info("Incoming Request: Method={}, URI={}, Payload={}",
+                    httpRequest.getMethod(), httpRequest.getRequestURI(), getRequestPayload(httpRequest));
+
+            chain.doFilter(request, responseWrapper);
+
+            // 응답 로깅
+            logger.info("Outgoing Response: Status={}, Payload={}",
+                    responseWrapper.getStatus(), responseWrapper.getData());
+        } catch (Exception ex) {
+            // 예외 발생 시 로깅
+            logger.error("Error occurred while processing the request. URI={}, Method={}", requestURI, httpRequest.getMethod(), ex);
+            throw ex; // 예외를 다시 던져야 이후 필터나 컨트롤러로 전달됨
         }
-
-        // 요청 로깅
-        logger.info("Incoming Request: Method={}, URI={}, Payload={}",
-                httpRequest.getMethod(), httpRequest.getRequestURI(), getRequestPayload(httpRequest));
-
-        chain.doFilter(request, responseWrapper);
-
-        // 응답 로깅
-        logger.info("Outgoing Response: Status={}, Payload={}",
-                responseWrapper.getStatus(), responseWrapper.getData());
     }
 
     private String getRequestPayload(HttpServletRequest request) {
