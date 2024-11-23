@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import naeilmolae.domain.alarm.domain.Alarm;
 import naeilmolae.domain.alarm.domain.AlarmCategory;
 import naeilmolae.domain.alarm.domain.CategoryType;
+import naeilmolae.domain.alarm.dto.AlarmCategoryCount;
 import naeilmolae.domain.alarm.repository.AlarmCategoryRepository;
 import naeilmolae.domain.alarm.repository.AlarmRepository;
 import org.springframework.stereotype.Service;
@@ -46,6 +47,31 @@ public class AlarmViewService {
                 .map(AlarmCategory::getParent)
                 .distinct()
                 .collect(Collectors.toList());
+    }
+
+    // VoiceFile이 부족한 부모 카테고리 조회
+    public List<AlarmCategoryCount> findUserCategoryCount(Long memberId, CategoryType categoryType) {
+//        LocalDateTime startOfWeek = LocalDateTime.now().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+//        LocalDateTime endOfWeek = LocalDateTime.now();
+
+        // TODO 1. 가장 적게 작성된 AlarmCateogry 나열
+        // TODO 2. 그 중에 사용자가 작성한 거는 뒤로
+//        List<Object[]> parentCategoriesWithVoiceFileCount = alarmCategoryRepository.findParentCategoriesWithVoiceFileCount(categoryType);
+//        List<AlarmCategoryCount> collect = parentCategoriesWithVoiceFileCount
+//                .stream()
+//                .sorted(Comparator.comparingLong(result -> (Long) result[1]))
+//                .map(result -> {
+//                    AlarmCategory parentCategory = (AlarmCategory) result[0];
+//                    Long voiceFileCount = (Long) result[1];
+//                    return new AlarmCategoryCount(parentCategory.getId(), parentCategory.getTitle(), voiceFileCount);
+//                })
+//                .collect(Collectors.toList());
+
+        return alarmCategoryRepository.findByCategoryTypeAndParentIsNull(categoryType)
+                .stream()
+                .map(parentCategory -> {
+                    return new AlarmCategoryCount(parentCategory.getId(), parentCategory.getTitle(), 0L);
+                }).toList();
     }
 
 
