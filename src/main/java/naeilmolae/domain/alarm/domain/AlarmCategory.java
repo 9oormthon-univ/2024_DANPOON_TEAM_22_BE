@@ -29,6 +29,8 @@ public class AlarmCategory {
 
     private String title;
 
+    private Long uniqueId;
+
     // Utility methods
     public void addChild(AlarmCategory child) {
         child.parent = this;

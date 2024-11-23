@@ -8,6 +8,8 @@ import naeilmolae.domain.member.dto.response.MemberInfoResponseDto;
 import naeilmolae.domain.member.dto.response.MemberNumResponseDto;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
+import java.util.List;
+
 public interface MemberService {
 
     Member findById(Long id) throws UsernameNotFoundException;
@@ -24,4 +26,7 @@ public interface MemberService {
     MemberInfoResponseDto getMemberInfo(Member member);
     // 회원 수 조회
     MemberNumResponseDto getMemberNum(Role role);
+    //청년 회원 조회
+    List<Member> getAllYouthMemeber();
+
 }
