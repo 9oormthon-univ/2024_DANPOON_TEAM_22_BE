@@ -1,4 +1,4 @@
-package naeilmolae.domain.chatgpt.dto.response;
+package naeilmolae.global.infrastructure.ai.dto.response;
 
 import lombok.Data;
 
