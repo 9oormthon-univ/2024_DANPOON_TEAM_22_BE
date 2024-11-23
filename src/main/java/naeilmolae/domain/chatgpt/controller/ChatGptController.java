@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import naeilmolae.domain.chatgpt.dto.ScriptValidationResponseDto;
 import naeilmolae.domain.chatgpt.service.ChatGptService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,7 +29,7 @@ public class ChatGptController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "COMMON200", description = "검증 성공")
     })
-    public Boolean checkOffensiveLanguage(@RequestBody String sentence) {
+    public ScriptValidationResponseDto checkOffensiveLanguage(@RequestBody String sentence) {
         return chatGptService.getCheckScriptRelevancePrompt(sentence, "우산 챙기라는 말을 해주세요");
     }
 }
