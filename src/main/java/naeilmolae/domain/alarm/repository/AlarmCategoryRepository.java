@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface AlarmCategoryRepository extends JpaRepository<AlarmCategory, Long> {
 
@@ -16,5 +17,5 @@ public interface AlarmCategoryRepository extends JpaRepository<AlarmCategory, Lo
             "AND ac.parent IS NULL")
     List<AlarmCategory> findByCategoryTypeAndParentIsNull(CategoryType categoryType);
 
-//
+    Optional<Long> findByUniqueId(Long uniqueId);
 }
