@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import naeilmolae.domain.member.client.KakaoMemberClient;
 import naeilmolae.domain.member.domain.LoginType;
 import naeilmolae.domain.member.domain.Member;
+import naeilmolae.domain.member.domain.Role;
 import naeilmolae.domain.member.dto.response.MemberGenerateTokenResponseDto;
 import naeilmolae.domain.member.dto.response.MemberIdResponseDto;
 import naeilmolae.domain.member.dto.response.MemberLoginResponseDto;
@@ -33,14 +34,15 @@ public class MemberAuthServiceImpl implements MemberAuthService {
 
     public final JwtProvider jwtTokenProvider;
 
-    public final MemberMapper memberMapper;
-
     // 소셜 로그인을 수행하는 함수
     @Override
+    @Transactional
     public MemberLoginResponseDto socialLogin(String accessToken, LoginType loginType){
         // 로그인 구분
         if(loginType.equals(LoginType.KAKAO))
             return loginByKakao(accessToken);
+        else if(loginType.equals(LoginType.ANOYMOUS))
+            return loginByAnoymous(accessToken);
 
         return null;
     }
@@ -81,7 +83,7 @@ public class MemberAuthServiceImpl implements MemberAuthService {
 
     private MemberLoginResponseDto loginByKakao(final String accessToken){
         // kakao 서버와 통신해서 유저 고유값(clientId) 받기
-        String clientId = kakaoMemberClient.getkakaoClientID(accessToken);
+        String clientId = kakaoMemberClient.getClientId(accessToken);
         // 존재 여부 파악
         Optional<Member> getMember = memberRepository.findByClientIdAndLoginType(clientId, LoginType.KAKAO);
 
@@ -91,22 +93,38 @@ public class MemberAuthServiceImpl implements MemberAuthService {
         }
         // 2. 있으면 : 새로운 토큰 반환
         boolean isServiceMember = getMember.get().getName() != null;
-        return getNewToken(getMember.get(), isServiceMember);
+
+        MemberLoginResponseDto memberLoginResponseDto = getNewToken(getMember.get(), isServiceMember, getMember.get().getRole());
+
+        return memberLoginResponseDto;
+    }
+
+    public MemberLoginResponseDto loginByAnoymous(final String accessToken) {
+        Optional<Member> getMember = memberRepository.findByClientIdAndLoginType(accessToken, LoginType.ANOYMOUS);
+        // 1. 없으면 : Member 객체 생성하고 DB 저장
+        if(getMember.isEmpty()) {
+            return saveNewMember(accessToken, LoginType.ANOYMOUS);
+        }
+        // 2. 있으면 : 새로운 토큰 반환
+        boolean isServiceMember = getMember.get().getName() != null;
+        return getNewToken(getMember.get(), isServiceMember, getMember.get().getRole());
     }
 
     private MemberLoginResponseDto saveNewMember(String clientId, LoginType loginType) {
         Member member = MemberMapper.toMember(clientId, loginType);
+        member.changeRole(Role.GUEST);
         Member newMember =  memberService.saveEntity(member);
 
-        return getNewToken(newMember, false);
+        return getNewToken(newMember, false, Role.GUEST);
     }
 
-    private MemberLoginResponseDto getNewToken(Member member, boolean isServiceMember) {
+    //todo: 분리 분리 롤 분리
+    private MemberLoginResponseDto getNewToken(Member member, boolean isServiceMember, Role role) {
         // jwt 토큰 생성
         TokenInfo tokenInfo = jwtTokenProvider.generateToken(member.getId().toString(), member.getRole().toString());
         // refreshToken 디비에 저장
         refreshTokenService.saveRefreshToken(tokenInfo.refreshToken(), member);
 
-        return MemberMapper.toLoginMember(member, tokenInfo, isServiceMember);
+        return MemberMapper.toLoginMember(member, tokenInfo, isServiceMember, role);
     }
 }

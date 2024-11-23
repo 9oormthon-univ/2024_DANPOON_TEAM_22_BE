@@ -1,6 +1,6 @@
 package naeilmolae.domain.member.client;
 
-import naeilmolae.domain.member.dto.client.KakaoResponse;
+import naeilmolae.global.infrastructure.kakao.dto.KakaoResponse;
 import naeilmolae.global.common.exception.RestApiException;
 import naeilmolae.global.common.exception.code.status.AuthErrorStatus;
 import org.springframework.stereotype.Component;
@@ -18,7 +18,9 @@ public class KakaoMemberClient {
                 .build();
     }
 
-    public String getkakaoClientID(final String accessToken) {
+    // todo: 통신만 하는 책임으로 변경
+    // 그니까, 이 메서드는 클라이언트의 역할만 하도록 변경해야 해야 함
+    public String getClientId(final String accessToken) {
         KakaoResponse response = webClient.get()
                 .header("Authorization", "Bearer " + accessToken)
                 .retrieve()

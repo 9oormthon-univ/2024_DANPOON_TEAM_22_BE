@@ -68,4 +68,9 @@ public class Member extends BaseEntity {
         this.role = request.role();
         this.birth = request.birth();
     }
+
+    public boolean changeRole(Role role) {
+        this.role = role;
+        return true;
+    }
 }

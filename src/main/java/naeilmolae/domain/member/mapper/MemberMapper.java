@@ -2,6 +2,7 @@ package naeilmolae.domain.member.mapper;
 
 import naeilmolae.domain.member.domain.LoginType;
 import naeilmolae.domain.member.domain.Member;
+import naeilmolae.domain.member.domain.Role;
 import naeilmolae.domain.member.domain.YouthMemberInfo;
 import naeilmolae.domain.member.dto.YouthMemberInfoDto;
 import naeilmolae.domain.member.dto.response.MemberInfoResponseDto;
@@ -19,12 +20,13 @@ public class MemberMapper {
                 .build();
     }
 
-    public static MemberLoginResponseDto toLoginMember(final Member member, TokenInfo tokenInfo, boolean isServiceMember) {
+    public static MemberLoginResponseDto toLoginMember(final Member member, TokenInfo tokenInfo, boolean isServiceMember, Role role) {
         return MemberLoginResponseDto.builder()
                 .memberId(member.getId())
                 .accessToken(tokenInfo.accessToken())
                 .refreshToken(tokenInfo.refreshToken())
                 .isServiceMember(isServiceMember)
+                .role(role)
                 .build();
     }
 

@@ -22,11 +22,13 @@ public class ChatGptController {
 
     @PostMapping("/check-offensive")
     @Operation(summary = "부적절 문장 검증 API"
-            , description = "부적절한 문장인지 검증해서 Boolean 값으로 리턴하는 API입니다. 부적절한 문장이라면 true, 아니라면 false를 리턴합니다.")
+            , description = "상황에 부적절한 문장인지 검증해서 Boolean 값으로 리턴하는 API입니다. " +
+            "상황에 부적절한 문장이라면 true, 아니라면 false를 리턴합니다." +
+            "테스트용 api이기 \'우산을 챙기라는 말을 해주세요\'라는 상황으로 고정되어 있습니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "COMMON200", description = "검증 성공")
     })
     public Boolean checkOffensiveLanguage(@RequestBody String sentence) {
-        return chatGptService.checkForOffensiveLanguage(sentence);
+        return chatGptService.etCheckScriptRelevancePrompt(sentence, "우산 챙기라는 말을 해주세요");
     }
 }
