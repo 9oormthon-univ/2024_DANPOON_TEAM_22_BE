@@ -15,7 +15,8 @@ public enum AnalysisErrorStatus implements BaseCodeInterface {
     // TODO 지금 에러 메시지가 제대로 안 나감 수정해야함
     _ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "ANALYSIS004", "분석 중 에러가 발생하였습니다."),
     _CANNOT_SAVE_ANALYSIS_RESULT(HttpStatus.INTERNAL_SERVER_ERROR, "ANALYSIS005", "분석 결과 저장에 문제가 발생했습니다."),
-    _DENIED_BY_GPT(HttpStatus.INTERNAL_SERVER_ERROR, "ANALYSIS006", "GPT: 올바르지 않은 스크립트입니다."),;
+    _DENIED_BY_GPT(HttpStatus.BAD_REQUEST, "ANALYSIS006", "GPT: 올바르지 않은 스크립트입니다."),
+    _GPT_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "ANALYSIS006", "GPT: 올바르지 않은 스크립트입니다."),;
 
     private final HttpStatus httpStatus;
     private final boolean isSuccess = false;

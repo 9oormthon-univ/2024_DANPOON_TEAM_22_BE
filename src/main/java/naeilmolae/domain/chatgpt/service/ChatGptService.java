@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import naeilmolae.domain.chatgpt.dto.ScriptValidationResponseDto;
+import naeilmolae.global.common.exception.RestApiException;
+import naeilmolae.global.common.exception.code.status.AnalysisErrorStatus;
 import naeilmolae.global.infrastructure.ai.OpenAiApiClient;
 import naeilmolae.global.infrastructure.ai.dto.request.ChatGptRequest;
 import naeilmolae.global.infrastructure.ai.dto.response.ChatGptResponse;
@@ -53,9 +55,9 @@ public final class ChatGptService {
         try {
             return objectMapper.readValue(content, ScriptValidationResponseDto.class);
         } catch (JsonMappingException e) {
-            throw new RuntimeException(e);
+            throw new RestApiException(AnalysisErrorStatus._GPT_ERROR);
         } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
+            throw new RestApiException(AnalysisErrorStatus._GPT_ERROR);
         }
     }
 }
