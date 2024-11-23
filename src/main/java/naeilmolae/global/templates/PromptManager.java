@@ -20,7 +20,7 @@ public class PromptManager {
         return template.fillTemplate(
                 """
                 ## 명령 
-                주어진 문장이 특정 상황에 처한 사람에게 적절한 응원이나 표현인지 판단해 주고, 부적절하다면 reason 필드를 추가하여 형식에 맞게 출력해줘. reason 이 없어도 null로 채워줘
+                주어진 문장이 특정 상황에 처한 사람에게 적절한 응원이나 표현인지 판단해 주고, 부적절하다면 문장 작성자에게 왜 부적절한지 높임말로 reason에 간결히 작성해줘. reason 이 없어도 null로 채워줘
                 ## 상황
                 \'%s\' 
                 ## 문장
