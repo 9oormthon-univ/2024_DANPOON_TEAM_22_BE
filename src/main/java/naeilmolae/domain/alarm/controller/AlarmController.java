@@ -32,7 +32,6 @@ public class AlarmController {
     private final AlarmViewService alarmViewService;
     private final AlarmService alarmService;
 
-
     // valid
     @Operation(summary = "[VALID] [청년] 위로 청취 1단계: 위로 목록 조회", description = "위로 목록을 조회합니다. 이후 '[청년] 청취 1단계'로 이동합니다. ")
     @GetMapping("/alarm-category/comfort")
@@ -92,5 +91,15 @@ public class AlarmController {
                 .map(AlarmCategoryResponseDto::new)
                 .collect(Collectors.toList());
         return BaseResponse.onSuccess(collect);
+    }
+
+    @Operation(summary = "[VALID] [봉사자] 동기부여 4단계: 카테고리 목록 조회", description = "위로 목록을 조회합니다. 이후 '[청년] 청취 1단계'로 이동합니다. ")
+    @GetMapping("/alarm-category/")
+    public BaseResponse<List<AlarmCategoryResponseDto>> getAlarmCategoryList(@CurrentMember Member member) {
+        List<AlarmCategoryResponseDto> list = alarmService.findParentCateories()
+                .stream()
+                .map(AlarmCategoryResponseDto::new).toList();
+
+        return BaseResponse.onSuccess(list);
     }
 }
