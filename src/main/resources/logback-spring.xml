@@ -1,0 +1,58 @@
+<configuration>
+    <!-- 콘솔에 출력 -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %highlight(%-5level) %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 파일에 저장 -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/app.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- 로그 파일 이름 형식 -->
+            <fileNamePattern>logs/app-%d{yyyy-MM-dd}.log</fileNamePattern>
+            <!-- 로그 보관 기간 -->
+            <maxHistory>30</maxHistory>
+            <!-- 로그 파일 크기 제한 -->
+            <totalSizeCap>200MB</totalSizeCap>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 기본 로깅 레벨 -->
+    <!-- local Profile에서의 로그 설정 -->
+    <springProfile name="local">
+        <!-- 해당 패키지의 로그는 DEBUG 레벨 부터 출력 -->
+        <logger name="naeilmolae" level="DEBUG" />
+        <!--HTTP 로깅을 위한 Logger 설정-->
+        <logger name="org.springframework.web.filter.CommonsRequestLoggingFilter" level="DEBUG" />
+        <logger name="naeilmolae.global.config.log.RequestResponseLoggingFilter" level="DEBUG" />
+        <!-- 전체적인 로그는 INFO 레벨 부터 출력 -->
+        <root level="INFO">
+            <!-- CONSOLE 로그 Appender를 로그 Appender로 등록 -->
+            <appender-ref ref="CONSOLE" />
+            <appender-ref ref="FILE" />
+        </root>
+    </springProfile>
+
+    <!-- dev Profile에서의 로그 설정 -->
+    <springProfile name="dev">
+        <!--HTTP 로깅을 위한 Logger 설정-->
+        <logger name="org.springframework.web.filter.CommonsRequestLoggingFilter" level="DEBUG" />
+        <root level="INFO">
+            <appender-ref ref="CONSOLE" />
+            <appender-ref ref="FILE" />
+        </root>
+    </springProfile>
+
+    <!-- prod Profile에서의 로그 설정 -->
+    <springProfile name="prod">
+        <root level="INFO">
+            <appender-ref ref="CONSOLE" />
+            <appender-ref ref="FILE" />
+        </root>
+    </springProfile>
+</configuration>
