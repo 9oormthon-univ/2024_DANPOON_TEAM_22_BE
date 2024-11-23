@@ -3,6 +3,7 @@ package naeilmolae.domain.member.dto.response;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
+import naeilmolae.domain.member.domain.Role;
 
 @Getter
 @Builder
@@ -20,5 +21,8 @@ public class MemberLoginResponseDto {
 
     @Schema(description = "서비스 회원 여부 (true: 서비스에 등록된 회원, false: 비회원, 비회원시 회원가입 진행)", example = "true")
     private boolean isServiceMember;
+
+    @Schema(description = "서비스 역할 (YOUTH: 청년, HELPER: 조력자, GUEST: (회원가입 중 or 비회원 로그인)", example = "YOUTH")
+    private Role role;
 }
 

@@ -1,4 +1,4 @@
-package naeilmolae.domain.member.dto.response;
+package naeilmolae.global.infrastructure.kakao.dto;
 
 import lombok.Getter;
 

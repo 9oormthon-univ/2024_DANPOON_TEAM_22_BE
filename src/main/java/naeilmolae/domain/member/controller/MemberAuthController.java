@@ -22,7 +22,7 @@ import naeilmolae.global.config.security.auth.CurrentMember;
 public class MemberAuthController {
     private final MemberAuthService memberAuthService;
 
-    @Operation(summary = "소셜 로그인 API", description = "네이버, 카카오, 구글 로그인을 수행하는 API입니다.")
+    @Operation(summary = "로그인 API", description = "카카오, 비회원 로그인을 수행하는 API입니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "COMMON200", description = "로그인 성공")
     })

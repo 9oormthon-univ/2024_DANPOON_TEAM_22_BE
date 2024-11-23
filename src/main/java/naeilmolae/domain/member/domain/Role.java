@@ -8,7 +8,8 @@ import lombok.Getter;
 public enum Role {
     ADMIN("관리자", 0),
     YOUTH("청년", 1),
-    HELPER("조력자", 1);
+    HELPER("조력자", 1),
+    GUEST("회원가입중", 2);
 
     private final String toKorean;
     private final int priority;

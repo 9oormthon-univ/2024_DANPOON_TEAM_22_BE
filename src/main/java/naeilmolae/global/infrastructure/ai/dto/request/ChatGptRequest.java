@@ -1,4 +1,4 @@
-package naeilmolae.domain.chatgpt.dto.request;
+package naeilmolae.global.infrastructure.ai.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
