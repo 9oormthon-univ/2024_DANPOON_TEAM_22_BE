@@ -1,6 +1,7 @@
 package naeilmolae.domain.pushnotification.service;
 
 import lombok.RequiredArgsConstructor;
+import naeilmolae.domain.alarm.service.AlarmViewService;
 import naeilmolae.domain.member.domain.Member;
 import naeilmolae.domain.member.domain.YouthMemberInfo;
 import naeilmolae.domain.member.service.MemberService;
@@ -15,9 +16,10 @@ public class PushNotificationService {
 
     private final MemberService memberService;
     private final FirebaseMessagingService firebaseMessagingService; // Firebase 연동
+    private final AlarmViewService alarmViewService;
 
     // 외출 시간 고정 2시
-    private static final LocalDateTime FIXED_OUTING_DATETIME = LocalDateTime.of(2024, 11, 23, 14, 0);
+    private static final LocalDateTime FIXED_OUTING_DATETIME = LocalDateTime.of(2024, 11, 23, 9, 0);
 
 
     public void sendNotificationsAtScheduledTime() {
@@ -36,9 +38,8 @@ public class PushNotificationService {
                 if (isTimeToSend(info.getWakeUpTime(), now)) {
                     firebaseMessagingService.sendNotification(
                             member.getFcmToken(),
-                            "좋은 아침이에요!", //todo: title하고 body 차이
-                            "응원의 목소리와 하루를 시작해볼까요?",
-                            defaultAlarmId
+                            "좋은 아침이에요! 응원의 목소리와 하루를 시작해볼까요?",
+                            alarmViewService.getAlarmCategoryIdByUnqiueId(1001L)
                     );
                 }
 
@@ -46,9 +47,8 @@ public class PushNotificationService {
                 if (isTimeToSend(info.getBreakfast(), now)) {
                     firebaseMessagingService.sendNotification(
                             member.getFcmToken(),
-                            "밥은 잘 챙겨 먹었나요?",
-                            "안 먹었다면, 잠깐 들어봐요.",
-                            defaultAlarmId
+                            "밥은 잘 챙겨 먹었나요? 안 먹었다면, 잠깐 들어봐요.",
+                            alarmViewService.getAlarmCategoryIdByUnqiueId(3001L)
                     );
                 }
 
@@ -56,9 +56,8 @@ public class PushNotificationService {
                 if (isTimeToSend(info.getLunch(), now)) {
                     firebaseMessagingService.sendNotification(
                             member.getFcmToken(),
-                            "점심시간이에요!",
-                            "맛있게 드세요!",
-                            defaultAlarmId
+                            "밥은 잘 챙겨 먹었나요? 안 먹었다면, 잠깐 들어봐요.",
+                            alarmViewService.getAlarmCategoryIdByUnqiueId(3002L)
                     );
                 }
 
@@ -66,9 +65,8 @@ public class PushNotificationService {
                 if (isTimeToSend(info.getDinner(), now)) {
                     firebaseMessagingService.sendNotification(
                             member.getFcmToken(),
-                            "저녁시간이에요!",
-                            "저녁 맛있게 드세요!",
-                            defaultAlarmId
+                            "밥은 잘 챙겨 먹었나요? 안 먹었다면, 잠깐 들어봐요.",
+                            alarmViewService.getAlarmCategoryIdByUnqiueId(3003L)
                     );
                 }
 
@@ -76,9 +74,8 @@ public class PushNotificationService {
                 if (isTimeToSend(info.getSleepTime(), now)) {
                     firebaseMessagingService.sendNotification(
                             member.getFcmToken(),
-                            "오늘 하루도 고생했어요!",
-                            "따뜻한 목소리와 함께 하루를 마무리해요.",
-                            defaultAlarmId
+                            "오늘 하루 수고 많았어요. 따스한 목소리와 함께 마무리해요.",
+                            alarmViewService.getAlarmCategoryIdByUnqiueId(4001L)
                     );
                 }
 
@@ -86,9 +83,8 @@ public class PushNotificationService {
                 if(isTimeToSend(FIXED_OUTING_DATETIME, now)){
                     firebaseMessagingService.sendNotification(
                             member.getFcmToken(),
-                            "외출할 일이 있나요?",
-                            "나가지 전에, 잠깐 들어봐요.",
-                            defaultAlarmId
+                            "외출할 일이 있나요? 나가지 전에, 잠깐 들어봐요.",
+                            alarmViewService.getAlarmCategoryIdByUnqiueId(2003L)
                     );
                 }
             }

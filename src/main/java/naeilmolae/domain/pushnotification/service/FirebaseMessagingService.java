@@ -10,13 +10,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class FirebaseMessagingService {
 
-    public void sendNotification(String fcmToken, String title, String body, Long fileId) {
+    public void sendNotification(String fcmToken, String title, Long fileId) {
         // FirebaseMessage 생성
         Message message = Message.builder()
                 .setToken(fcmToken)
                 .setNotification(Notification.builder()
                         .setTitle(title)
-                        .setBody(body)
                         .build())
                 .putData("alarmId", String.valueOf(fileId)) // 파일 ID를 데이터로 추가
                 .build();
