@@ -6,6 +6,7 @@ import naeilmolae.domain.member.domain.Member;
 import naeilmolae.domain.member.domain.YouthMemberInfo;
 import naeilmolae.domain.member.service.MemberService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -19,9 +20,9 @@ public class PushNotificationService {
     private final AlarmViewService alarmViewService;
 
     // 외출 시간 고정 2시
-    private static final LocalDateTime FIXED_OUTING_DATETIME = LocalDateTime.of(2024, 11, 23, 9, 0);
+    private static final LocalDateTime FIXED_OUTING_DATETIME = LocalDateTime.of(2024, 11, 23, 23, 47);
 
-
+    @Transactional(readOnly = true)
     public void sendNotificationsAtScheduledTime() {
         // 모든 청년(YOUTH) 유저 가져오기
         List<Member> youthMembers = memberService.getAllYouthMemeber();
@@ -87,6 +88,7 @@ public class PushNotificationService {
                             alarmViewService.getAlarmCategoryIdByUnqiueId(2003L)
                     );
                 }
+
             }
         }
     }
