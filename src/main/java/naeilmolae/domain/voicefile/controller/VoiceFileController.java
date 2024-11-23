@@ -2,6 +2,7 @@ package naeilmolae.domain.voicefile.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
+import naeilmolae.domain.alarm.service.AlarmExampleService;
 import naeilmolae.domain.member.domain.Member;
 import naeilmolae.domain.voicefile.domain.ProvidedFile;
 import naeilmolae.domain.voicefile.domain.VoiceFile;
@@ -23,7 +24,17 @@ public class VoiceFileController {
     private final VoiceFileService voiceFileService;
     private final S3FileComponent s3FileComponent;
     private final ProvidedFileService providedFileService;
+    private final AlarmExampleService alarmExampleService;
 
+    @Operation(summary = "[VALID] [봉사자] 녹음 3-1단계: 스크립트 GPT에게 작성 요청", description = "GPT에게 스크립트 작성을 요청합니다.")
+    @PostMapping("/{alarmId}/gpt")
+    public BaseResponse<VoiceFileMetaResponseDto> gptContent(@CurrentMember Member member,
+                                                             @PathVariable(value = "alarmId") Long alarmId) {
+        String content = alarmExampleService.findAllByAlarmId(alarmId)
+                .getContent();
+        VoiceFile voiceFile = voiceFileService.saveContent(member.getId(), alarmId, content);
+        return BaseResponse.onSuccess(VoiceFileMetaResponseDto.fromEntity(voiceFile));
+    }
 
     @Operation(summary = "[VALID] [봉사자] 녹음 3-2단계: 작성한 스크립트 저장", description = "사용자가 작성한 스크립트를 저장합니다. GPT에게 검증을 받으며 부적절한 스크립트 제공시 예외가 발생할 수 있습니다. [NOTICE] 에러 응답은 추후에 추가하겠습니다.")
     @PostMapping("/{alarmId}/self")
