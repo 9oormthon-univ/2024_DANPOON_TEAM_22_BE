@@ -29,6 +29,6 @@ public class ChatGptController {
             @ApiResponse(responseCode = "COMMON200", description = "검증 성공")
     })
     public Boolean checkOffensiveLanguage(@RequestBody String sentence) {
-        return chatGptService.etCheckScriptRelevancePrompt(sentence, "우산 챙기라는 말을 해주세요");
+        return chatGptService.getCheckScriptRelevancePrompt(sentence, "우산 챙기라는 말을 해주세요");
     }
 }
