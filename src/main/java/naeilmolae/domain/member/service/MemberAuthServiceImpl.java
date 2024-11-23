@@ -39,7 +39,7 @@ public class MemberAuthServiceImpl implements MemberAuthService {
     @Override
     @Transactional
     public MemberLoginResponseDto socialLogin(String accessToken, LoginType loginType){
-        // 로그인 구분
+        // 로그인 구분 todo: if 문 말고 LoginStrategy 만들어서 암튼 하기
         if(loginType.equals(LoginType.KAKAO))
             return loginByKakao(accessToken);
         else if(loginType.equals(LoginType.ANOYMOUS))
@@ -92,7 +92,7 @@ public class MemberAuthServiceImpl implements MemberAuthService {
         if(getMember.isEmpty()) {
             return saveNewMember(clientId, LoginType.KAKAO);
         }
-        // 2. 있으면 : 새로운 토큰 반환 todo: 따로 뺴
+        // 2. 있으면 : 새로운 토큰 반환 todo: 좀 생각을 해
         boolean isServiceMember = getMember.get().getName() != null;
 
         TokenInfo tokenInfo = getNewToken(getMember.get());
