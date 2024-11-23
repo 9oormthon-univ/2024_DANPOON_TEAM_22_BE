@@ -6,6 +6,7 @@ import naeilmolae.domain.member.dto.response.MemberLoginResponseDto;
 import naeilmolae.domain.member.strategy.LoginStrategy;
 import naeilmolae.domain.member.strategy.impl.AnonymousLoginStrategy;
 import naeilmolae.domain.member.strategy.impl.KakaoLoginStrategy;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -14,10 +15,11 @@ import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
-public class LoginContext { //todo: 의존성 문제 해결 ㄱㄱ
+public class LoginContext {
 
     private final Map<LoginType, LoginStrategy> strategyMap;
 
+    @Autowired
     public LoginContext(List<LoginStrategy> strategies) {
         this.strategyMap = new HashMap<>();
         strategies.forEach(strategy -> {
