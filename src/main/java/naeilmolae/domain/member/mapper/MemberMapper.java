@@ -10,6 +10,8 @@ import naeilmolae.domain.member.dto.response.MemberLoginResponseDto;
 import naeilmolae.global.config.security.jwt.TokenInfo;
 import org.springframework.stereotype.Component;
 
+import static naeilmolae.domain.member.mapper.DefaultTimeSettings.*;
+
 @Component
 public class MemberMapper {
 
@@ -31,12 +33,22 @@ public class MemberMapper {
     }
 
     public static YouthMemberInfo toYouthMemberInfo(YouthMemberInfoDto dto) {
+        if (dto == null) {
+            return YouthMemberInfo.builder()
+                    .wakeUpTime(DefaultTimeSettings.DEFAULT_WAKE_UP_TIME)
+                    .sleepTime(DefaultTimeSettings.DEFAULT_SLEEP_TIME)
+                    .breakfast(DefaultTimeSettings.DEFAULT_BREAKFAST_TIME)
+                    .lunch(DefaultTimeSettings.DEFAULT_LUNCH_TIME)
+                    .dinner(DefaultTimeSettings.DEFAULT_DINNER_TIME)
+                    .build();
+        }
+
         return YouthMemberInfo.builder()
-                .wakeUpTime(dto.getWakeUpTime())
-                .sleepTime(dto.getSleepTime())
-                .breakfast(dto.getBreakfast())
-                .lunch(dto.getLunch())
-                .dinner(dto.getDinner())
+                .wakeUpTime(dto.getWakeUpTime() != null ? dto.getWakeUpTime() : DefaultTimeSettings.DEFAULT_WAKE_UP_TIME)
+                .sleepTime(dto.getSleepTime() != null ? dto.getSleepTime() : DefaultTimeSettings.DEFAULT_SLEEP_TIME)
+                .breakfast(dto.getBreakfast() != null ? dto.getBreakfast() : DefaultTimeSettings.DEFAULT_BREAKFAST_TIME)
+                .lunch(dto.getLunch() != null ? dto.getLunch() : DefaultTimeSettings.DEFAULT_LUNCH_TIME)
+                .dinner(dto.getDinner() != null ? dto.getDinner() : DefaultTimeSettings.DEFAULT_DINNER_TIME)
                 .build();
     }
 
