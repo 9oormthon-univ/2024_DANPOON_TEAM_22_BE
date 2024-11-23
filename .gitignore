@@ -42,3 +42,5 @@ docker-compose.yml
 
 ### Qclass ###
 **/generated
+
+data.sql
