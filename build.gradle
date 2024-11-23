@@ -55,6 +55,8 @@ dependencies {
 	implementation 'org.apache.kafka:kafka-clients:3.7.1'
 	testImplementation 'org.springframework.kafka:spring-kafka-test'
 
+	// firebase
+	implementation 'com.google.firebase:firebase-admin:9.1.1' // 최신 버전 확인 후 적용
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
