@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -38,7 +39,7 @@ public class MemberAuthServiceImpl implements MemberAuthService {
     @Override
     @Transactional
     public MemberLoginResponseDto socialLogin(String accessToken, LoginType loginType){
-        // 로그인 구분
+        // 로그인 구분 todo: if 문 말고 LoginStrategy 만들어서 암튼 하기
         if(loginType.equals(LoginType.KAKAO))
             return loginByKakao(accessToken);
         else if(loginType.equals(LoginType.ANOYMOUS))
@@ -91,12 +92,13 @@ public class MemberAuthServiceImpl implements MemberAuthService {
         if(getMember.isEmpty()) {
             return saveNewMember(clientId, LoginType.KAKAO);
         }
-        // 2. 있으면 : 새로운 토큰 반환
+        // 2. 있으면 : 새로운 토큰 반환 todo: 좀 생각을 해
         boolean isServiceMember = getMember.get().getName() != null;
 
-        MemberLoginResponseDto memberLoginResponseDto = getNewToken(getMember.get(), isServiceMember, getMember.get().getRole());
+        TokenInfo tokenInfo = getNewToken(getMember.get());
 
-        return memberLoginResponseDto;
+        return MemberMapper.toMemberLoginResponseDto(getMember.get(), tokenInfo, isServiceMember, getMember.get().getRole());
+
     }
 
     public MemberLoginResponseDto loginByAnoymous(final String accessToken) {
@@ -107,7 +109,10 @@ public class MemberAuthServiceImpl implements MemberAuthService {
         }
         // 2. 있으면 : 새로운 토큰 반환
         boolean isServiceMember = getMember.get().getName() != null;
-        return getNewToken(getMember.get(), isServiceMember, getMember.get().getRole());
+
+        TokenInfo tokenInfo = getNewToken(getMember.get());
+
+        return MemberMapper.toMemberLoginResponseDto(getMember.get(), tokenInfo, isServiceMember, getMember.get().getRole());
     }
 
     private MemberLoginResponseDto saveNewMember(String clientId, LoginType loginType) {
@@ -115,16 +120,19 @@ public class MemberAuthServiceImpl implements MemberAuthService {
         member.changeRole(Role.GUEST);
         Member newMember =  memberService.saveEntity(member);
 
-        return getNewToken(newMember, false, Role.GUEST);
+        TokenInfo tokenInfo = getNewToken(newMember);
+
+        return MemberMapper.toMemberLoginResponseDto(newMember, tokenInfo, false, Role.GUEST);
     }
 
-    //todo: 분리 분리 롤 분리
-    private MemberLoginResponseDto getNewToken(Member member, boolean isServiceMember, Role role) {
+    // 새로운 토큰 생성
+    private TokenInfo getNewToken(Member member) {
         // jwt 토큰 생성
         TokenInfo tokenInfo = jwtTokenProvider.generateToken(member.getId().toString(), member.getRole().toString());
         // refreshToken 디비에 저장
         refreshTokenService.saveRefreshToken(tokenInfo.refreshToken(), member);
 
-        return MemberMapper.toLoginMember(member, tokenInfo, isServiceMember, role);
+        return tokenInfo;
     }
+
 }

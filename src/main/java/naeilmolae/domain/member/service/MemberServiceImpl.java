@@ -19,7 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional(readOnly = true)
-@RequiredArgsConstructor
+@RequiredArgsConstructor //todo: 세상의 모든 에러를 처리한다.
 public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
     private final YouthMemberInfoRepository youthMemberInfoRepository;

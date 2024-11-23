@@ -28,7 +28,7 @@ public class ChatGptService {
     private final double temperature = 0.0;
 
 
-    public Boolean etCheckScriptRelevancePrompt(String sentence, String Situation) {
+    public Boolean getCheckScriptRelevancePrompt(String sentence, String Situation) {
 
         // 템플릿 생성
         String prompt = promptManager.createCheckForOffensiveLanguagePrompt(Situation);

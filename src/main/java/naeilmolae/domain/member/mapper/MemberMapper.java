@@ -20,7 +20,7 @@ public class MemberMapper {
                 .build();
     }
 
-    public static MemberLoginResponseDto toLoginMember(final Member member, TokenInfo tokenInfo, boolean isServiceMember, Role role) {
+    public static MemberLoginResponseDto toMemberLoginResponseDto(final Member member, TokenInfo tokenInfo, boolean isServiceMember, Role role) {
         return MemberLoginResponseDto.builder()
                 .memberId(member.getId())
                 .accessToken(tokenInfo.accessToken())
