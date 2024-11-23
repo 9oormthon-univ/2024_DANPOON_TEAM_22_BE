@@ -17,6 +17,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor //todo: 세상의 모든 에러를 처리한다.
@@ -123,5 +125,10 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public MemberNumResponseDto getMemberNum(Role role) {
         return new MemberNumResponseDto(memberRepository.countAllByRole(role));
+    }
+
+    @Override
+    public List<Member> getAllYouthMemeber(){
+        return memberRepository.findAllYouthMembersWithInfo(Role.YOUTH);
     }
 }
