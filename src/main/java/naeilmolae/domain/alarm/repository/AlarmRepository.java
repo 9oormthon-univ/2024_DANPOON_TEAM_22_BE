@@ -13,7 +13,7 @@ public interface AlarmRepository extends JpaRepository<Alarm, Long> {
 
     @Query("SELECT a FROM Alarm a " +
             "JOIN FETCH a.alarmCategory aa " +
-            "LEFT JOIN aa.parent " +
+            "JOIN FETCH aa.parent " +
             "WHERE a.id = :id")
     Optional<Alarm> findById(Long id);
 
