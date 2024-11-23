@@ -16,6 +16,10 @@ public class PushNotificationService {
     private final MemberService memberService;
     private final FirebaseMessagingService firebaseMessagingService; // Firebase 연동
 
+    // 외출 시간 고정 2시
+    private static final LocalDateTime FIXED_OUTING_DATETIME = LocalDateTime.of(2024, 11, 23, 14, 0);
+
+
     public void sendNotificationsAtScheduledTime() {
         // 모든 청년(YOUTH) 유저 가져오기
         List<Member> youthMembers = memberService.getAllYouthMemeber();
@@ -74,6 +78,16 @@ public class PushNotificationService {
                             member.getFcmToken(),
                             "오늘 하루도 고생했어요!",
                             "따뜻한 목소리와 함께 하루를 마무리해요.",
+                            defaultAlarmId
+                    );
+                }
+
+                // 외출 시간 알림
+                if(isTimeToSend(FIXED_OUTING_DATETIME, now)){
+                    firebaseMessagingService.sendNotification(
+                            member.getFcmToken(),
+                            "외출할 일이 있나요?",
+                            "나가지 전에, 잠깐 들어봐요.",
                             defaultAlarmId
                     );
                 }
