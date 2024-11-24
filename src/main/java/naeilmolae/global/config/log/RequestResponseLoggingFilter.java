@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import java.io.BufferedReader;
 import java.io.IOException;
 
-@Component
+//@Component
 public class RequestResponseLoggingFilter implements Filter {
     private static final Logger logger = LoggerFactory.getLogger(RequestResponseLoggingFilter.class);
 
@@ -27,6 +27,7 @@ public class RequestResponseLoggingFilter implements Filter {
                 return;
             }
 
+            // TODO stream 재사용 불가
             // 요청 로깅
             logger.info("Incoming Request: Method={}, URI={}, Payload={}",
                     httpRequest.getMethod(), httpRequest.getRequestURI(), getRequestPayload(httpRequest));

@@ -18,4 +18,6 @@ public interface AlarmCategoryRepository extends JpaRepository<AlarmCategory, Lo
     List<AlarmCategory> findByCategoryTypeAndParentIsNull(CategoryType categoryType);
 
     Optional<Long> findByUniqueId(Long uniqueId);
+
+    List<AlarmCategory> findByParentIsNull();
 }
