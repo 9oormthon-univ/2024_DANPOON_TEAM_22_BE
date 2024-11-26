@@ -12,6 +12,7 @@ import naeilmolae.domain.alarm.dto.AlarmCategoryCount;
 import naeilmolae.domain.alarm.dto.response.AlarmCategoryResponseDto;
 import naeilmolae.domain.alarm.dto.response.AlarmCategoryResponseDtoWithChildren;
 import naeilmolae.domain.alarm.dto.response.AlarmResponseDto;
+import naeilmolae.domain.alarm.service.AlarmCategoryService;
 import naeilmolae.domain.alarm.service.AlarmService;
 import naeilmolae.domain.alarm.service.AlarmViewService;
 import naeilmolae.domain.member.domain.Member;
@@ -30,13 +31,14 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/v1/alarm")
 public class AlarmController {
     private final AlarmViewService alarmViewService;
+    private final AlarmCategoryService alarmCategoryService;
     private final AlarmService alarmService;
 
     // valid
     @Operation(summary = "[VALID] [청년] 위로 청취 1단계: 위로 목록 조회", description = "위로 목록을 조회합니다. 이후 '[청년] 청취 1단계'로 이동합니다. ")
     @GetMapping("/alarm-category/comfort")
     public BaseResponse<List<AlarmCategoryResponseDtoWithChildren>> getComfortList(@CurrentMember Member member) {
-        List<AlarmCategoryResponseDtoWithChildren> collect = alarmViewService.findComfortAlarmCategoryList()
+        List<AlarmCategoryResponseDtoWithChildren> collect = alarmCategoryService.findComfortAlarmCategoryList()
                 .stream()
                 .map(AlarmCategoryResponseDtoWithChildren::new)
                 .collect(Collectors.toList());

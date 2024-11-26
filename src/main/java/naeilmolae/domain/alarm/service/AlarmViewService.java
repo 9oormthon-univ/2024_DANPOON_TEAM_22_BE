@@ -22,10 +22,6 @@ public class AlarmViewService {
     private final AlarmCategoryRepository alarmCategoryRepository;
     private final AlarmRepository alarmRepository;
 
-    // 위로 카테고리 알람 조회
-    public List<AlarmCategory> findComfortAlarmCategoryList() {
-        return alarmCategoryRepository.findByCategoryTypeAndParentIsNull(CategoryType.COMFORT);
-    }
 
     // 추천 알람 조회
     public Alarm findRecommendedAlarm(Long memberId, Long parentCategoryId) {
