@@ -1,11 +1,13 @@
 package naeilmolae.global.common.exception;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import naeilmolae.global.common.base.BaseResponse;
 import naeilmolae.global.common.exception.code.BaseCodeDto;
 import naeilmolae.global.common.exception.code.status.GlobalErrorStatus;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -22,7 +24,20 @@ import java.util.Optional;
 
 @Slf4j
 @RestControllerAdvice(annotations = {RestController.class})
+@RequiredArgsConstructor
 public class ExceptionAdvice extends ResponseEntityExceptionHandler {
+
+    private final ErrorSender errorSender;
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<BaseResponse<String>> handle500Exception(Exception e) {
+        log.error("An error occurred: {}", e.getMessage(), e);
+
+        //디스코드 알림 전송
+        errorSender.sendErrorToDiscord(String.format("An error occurred: %s\n%s", e.getMessage(), e.toString()));
+
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
+
     /*
      * 직접 정의한 RestApiException 에러 클래스에 대한 예외 처리
      */
@@ -33,15 +48,15 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(errorCode);
     }
 
-    /*
-     * 일반적인 서버 에러에 대한 예외 처리
-     */
-    @ExceptionHandler
-    public ResponseEntity<BaseResponse<String>> handleException(Exception e) {
-        e.printStackTrace(); //예외 정보 출력
-
-        return handleExceptionInternalFalse(GlobalErrorStatus._INTERNAL_SERVER_ERROR.getCode(), e.getMessage());
-    }
+//    /*
+//     * 일반적인 서버 에러에 대한 예외 처리
+//     */
+//    @ExceptionHandler
+//    public ResponseEntity<BaseResponse<String>> handleException(Exception e) {
+//        e.printStackTrace(); //예외 정보 출력
+//
+//        return handleExceptionInternalFalse(GlobalErrorStatus._INTERNAL_SERVER_ERROR.getCode(), e.getMessage());
+//    }
 
     /*
      * ConstraintViolationException 발생 시 예외 처리

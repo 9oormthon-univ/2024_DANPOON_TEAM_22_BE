@@ -1,39 +1,29 @@
 package naeilmolae.global.common.exception;
 
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
-@RestControllerAdvice
-public class ControllerExceptionHandler {
+@Component
+@Slf4j
+public class ErrorSender {
 
-    private static final Logger logger = LoggerFactory.getLogger(ControllerExceptionHandler.class);
+    private static final Logger logger = LoggerFactory.getLogger(ErrorSender.class);
 
     private final WebClient webClient;
     private final String discordWebhookUrl;
 
     // Webhook URL은 application.yml 또는 application.properties에서 주입
-    public ControllerExceptionHandler(@Value("${discord.webhook.url}") String discordWebhookUrl, WebClient.Builder webClientBuilder) {
+    public ErrorSender(@Value("${discord.webhook.url}") String discordWebhookUrl, WebClient.Builder webClientBuilder) {
         this.discordWebhookUrl = discordWebhookUrl;
         this.webClient = webClientBuilder.build();
     }
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<Void> handleException(Exception e) {
-        logger.error("An error occurred: {}", e.getMessage(), e);
 
-        //디스코드 알림 전송
-        sendErrorToDiscord(String.format("An error occurred: %s\n%s", e.getMessage(), e.toString()));
-
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-    }
-
-    private void sendErrorToDiscord(String message) {
+    public void sendErrorToDiscord(String message) {
         try {
             webClient.post()
                     .uri(discordWebhookUrl)
