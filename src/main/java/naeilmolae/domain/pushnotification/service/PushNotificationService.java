@@ -1,6 +1,7 @@
 package naeilmolae.domain.pushnotification.service;
 
 import lombok.RequiredArgsConstructor;
+import naeilmolae.domain.alarm.service.AlarmService;
 import naeilmolae.domain.alarm.service.AlarmViewService;
 import naeilmolae.domain.member.domain.Member;
 import naeilmolae.domain.member.domain.YouthMemberInfo;
@@ -11,6 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static naeilmolae.domain.alarm.domain.AlarmCategory.*;
+
 @Service
 @RequiredArgsConstructor
 public class PushNotificationService {
@@ -18,11 +21,13 @@ public class PushNotificationService {
     private final MemberService memberService;
     private final FirebaseMessagingService firebaseMessagingService; // Firebase 연동
     private final AlarmViewService alarmViewService;
+    private final AlarmService alarmService;
 
     // 외출 시간 고정 2시
     private static final LocalDateTime FIXED_OUTING_DATETIME = LocalDateTime.of(2024, 11, 23, 23, 47);
 
     @Transactional(readOnly = true)
+    // TODO 수정 필요함
     public void sendNotificationsAtScheduledTime() {
         // 모든 청년(YOUTH) 유저 가져오기
         List<Member> youthMembers = memberService.getAllYouthMemeber();
@@ -40,8 +45,9 @@ public class PushNotificationService {
                     firebaseMessagingService.sendNotification(
                             member.getFcmToken(),
                             "좋은 아침이에요! 응원의 목소리와 하루를 시작해볼까요?",
-                            alarmViewService.getAlarmCategoryIdByUnqiueId(1001L)
+                            alarmService.findByAlarmCategory(WAKE_UP_WEEKDAY).getId()
                     );
+
                 }
 
                 // breakfast 알림
@@ -49,7 +55,7 @@ public class PushNotificationService {
                     firebaseMessagingService.sendNotification(
                             member.getFcmToken(),
                             "밥은 잘 챙겨 먹었나요? 안 먹었다면, 잠깐 들어봐요.",
-                            alarmViewService.getAlarmCategoryIdByUnqiueId(3001L)
+                            alarmService.findByAlarmCategory(MEAL_BREAKFAST).getId()
                     );
                 }
 
@@ -58,7 +64,7 @@ public class PushNotificationService {
                     firebaseMessagingService.sendNotification(
                             member.getFcmToken(),
                             "밥은 잘 챙겨 먹었나요? 안 먹었다면, 잠깐 들어봐요.",
-                            alarmViewService.getAlarmCategoryIdByUnqiueId(3002L)
+                            alarmService.findByAlarmCategory(MEAL_LUNCH).getId()
                     );
                 }
 
@@ -67,7 +73,7 @@ public class PushNotificationService {
                     firebaseMessagingService.sendNotification(
                             member.getFcmToken(),
                             "밥은 잘 챙겨 먹었나요? 안 먹었다면, 잠깐 들어봐요.",
-                            alarmViewService.getAlarmCategoryIdByUnqiueId(3003L)
+                            alarmService.findByAlarmCategory(MEAL_DINNER).getId()
                     );
                 }
 
@@ -76,7 +82,7 @@ public class PushNotificationService {
                     firebaseMessagingService.sendNotification(
                             member.getFcmToken(),
                             "오늘 하루 수고 많았어요. 따스한 목소리와 함께 마무리해요.",
-                            alarmViewService.getAlarmCategoryIdByUnqiueId(4001L)
+                            alarmService.findByAlarmCategory(SLEEP_PREPARE).getId()
                     );
                 }
 
@@ -85,7 +91,7 @@ public class PushNotificationService {
                     firebaseMessagingService.sendNotification(
                             member.getFcmToken(),
                             "외출할 일이 있나요? 나가지 전에, 잠깐 들어봐요.",
-                            alarmViewService.getAlarmCategoryIdByUnqiueId(2003L)
+                            alarmService.findByAlarmCategory(GO_OUT_CLEAR).getId()
                     );
                 }
 

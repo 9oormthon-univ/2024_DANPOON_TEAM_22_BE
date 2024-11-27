@@ -34,24 +34,19 @@ public class VoiceFile extends BaseEntity {
     @JoinColumn(name = "analysis_result_id")
     private AnalysisResult analysisResult;
 
-    @ManyToOne
-    @JoinColumn(name = "member_id")
-    private Member member;
+    @Column(name = "member_id")
+    private Long memberId;
 
-    @ManyToOne
-    @JoinColumn(name = "alarm_id")
-    private Alarm alarm;
+    @Column(name = "alarm_id")
+    private Long alarmId;
+
 
     // TODO 음성 파형 넣어야함
 
-    public VoiceFile(Member member, Alarm alarm, String content) {
-        //  Alarm 서비스가 구현 되어야 한다.
-        if (alarm.getAlarmCategory().isRoot()) {
-            throw new RestApiException(GlobalErrorStatus._BAD_REQUEST); // TODO 예외 처리
-        }
-        this.member = member;
+    public VoiceFile(Long memberId, Long alarmId, String content) {
         this.content = content;
-        this.alarm = alarm; // TODO Alarm 서비스가 구현 되어야 한다.
+        this.memberId = memberId;
+        this.alarmId = alarmId;
     }
 
     /**

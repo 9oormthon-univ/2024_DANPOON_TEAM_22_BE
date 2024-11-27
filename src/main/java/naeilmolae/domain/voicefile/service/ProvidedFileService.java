@@ -1,6 +1,8 @@
 package naeilmolae.domain.voicefile.service;
 
 import lombok.RequiredArgsConstructor;
+import naeilmolae.domain.alarm.dto.response.AlarmCategoryMessageResponseDto;
+import naeilmolae.domain.alarm.service.AlarmAdapterService;
 import naeilmolae.domain.member.domain.Member;
 import naeilmolae.domain.member.service.MemberService;
 import naeilmolae.domain.voicefile.domain.ProvidedFile;
@@ -15,10 +17,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -27,6 +29,8 @@ public class ProvidedFileService {
     private final ProvidedFileRepository providedFileRepository;
     private final MemberService memberService;
     private final VoiceFileService voiceFileService;
+    // 외부 서비스
+    private final AlarmAdapterService alarmAdapterService;
 
     @Transactional
     public ProvidedFile save(Long memberId, Long voiceFileId) {
@@ -38,20 +42,24 @@ public class ProvidedFileService {
 
         VoiceFile voiceFile = voiceFileService.findById(voiceFileId);
         Member consumer = memberService.findById(memberId);
-        ProvidedFile providedFile = new ProvidedFile(voiceFile, consumer);
+
+
+        ProvidedFile providedFile = new ProvidedFile(voiceFile, consumer.getId());
 
         return providedFileRepository.save(providedFile);
     }
 
     // 봉사자용 편지 조회
-    public Page<ProvidedFile> getProvidedFiles(Long memberId, Optional<Long> parentCategoryId, Pageable pageable) {
-        if (parentCategoryId.isEmpty()) {
+    public Page<ProvidedFile> getProvidedFiles(Long memberId, String parentCategory, Pageable pageable) {
+        if (parentCategory == null) {
             return providedFileRepository.findByMemberId(memberId, pageable);
         } else {
-            return providedFileRepository.findByMemberIdAndAlarmId(memberId, parentCategoryId.get(), pageable);
+            AlarmCategoryMessageResponseDto dto = alarmAdapterService.findByAlarmCategory(parentCategory);
+            return providedFileRepository.findByMemberIdAndAlarmId(memberId, dto.getAlarmId(), pageable);
         }
     }
 
+    // 감사 편지 보내기
     @Transactional
     public boolean likeProvidedFile(Long consumerId, Long providedFileId, String message) {
         ProvidedFile providedFile = providedFileRepository.findByConsumerId(consumerId,providedFileId)
@@ -59,11 +67,17 @@ public class ProvidedFileService {
         return providedFile.addThanksMessage(message);
     }
 
+    // 음성 파일 북마크하기
     @Transactional
     public boolean bookmarkProvidedFile(Long consumerId, Long providedFileId) {
         ProvidedFile providedFile = providedFileRepository.findByConsumerId(consumerId,providedFileId)
                 .orElseThrow(() -> new RestApiException(GlobalErrorStatus._BAD_REQUEST));
         return providedFile.setConsumerSaved();
+    }
+
+    // 특정 날짜 사이의 사용자가 제공한 파일의 List<Long> (AlarmId) 반환
+    public List<Long> findAlarmIdsByConsumerId(Long memberId, LocalDateTime startDay, LocalDateTime endDay) {
+        return providedFileRepository.findAlarmIdsByConsumerId(memberId, startDay, endDay);
     }
 
     // 청년의 반응 보여주기

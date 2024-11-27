@@ -25,10 +25,10 @@ public class ProvidedFileResponseDto {
     @Schema(description = "알람 타입", example = "기상")
     private String alarmType;
 
-    public static ProvidedFileResponseDto from(ProvidedFile providedFile) {
+    public static ProvidedFileResponseDto from(ProvidedFile providedFile, String alarmType) {
         return new ProvidedFileResponseDto(providedFile.getId(),
                 providedFile.getCreatedAt(),
                 providedFile.getThanksMessage(),
-                providedFile.getVoiceFile().getAlarm().getAlarmCategory().getName());
+                alarmType);
     }
 }

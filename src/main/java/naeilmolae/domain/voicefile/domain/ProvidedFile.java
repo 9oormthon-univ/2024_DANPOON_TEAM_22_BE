@@ -19,20 +19,18 @@ public class ProvidedFile extends BaseEntity {
     @JoinColumn(name = "voice_file_id")
     private VoiceFile voiceFile;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
-    private Member consumer;
+    private Long consumerId;
 
     private String thanksMessage; // TODO 나중에 varchar 255를 늘려야할 수도
 
     private boolean isConsumerSaved = false;
 
-    public ProvidedFile(VoiceFile voiceFile, Member consumer) {
-        if(consumer.getRole() == Role.HELPER) {
-            throw new IllegalArgumentException("파일을 제공할 수 없는 사용자입니다.");
-        }
+    public ProvidedFile(VoiceFile voiceFile, Long consumerId) {
+//        if(consumer.getRole() == Role.HELPER) {
+//            throw new IllegalArgumentException("파일을 제공할 수 없는 사용자입니다.");
+//        }
         this.voiceFile = voiceFile;
-        this.consumer = consumer;
+        this.consumerId = consumerId;
     }
 
     public boolean addThanksMessage(String message) {

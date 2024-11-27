@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import naeilmolae.domain.alarm.domain.AlarmCategory;
+import naeilmolae.domain.alarm.domain.AlarmCategoryMessage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,15 +15,14 @@ import java.util.stream.Collectors;
 public class AlarmCategoryResponseDtoWithChildren extends AlarmCategoryResponseDto {
     List<AlarmCategoryResponseDto> children = new ArrayList<>();
 
-    public AlarmCategoryResponseDtoWithChildren(AlarmCategory entity) {
-        super(entity);
-        if (!entity.isRoot()) {
+    public AlarmCategoryResponseDtoWithChildren(AlarmCategory alarmCategory, AlarmCategoryMessage alarmCategoryMessage) {
+        super(alarmCategory, alarmCategoryMessage);
+        if (!alarmCategory.isRoot()) {
             throw new IllegalArgumentException("AlarmCategory must be root category"); // TDOO 예외 응답 정제해야함.
         }
-        setChildren(entity.getChildren()
+        this.children = AlarmCategory.getByParent(alarmCategory)
                 .stream()
-                .map(AlarmCategoryResponseDto::new)
-                .collect(Collectors.toList()));
-        ;
+                .map(child -> new AlarmCategoryResponseDto(child, alarmCategoryMessage))
+                .collect(Collectors.toList());
     }
 }

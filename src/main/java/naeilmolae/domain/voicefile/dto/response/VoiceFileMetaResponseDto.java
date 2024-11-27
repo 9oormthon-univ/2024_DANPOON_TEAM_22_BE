@@ -21,9 +21,9 @@ public class VoiceFileMetaResponseDto {
 
 
     public static VoiceFileMetaResponseDto fromEntity(VoiceFile voiceFile) {
-        if (voiceFile.getAlarm() == null) {
-            throw new IllegalArgumentException("Alarm이 존재하지 않습니다.");
-        }
+//        if (voiceFile.getAlarm() == null) {
+//            throw new IllegalArgumentException("Alarm이 존재하지 않습니다.");
+//        }
 
         VoiceFileMetaResponseDto responseDto = new VoiceFileMetaResponseDto();
         responseDto.voiceFileId = voiceFile.getId();

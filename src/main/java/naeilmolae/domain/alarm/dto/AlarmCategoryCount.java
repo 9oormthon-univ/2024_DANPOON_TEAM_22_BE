@@ -7,13 +7,11 @@ import lombok.Setter;
 @Getter
 @Setter(value = AccessLevel.PRIVATE)
 public class AlarmCategoryCount {
-    private Long categoryId;
     private String title;
     private Long count = 0L;
     private boolean isUsed = false;
 
-    public AlarmCategoryCount(Long categoryId, String title, Long count) {
-        setCategoryId(categoryId);
+    public AlarmCategoryCount(String title, Long count) {
         setTitle(title);
         setCount(count);
     }
