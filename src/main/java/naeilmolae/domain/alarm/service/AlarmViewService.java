@@ -24,6 +24,7 @@ public class AlarmViewService {
 
 
     // 알림 조회
+    // TODO 메소드 이름 변경
     public Alarm findRecommendedAlarm(Long memberId, AlarmCategory childAlarmCategory) {
         return alarmService.findByAlarmCategory(childAlarmCategory);
     }
