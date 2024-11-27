@@ -1,58 +1,59 @@
 <configuration>
-    <!-- 콘솔에 출력 -->
+    <!-- 날짜 포맷 설정 -->
+    <timestamp key="currentDate" datePattern="yyyy-MM-dd" />
+
+    <!-- 전역 변수 설정 -->
+    <property name="LOG_PATH" value="./logs" />
+    <property name="LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%level] [%thread] [%logger{36}] - %msg%n" />
+    <property name="ERROR_LOG_FILE" value="error" />
+    <property name="GENERAL_LOG_FILE" value="general" />
+
+
+    <!-- Console Appender -->
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %highlight(%-5level) %logger{36} - %msg%n</pattern>
+            <pattern>${LOG_PATTERN}</pattern>
         </encoder>
     </appender>
 
-    <!-- 파일에 저장 -->
-    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>logs/app.log</file>
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <!-- 로그 파일 이름 형식 -->
-            <fileNamePattern>logs/app-%d{yyyy-MM-dd}.log</fileNamePattern>
-            <!-- 로그 보관 기간 -->
+    <!-- General File Appender (모든 로그 기록) -->
+    <appender name="GENERAL_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}/${currentDate}/${GENERAL_LOG_FILE}.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- 날짜 및 크기 기준으로 로그 파일 관리 -->
+            <fileNamePattern>${LOG_PATH}/%d{yyyy-MM-dd}/${GENERAL_LOG_FILE}-%i.log</fileNamePattern>
+            <maxFileSize>10MB</maxFileSize>
             <maxHistory>30</maxHistory>
-            <!-- 로그 파일 크기 제한 -->
-            <totalSizeCap>200MB</totalSizeCap>
         </rollingPolicy>
         <encoder>
-            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %logger{36} - %msg%n</pattern>
+            <pattern>${LOG_PATTERN}</pattern>
         </encoder>
     </appender>
 
-    <!-- 기본 로깅 레벨 -->
-    <!-- local Profile에서의 로그 설정 -->
-    <springProfile name="local">
-        <!-- 해당 패키지의 로그는 DEBUG 레벨 부터 출력 -->
-        <logger name="naeilmolae" level="DEBUG" />
-        <!--HTTP 로깅을 위한 Logger 설정-->
-        <logger name="org.springframework.web.filter.CommonsRequestLoggingFilter" level="DEBUG" />
-        <logger name="naeilmolae.global.config.log.RequestResponseLoggingFilter" level="DEBUG" />
-        <!-- 전체적인 로그는 INFO 레벨 부터 출력 -->
-        <root level="INFO">
-            <!-- CONSOLE 로그 Appender를 로그 Appender로 등록 -->
-            <appender-ref ref="CONSOLE" />
-            <appender-ref ref="FILE" />
-        </root>
-    </springProfile>
+    <!-- Error File Appender -->
+    <appender name="ERROR_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}/${currentDate}/${ERROR_LOG_FILE}.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- 날짜 및 크기 기준으로 로그 파일 관리 -->
+            <fileNamePattern>${LOG_PATH}/%d{yyyy-MM-dd}/${ERROR_LOG_FILE}-%i.log</fileNamePattern>
+            <maxFileSize>10MB</maxFileSize>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <!-- ERROR 레벨 필터 -->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
 
-    <!-- dev Profile에서의 로그 설정 -->
-    <springProfile name="dev">
-        <!--HTTP 로깅을 위한 Logger 설정-->
-        <logger name="org.springframework.web.filter.CommonsRequestLoggingFilter" level="DEBUG" />
-        <root level="INFO">
-            <appender-ref ref="CONSOLE" />
-            <appender-ref ref="FILE" />
-        </root>
-    </springProfile>
-
-    <!-- prod Profile에서의 로그 설정 -->
-    <springProfile name="prod">
-        <root level="INFO">
-            <appender-ref ref="CONSOLE" />
-            <appender-ref ref="FILE" />
-        </root>
-    </springProfile>
+    <!-- 루트 로거 -->
+    <root level="INFO">
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="GENERAL_FILE" />
+        <appender-ref ref="ERROR_FILE" />
+    </root>
 </configuration>
