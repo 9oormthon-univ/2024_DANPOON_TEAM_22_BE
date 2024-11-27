@@ -26,7 +26,7 @@ public class VoiceFileController {
     private final ProvidedFileService providedFileService;
     private final S3FileComponent s3FileComponent;
 
-    private final AlarmAdapterService alarmAdapterService; // TODO 의존성 제거해야함
+    private final AlarmAdapterService alarmAdapterService; 
 
     @Operation(summary = "[VALID] [봉사자] 녹음 3-1단계: 스크립트 GPT에게 작성 요청", description = "GPT에게 스크립트 작성을 요청합니다.")
     @PostMapping("/{alarmId}/gpt")
