@@ -75,11 +75,6 @@ public class ProvidedFileService {
         return providedFile.setConsumerSaved();
     }
 
-    // 특정 날짜 사이의 사용자가 제공한 파일의 List<Long> (AlarmId) 반환
-    public List<Long> findAlarmIdsByConsumerId(Long memberId, LocalDateTime startDay, LocalDateTime endDay) {
-        return providedFileRepository.findAlarmIdsByConsumerId(memberId, startDay, endDay);
-    }
-
     // 청년의 반응 보여주기
     public VoiceFileReactionSummaryResponseDto getTotalReaction(Long memberId) {
 

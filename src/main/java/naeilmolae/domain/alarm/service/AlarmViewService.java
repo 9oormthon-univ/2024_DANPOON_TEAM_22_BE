@@ -12,6 +12,7 @@ import naeilmolae.domain.voicefile.service.ProvidedFileAdapterService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
@@ -27,15 +28,9 @@ public class AlarmViewService {
     private final ProvidedFileAdapterService providedFileAdapterService;
 
 
-    // 추천 알람 조회
-    public Alarm findRecommendedAlarm(Long memberId, AlarmCategory parentCategory) {
-        List<AlarmCategory> childCategories = AlarmCategory.getByParent(parentCategory);
-        List<Alarm> alarmsByParentCategoryId = alarmService.findByCategories(childCategories);
-        if (alarmsByParentCategoryId.isEmpty()) {
-            return null; // 리스트가 비어있으면 null 반환
-        }
-        int randomIndex = ThreadLocalRandom.current().nextInt(alarmsByParentCategoryId.size());
-        return alarmsByParentCategoryId.get(randomIndex);
+    // 알림 조회
+    public Alarm findRecommendedAlarm(Long memberId, AlarmCategory childAlarmCategory) {
+        return alarmService.findByAlarmCategory(childAlarmCategory);
     }
 
 
@@ -51,19 +46,37 @@ public class AlarmViewService {
                 .collect(Collectors.toSet());
     }
 
-    // VoiceFile이 부족한 부모 카테고리 조회
+    // 카테고리 순서 맞추기
     public List<AlarmCategoryCount> findUserCategoryCount(Long memberId, CategoryType categoryType) {
-        // TODO 1. 가장 적게 작성된 AlarmCateogry 나열
-        // TODO 2. 그 중에 사용자가 작성한 거는 뒤로
-
-        List<AlarmCategory> collect = AlarmCategory.ROOT_CATEGORIES
+        // TODO 1. 사용자가 작성한 알람 조회
+        Set<AlarmCategory> userUsed = this.findDistinctCreatedCategories(memberId)
                 .stream()
                 .filter(item -> item.getCategoryType().equals(categoryType))
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
 
-        return alarmService.findByCategories(collect)
+        // TODO 2. 순서 맞추기
+        List<AlarmCategoryCount> collect = AlarmCategory.ROOT_CATEGORIES
                 .stream()
+                .filter(item -> item.getCategoryType().equals(categoryType))
                 .map(AlarmCategoryCount::new)
                 .collect(Collectors.toList());
+
+        // collect 리스트를 순회하면서 userUsed에 포함된 요소는 맨 뒤로 이동
+        List<AlarmCategoryCount> sortedCollect = new ArrayList<>();
+
+        // userUsed에 포함되지 않은 항목 먼저 추가
+        collect.stream()
+                .filter(item -> !userUsed.contains(item.getAlarmCategory()))
+                .forEach(sortedCollect::add);
+
+        // userUsed에 포함된 항목을 뒤에 추가
+        collect.stream()
+                .filter(item -> userUsed.contains(item.getAlarmCategory()))
+                .forEach(item -> {
+                    item.setUsed();         // isUsed 값을 true로 설정
+                    sortedCollect.add(item); // sortedCollect에 추가
+                });
+
+        return sortedCollect;
     }
 }

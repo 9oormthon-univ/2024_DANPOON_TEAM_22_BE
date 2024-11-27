@@ -90,4 +90,10 @@ public enum AlarmCategory {
     public boolean isChildOf(AlarmCategory parentCategory) {
         return this.parent == parentCategory;
     }
+
+    public static List<AlarmCategory> getChildrenByParent(AlarmCategory parent) {
+        return Stream.of(AlarmCategory.values())
+                .filter(category -> category.isChildOf(parent))
+                .collect(Collectors.toList());
+    }
 }

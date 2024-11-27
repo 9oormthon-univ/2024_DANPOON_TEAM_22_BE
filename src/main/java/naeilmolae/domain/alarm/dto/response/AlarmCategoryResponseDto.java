@@ -15,7 +15,7 @@ public class AlarmCategoryResponseDto {
     private CategoryType categoryType;
 
     public AlarmCategoryResponseDto(AlarmCategory alarmCategory, AlarmCategoryMessage alarmCategoryMessage) {
-        this.name = alarmCategory.getName();
+        this.name = alarmCategory.name();
         this.title = alarmCategoryMessage.getTitle();
         this.categoryType = alarmCategory.getCategoryType();
     }

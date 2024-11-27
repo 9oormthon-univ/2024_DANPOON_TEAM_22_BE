@@ -57,7 +57,7 @@ public class AlarmController {
     }
 
     // valid
-    @Operation(summary = "[VALID] [청년] 위로 청취 2단계: 1단계로 AlarmId 조회", description = "위로 목록을 조회합니다. 이후 '[청년] 청취 1단계'로 이동합니다. ")
+    @Operation(summary = "[VALID] [청년] 위로 청취 2단계 -> [청년] 청취 1단계: 1단계로 AlarmId 조회", description = "위로 목록을 조회합니다. 이후 '[청년] 청취 1단계'로 이동합니다. ")
     @GetMapping("/alarm-category/{alarmCategory}")
     public BaseResponse<AlarmCategoryMessageResponseDto> getAlarmIdByAlarmCategoryId(@CurrentMember Member member,
                                                                                      @PathVariable AlarmCategory alarmCategory) {
@@ -78,11 +78,11 @@ public class AlarmController {
         return BaseResponse.onSuccess(collect);
     }
 
-    @Operation(summary = "[VALID] [봉사자] 녹음 2단계: 말 작성 시 상단 멘트 조회", description = "위로 녹음9 에서 상단에 보여줄 멘트를 제공합니다.")
+    @Operation(summary = "[VALID] [봉사자] 녹음 2단계: 말 작성 시 상단 멘트 및 AlarmId 조회", description = "위로 녹음9 에서 상단에 보여줄 멘트를 제공합니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "COMMON200", description = "조회 성공"),
     })
-    @GetMapping("/alarm-category/{alarmCategory}/optimized")
+    @GetMapping("/alarm-category/{alarmCategory}/detail")
     public BaseResponse<AlarmCategoryMessageResponseDto> getAlarmCategory(@CurrentMember Member member,
                                                                           @PathVariable AlarmCategory alarmCategory) {
         Alarm recommendedAlarm = alarmViewService.findRecommendedAlarm(member.getId(), alarmCategory);
@@ -100,6 +100,7 @@ public class AlarmController {
     @GetMapping("/this-week")
     public BaseResponse<List<AlarmCategoryResponseDto>> getDistinctAlarmTypesThisWeek(@CurrentMember Member member) {
 
+        // 이번 주에 사용된 알람의 부모 카테고리 조회
         Set<AlarmCategory> distinctCreatedCategories = alarmViewService.findDistinctCreatedCategories(member.getId());
         List<AlarmCategoryResponseDto> collect = alarmCategoryMessageService.findByAlarmCategoryIn(distinctCreatedCategories.stream().toList())
                 .stream()

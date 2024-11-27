@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.temporal.TemporalAdjusters;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -38,7 +39,13 @@ public class AlarmService {
                 .orElseThrow(() -> new RestApiException(GlobalErrorStatus._BAD_REQUEST));
     }
 
+    // TODO 값이 일정하므로 캐싱하게 만들어야 함.
     public List<Alarm> findByCategories(List<AlarmCategory> alarmCategories) {
-        return alarmRepository.findByCategories(alarmCategories);
+        List<AlarmCategory> query = new ArrayList<>();
+        for (AlarmCategory alarmCategory : alarmCategories) {
+            List<AlarmCategory> childrenByParent = AlarmCategory.getChildrenByParent(alarmCategory);
+            query.addAll(childrenByParent);
+        }
+        return alarmRepository.findByCategories(query);
     }
 }

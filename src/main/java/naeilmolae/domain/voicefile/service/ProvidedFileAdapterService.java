@@ -11,13 +11,13 @@ import java.util.Set;
 @Service
 @RequiredArgsConstructor
 public class ProvidedFileAdapterService {
-    private final ProvidedFileService providedFileService;
+    private final VoiceFileService voiceFileService;
 
     public Set<Long> findAlarmIdsProvidedThisWeek(Long memberId) {
         LocalDate now = LocalDate.now();
-        LocalDateTime startDay = now.atStartOfDay();
-        LocalDateTime endDay = now.plusDays(7).atStartOfDay();
-        List<Long> alarmIdsByConsumerId = providedFileService.findAlarmIdsByConsumerId(memberId, startDay, endDay);
+        LocalDateTime startDay = now.minusDays(7).atStartOfDay();
+        LocalDateTime endDay = LocalDateTime.now();
+        List<Long> alarmIdsByConsumerId = voiceFileService.findAlarmIdsByMemberIdAndBetween(memberId, startDay, endDay);
         return Set.copyOf(alarmIdsByConsumerId);
     }
 }

@@ -30,4 +30,13 @@ public interface VoiceFileRepository extends JpaRepository<VoiceFile, Long> {
             @Param("alarmId") Long alarmId,
             @Param("oneWeekAgo") LocalDateTime oneWeekAgo);
 
+    @Query("""
+            SELECT vf.alarmId
+            FROM VoiceFile vf 
+            WHERE vf.memberId = :memberId 
+            AND vf.createdAt >= :startDay 
+            AND vf.createdAt < :endDay""")
+    List<Long> findAlarmIdsByMemberIdAndBetween(@Param("memberId") Long memberId,
+                                        @Param("startDay") LocalDateTime startDay,
+                                        @Param("endDay") LocalDateTime endDay);
 }

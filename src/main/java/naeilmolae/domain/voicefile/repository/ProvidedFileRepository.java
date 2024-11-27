@@ -56,14 +56,5 @@ public interface ProvidedFileRepository extends JpaRepository<ProvidedFile, Long
         // ProvidedFile의 voiceFile의 member의 id가 memberId인 ProvidedFile의 개수를 찾는 쿼리
     Long findTotalListenersByMemberId(@Param("memberId") Long memberId);
 
-    @Query("""
-            SELECT pf.id 
-            FROM ProvidedFile pf 
-            JOIN pf.voiceFile vf 
-            WHERE vf.memberId= :memberId 
-            AND pf.createdAt >= :startDay 
-            AND pf.createdAt < :endDay""")
-    List<Long> findAlarmIdsByConsumerId(@Param("memberId") Long memberId,
-                                        @Param("startDay") LocalDateTime startDay,
-                                        @Param("endDay") LocalDateTime endDay);
+
 }

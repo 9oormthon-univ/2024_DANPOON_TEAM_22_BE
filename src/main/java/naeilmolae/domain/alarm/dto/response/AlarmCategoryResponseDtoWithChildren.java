@@ -20,7 +20,7 @@ public class AlarmCategoryResponseDtoWithChildren extends AlarmCategoryResponseD
         if (!alarmCategory.isRoot()) {
             throw new IllegalArgumentException("AlarmCategory must be root category"); // TDOO 예외 응답 정제해야함.
         }
-        this.children = AlarmCategory.getByParent(alarmCategory)
+        this.children = AlarmCategory.getChildrenByParent(alarmCategory)
                 .stream()
                 .map(child -> new AlarmCategoryResponseDto(child, alarmCategoryMessage))
                 .collect(Collectors.toList());

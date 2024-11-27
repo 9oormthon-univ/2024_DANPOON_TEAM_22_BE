@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -122,6 +123,11 @@ public class VoiceFileService {
     public VoiceFile verifyUserFile(Long memberId, Long fileId) {
         return voiceFileRepository.findByMemberIdAndId(memberId, fileId)
                 .orElseThrow(() -> new RestApiException(GlobalErrorStatus._BAD_REQUEST));
+    }
+
+    // 사용자가 특정 시간 사이에 생성한 알람 ID List 조회
+    public List<Long> findAlarmIdsByMemberIdAndBetween(Long memberId, LocalDateTime startDay, LocalDateTime endDay) {
+        return voiceFileRepository.findAlarmIdsByMemberIdAndBetween(memberId, startDay, endDay);
     }
 
     // 알람 Id로 사용자에게 제공되지 않은 데이터 조회
