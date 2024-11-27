@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import naeilmolae.domain.alarm.domain.Alarm;
 import naeilmolae.domain.alarm.domain.AlarmCategory;
 import naeilmolae.domain.alarm.domain.AlarmCategoryMessage;
+import naeilmolae.domain.alarm.domain.AlarmExample;
 import naeilmolae.domain.alarm.dto.response.AlarmCategoryMessageResponseDto;
 import naeilmolae.domain.alarm.dto.response.AlarmResponseDto;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,7 @@ public class AlarmAdapterService {
 
     private final AlarmService alarmService;
     private final AlarmCategoryMessageService alarmCategoryMessageService;
+    private final AlarmExampleService alarmExampleService;
 
     public AlarmCategoryMessageResponseDto findByAlarmCategory(String alarmCategory) {
         AlarmCategory category = AlarmCategory.valueOf(alarmCategory.toUpperCase());
@@ -39,5 +41,9 @@ public class AlarmAdapterService {
         return alarmService.findByIdIn(alarmIds)
                 .stream()
                 .collect(Collectors.toMap(Alarm::getId, AlarmResponseDto::new));
+    }
+
+    public AlarmExample findAllByAlarmId(Long alarmId) {
+        return alarmExampleService.findAllByAlarmId(alarmId);
     }
 }
