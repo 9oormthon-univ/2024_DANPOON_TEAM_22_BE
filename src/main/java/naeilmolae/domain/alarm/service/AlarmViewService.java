@@ -5,9 +5,6 @@ import naeilmolae.domain.alarm.domain.Alarm;
 import naeilmolae.domain.alarm.domain.AlarmCategory;
 import naeilmolae.domain.alarm.domain.CategoryType;
 import naeilmolae.domain.alarm.dto.AlarmCategoryCount;
-import naeilmolae.domain.alarm.dto.response.AlarmResponseDto;
-import naeilmolae.domain.alarm.repository.AlarmCategoryMessageRepository;
-import naeilmolae.domain.alarm.repository.AlarmRepository;
 import naeilmolae.domain.voicefile.service.ProvidedFileAdapterService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,7 +19,6 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 public class AlarmViewService {
     private final AlarmService alarmService;
-    private final AlarmCategoryMessageService alarmCategoryMessageService;
 
     private final ProvidedFileAdapterService providedFileAdapterService;
 

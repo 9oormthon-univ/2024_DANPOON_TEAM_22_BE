@@ -30,6 +30,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/v1/providedfile")
 public class ProvidedFileController {
     private final ProvidedFileService providedFileService;
+
     private final AlarmAdapterService alarmAdapterService;
 
     @Operation(summary = "[봉사자] 동기부여 2단계: 자신의 녹음에 대해 사람들이 남긴 정보 요약 API", description = "동기부여 메인 페이지 내용, 자신의 녹음에 대해 사람들이 남긴 정보 요약")

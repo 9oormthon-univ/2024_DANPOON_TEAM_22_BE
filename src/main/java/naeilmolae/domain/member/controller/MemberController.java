@@ -15,7 +15,6 @@ import naeilmolae.domain.member.dto.response.MemberNumResponseDto;
 import naeilmolae.domain.member.service.MemberService;
 import naeilmolae.global.common.base.BaseResponse;
 import naeilmolae.global.config.security.auth.CurrentMember;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "멤버 API", description = "회원 가입, 회원 정보 조회/수정 등 회원 관리 관련 작업 담당 API")
