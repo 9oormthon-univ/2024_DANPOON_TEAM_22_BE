@@ -50,6 +50,9 @@ public class ProvidedFileService {
 
     // 봉사자용 편지 조회
     public Page<ProvidedFile> getProvidedFiles(Long memberId, String parentCategory, Pageable pageable) {
+        // TODO parentCategory에 대한 validation을 알람에게 제공
+
+
         if (parentCategory == null) {
             return providedFileRepository.findByMemberId(memberId, pageable);
         } else {

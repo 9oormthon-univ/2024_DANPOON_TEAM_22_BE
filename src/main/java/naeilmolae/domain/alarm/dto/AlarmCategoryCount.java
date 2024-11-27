@@ -11,11 +11,13 @@ import java.util.List;
 @Setter(value = AccessLevel.PRIVATE)
 public class AlarmCategoryCount {
     private AlarmCategory alarmCategory;
+    private String koreanName;
     private boolean isUsed = false;
     private List<AlarmCategory> children;
 
     public AlarmCategoryCount(AlarmCategory alarmCategory) {
         this.alarmCategory = alarmCategory;
+        this.koreanName = alarmCategory.getName();
         this.children = AlarmCategory.getChildrenByParent(alarmCategory);
     }
     public void setUsed() {
