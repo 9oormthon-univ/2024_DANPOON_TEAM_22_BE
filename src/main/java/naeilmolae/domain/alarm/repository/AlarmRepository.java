@@ -14,7 +14,6 @@ import java.util.Set;
 public interface AlarmRepository extends JpaRepository<Alarm, Long> {
 
     @Query("SELECT a FROM Alarm a " +
-            "JOIN FETCH a.alarmCategory aa " +
 //            "JOIN FETCH aa.parent " +
             "WHERE a.id = :id")
     Optional<Alarm> findById(Long id);

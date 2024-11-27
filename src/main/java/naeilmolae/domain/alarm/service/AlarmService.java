@@ -31,19 +31,14 @@ public class AlarmService {
         return alarmRepository.findByIdIn(alarmIds);
     }
 
-//    // 이번 주에 사용된 알람 조회
-//    public List<Alarm> findUsedAlarmInThisWeek(Long memberId) {
-//        LocalDateTime startOfWeek = LocalDateTime
-//                .now()
-//                .with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
-//        return alarmRepository.findByMemberIdAndBetween(memberId,
-//                startOfWeek,
-//                LocalDateTime.now());
-//    }
 
     // 알람 카테고리 ID로 알람 조회
-    public Alarm findByAlarmCategory(AlarmCategory alarmCategoryId) {
-        return alarmRepository.findByAlarmCategoryId(alarmCategoryId)
+    public Alarm findByAlarmCategory(AlarmCategory alarmCategory) {
+        return alarmRepository.findByAlarmCategoryId(alarmCategory)
                 .orElseThrow(() -> new RestApiException(GlobalErrorStatus._BAD_REQUEST));
+    }
+
+    public List<Alarm> findByCategories(List<AlarmCategory> alarmCategories) {
+        return alarmRepository.findByCategories(alarmCategories);
     }
 }

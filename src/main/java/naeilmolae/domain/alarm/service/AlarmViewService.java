@@ -5,6 +5,7 @@ import naeilmolae.domain.alarm.domain.Alarm;
 import naeilmolae.domain.alarm.domain.AlarmCategory;
 import naeilmolae.domain.alarm.domain.CategoryType;
 import naeilmolae.domain.alarm.dto.AlarmCategoryCount;
+import naeilmolae.domain.alarm.dto.response.AlarmResponseDto;
 import naeilmolae.domain.alarm.repository.AlarmCategoryMessageRepository;
 import naeilmolae.domain.alarm.repository.AlarmRepository;
 import naeilmolae.domain.voicefile.service.ProvidedFileAdapterService;
@@ -21,7 +22,6 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 public class AlarmViewService {
     private final AlarmService alarmService;
-    private final AlarmRepository alarmRepository;
     private final AlarmCategoryMessageService alarmCategoryMessageService;
 
     private final ProvidedFileAdapterService providedFileAdapterService;
@@ -30,14 +30,13 @@ public class AlarmViewService {
     // 추천 알람 조회
     public Alarm findRecommendedAlarm(Long memberId, AlarmCategory parentCategory) {
         List<AlarmCategory> childCategories = AlarmCategory.getByParent(parentCategory);
-        List<Alarm> alarmsByParentCategoryId = alarmRepository.findByCategories(childCategories);
+        List<Alarm> alarmsByParentCategoryId = alarmService.findByCategories(childCategories);
         if (alarmsByParentCategoryId.isEmpty()) {
             return null; // 리스트가 비어있으면 null 반환
         }
         int randomIndex = ThreadLocalRandom.current().nextInt(alarmsByParentCategoryId.size());
         return alarmsByParentCategoryId.get(randomIndex);
     }
-
 
 
     // 이번 주에 사용된 알람의 부모 카테고리 조회
@@ -57,12 +56,14 @@ public class AlarmViewService {
         // TODO 1. 가장 적게 작성된 AlarmCateogry 나열
         // TODO 2. 그 중에 사용자가 작성한 거는 뒤로
 
-        return alarmCategoryMessageService.findByAlarmCategoryIn(AlarmCategory.ROOT_CATEGORIES)
+        List<AlarmCategory> collect = AlarmCategory.ROOT_CATEGORIES
                 .stream()
-                .map(alarmCategoryMessage -> new AlarmCategoryCount(alarmCategoryMessage.getTitle(), 0L))
-                .toList();
+                .filter(item -> item.getCategoryType().equals(categoryType))
+                .collect(Collectors.toList());
+
+        return alarmService.findByCategories(collect)
+                .stream()
+                .map(AlarmCategoryCount::new)
+                .collect(Collectors.toList());
     }
-
-
-
 }

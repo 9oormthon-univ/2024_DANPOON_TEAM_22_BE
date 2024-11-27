@@ -34,7 +34,6 @@ public class PushNotificationService {
 
         // 현재 시간
         LocalDateTime now = LocalDateTime.now();
-        Long defaultAlarmId = 16L; // 하드코딩된 파일 ID
 
         for (Member member : youthMembers) {
             YouthMemberInfo info = member.getYouthMemberInfo();
