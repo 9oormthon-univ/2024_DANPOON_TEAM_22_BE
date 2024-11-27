@@ -3,7 +3,6 @@ package naeilmolae.domain.alarm.dto;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
-import naeilmolae.domain.alarm.domain.Alarm;
 import naeilmolae.domain.alarm.domain.AlarmCategory;
 
 import java.util.List;

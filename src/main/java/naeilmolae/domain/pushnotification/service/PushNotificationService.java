@@ -20,7 +20,6 @@ public class PushNotificationService {
 
     private final MemberService memberService;
     private final FirebaseMessagingService firebaseMessagingService; // Firebase 연동
-    private final AlarmViewService alarmViewService;
     private final AlarmService alarmService;
 
     // 외출 시간 고정 2시

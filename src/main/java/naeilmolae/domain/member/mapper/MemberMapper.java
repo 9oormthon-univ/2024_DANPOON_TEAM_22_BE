@@ -10,8 +10,6 @@ import naeilmolae.domain.member.dto.response.MemberLoginResponseDto;
 import naeilmolae.global.config.security.jwt.TokenInfo;
 import org.springframework.stereotype.Component;
 
-import static naeilmolae.domain.member.mapper.DefaultTimeSettings.*;
-
 @Component
 public class MemberMapper {
 

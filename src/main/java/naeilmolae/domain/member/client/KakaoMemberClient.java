@@ -1,8 +1,8 @@
 package naeilmolae.domain.member.client;
 
-import naeilmolae.global.infrastructure.kakao.dto.KakaoResponse;
 import naeilmolae.global.common.exception.RestApiException;
 import naeilmolae.global.common.exception.code.status.AuthErrorStatus;
+import naeilmolae.global.infrastructure.kakao.dto.KakaoResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 

@@ -3,8 +3,6 @@ package naeilmolae.domain.voicefile.domain;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import naeilmolae.domain.member.domain.Member;
-import naeilmolae.domain.member.domain.Role;
 import naeilmolae.global.common.base.BaseEntity;
 
 @Entity

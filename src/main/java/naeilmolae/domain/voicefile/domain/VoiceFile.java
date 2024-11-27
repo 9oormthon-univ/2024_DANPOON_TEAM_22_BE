@@ -4,8 +4,6 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import naeilmolae.domain.alarm.domain.Alarm;
-import naeilmolae.domain.member.domain.Member;
 import naeilmolae.global.common.base.BaseEntity;
 import naeilmolae.global.common.exception.RestApiException;
 import naeilmolae.global.common.exception.code.status.GlobalErrorStatus;
