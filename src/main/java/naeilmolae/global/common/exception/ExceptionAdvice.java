@@ -31,10 +31,7 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<BaseResponse<String>> handle500Exception(Exception e) {
         log.error("An error occurred: {}", e.getMessage(), e);
-
-        //디스코드 알림 전송
-        errorSender.sendErrorToDiscord(String.format("An error occurred: %s\n%s", e.getMessage(), e.toString()));
-
+        errorSender.sendError(e);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 
@@ -48,16 +45,6 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
         BaseCodeDto errorCode = e.getErrorCode();
         return handleExceptionInternal(errorCode);
     }
-
-//    /*
-//     * 일반적인 서버 에러에 대한 예외 처리
-//     */
-//    @ExceptionHandler
-//    public ResponseEntity<BaseResponse<String>> handleException(Exception e) {
-//        e.printStackTrace(); //예외 정보 출력
-//
-//        return handleExceptionInternalFalse(GlobalErrorStatus._INTERNAL_SERVER_ERROR.getCode(), e.getMessage());
-//    }
 
     /*
      * ConstraintViolationException 발생 시 예외 처리
