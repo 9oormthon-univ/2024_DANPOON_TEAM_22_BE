@@ -1,23 +1,20 @@
 package naeilmolae.domain.alarm.dto.response;
 
+
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
 import naeilmolae.domain.alarm.domain.AlarmCategory;
 import naeilmolae.domain.alarm.domain.CategoryType;
 
 @Getter
-@Setter(value = AccessLevel.PRIVATE)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class AlarmCategoryResponseDto {
-    private Long id;
-    private String name;
-    private String title;
+    private String alarmCategory;
+    private String alarmCategoryKoreanName;
     private CategoryType categoryType;
 
-    public AlarmCategoryResponseDto(AlarmCategory entity) {
-        setId(entity.getId());
-        setName(entity.getName());
-        setTitle(entity.getTitle());
-        setCategoryType(entity.getCategoryType());
+    public AlarmCategoryResponseDto from(AlarmCategory alarmCategory) {
+        return new AlarmCategoryResponseDto(alarmCategory.name(), alarmCategory.getName(), alarmCategory.getCategoryType());
     }
 }

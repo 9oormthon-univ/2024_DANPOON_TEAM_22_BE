@@ -1,11 +1,15 @@
 package naeilmolae.domain.alarm.dto.response;
 
-public class AlarmResponseDto {
-    public Long alarmId;
-    public String title;
+import lombok.Getter;
+import naeilmolae.domain.alarm.domain.Alarm;
 
-    public AlarmResponseDto(Long alarmId, String title) {
-        this.alarmId = alarmId;
-        this.title = title;
+@Getter
+public class AlarmResponseDto {
+    private Long alarmId;
+    private String alarmCategory;
+
+    public AlarmResponseDto(Alarm alarm) {
+        this.alarmId = alarm.getId();
+        this.alarmCategory = alarm.getAlarmCategory().name();
     }
 }

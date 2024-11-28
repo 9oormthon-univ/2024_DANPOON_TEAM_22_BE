@@ -5,15 +5,15 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import naeilmolae.domain.member.service.MemberAuthService;
-import org.springframework.web.bind.annotation.*;
-import naeilmolae.global.common.base.BaseResponse;
-import naeilmolae.domain.member.dto.response.MemberLoginResponseDto;
-import naeilmolae.domain.member.dto.response.MemberIdResponseDto;
 import naeilmolae.domain.member.domain.LoginType;
 import naeilmolae.domain.member.domain.Member;
 import naeilmolae.domain.member.dto.response.MemberGenerateTokenResponseDto;
+import naeilmolae.domain.member.dto.response.MemberIdResponseDto;
+import naeilmolae.domain.member.dto.response.MemberLoginResponseDto;
+import naeilmolae.domain.member.service.MemberAuthService;
+import naeilmolae.global.common.base.BaseResponse;
 import naeilmolae.global.config.security.auth.CurrentMember;
+import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "인증 API", description = "소셜 로그인, 토큰 발급/재발급, 로그아웃 등 인증 관련 작업을 수행하는 API")
 @RestController

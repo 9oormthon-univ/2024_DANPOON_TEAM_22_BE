@@ -1,12 +1,10 @@
 package naeilmolae.domain.voicefile.service;
 
 import lombok.RequiredArgsConstructor;
-import naeilmolae.domain.alarm.domain.Alarm;
-import naeilmolae.domain.alarm.service.AlarmService;
+import naeilmolae.domain.alarm.dto.response.AlarmCategoryMessageResponseDto;
+import naeilmolae.domain.alarm.service.AlarmAdapterService;
 import naeilmolae.domain.chatgpt.dto.ScriptValidationResponseDto;
 import naeilmolae.domain.chatgpt.service.ChatGptService;
-import naeilmolae.domain.member.domain.Member;
-import naeilmolae.domain.member.service.MemberService;
 import naeilmolae.domain.voicefile.domain.AnalysisResult;
 import naeilmolae.domain.voicefile.domain.AnalysisResultStatus;
 import naeilmolae.domain.voicefile.domain.VoiceFile;
@@ -23,31 +21,28 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class VoiceFileService {
-    private final MemberService memberService;
-    private final AlarmService alarmService;
     private final VoiceFileRepository voiceFileRepository;
     private final ApplicationEventPublisher publisher;
     private final AnalysisResultRepository analysisResultRepository;
     private final ChatGptService chatGptService;
-
+    // 외부 서비스
+    private final AlarmAdapterService alarmAdapterService;
 
     // 음성 파일 저장
     @Transactional
     public VoiceFile saveContent(Long memberId, Long alarmId, String content) {
+        AlarmCategoryMessageResponseDto alarmCategoryMessageResponseDto = alarmAdapterService.findById(alarmId);// 알람이 존재하는지 확인
+        String title = alarmCategoryMessageResponseDto.getTitle();
+
         // 스크립트 검증
-        Alarm alarm = alarmService.findById(alarmId);
-        String title = alarm.getAlarmCategory().getTitle();
         verifyContent(title, content);
-
-        Member member = memberService.findById(memberId);
-
-
-        VoiceFile voiceFile = new VoiceFile(member, alarm, content);
+        VoiceFile voiceFile = new VoiceFile(memberId, alarmId, content);
 
         return voiceFileRepository.save(voiceFile);
     }
@@ -130,13 +125,22 @@ public class VoiceFileService {
                 .orElseThrow(() -> new RestApiException(GlobalErrorStatus._BAD_REQUEST));
     }
 
+    // 사용자가 특정 시간 사이에 생성한 알람 ID List 조회
+    public List<Long> findAlarmIdsByMemberIdAndBetween(Long memberId, LocalDateTime startDay, LocalDateTime endDay) {
+        return voiceFileRepository.findAlarmIdsByMemberIdAndBetween(memberId, startDay, endDay);
+    }
+
     // 알람 Id로 사용자에게 제공되지 않은 데이터 조회
     public VoiceFile getAvailableDataList(Long memberId, Long alarmId) {
         // TODO 청년만 통과할 수 있게
+        // TODO 추후에 음성 제공 알고리즘 적용 예정
 
-        return voiceFileRepository.findUnprovided(memberId, alarmId, LocalDateTime.now().minusWeeks(1))
+        List<VoiceFile> unprovided = voiceFileRepository.findUnprovided(memberId, alarmId, LocalDateTime.now().minusWeeks(1));
+        VoiceFile voiceFile = unprovided
                 .stream()
                 .findFirst()
-                .orElseThrow(() -> new RestApiException(VoiceFileErrorStatus._LACK_OF_MESSAGE)); // 제공할 수 있는 데이터가 없는 경우
+                .orElseThrow(() -> new RestApiException(VoiceFileErrorStatus._LACK_OF_MESSAGE));// 제공할 수 있는 데이터가 없는 경우
+
+        return voiceFile;
     }
 }

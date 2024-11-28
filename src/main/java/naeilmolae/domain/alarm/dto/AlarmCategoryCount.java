@@ -3,26 +3,26 @@ package naeilmolae.domain.alarm.dto;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
+import naeilmolae.domain.alarm.domain.AlarmCategory;
+
+import java.util.List;
 
 @Getter
-@Setter(value = AccessLevel.PRIVATE)
 public class AlarmCategoryCount {
-    private Long categoryId;
+    private AlarmCategory alarmCategory;
+    private String koreanName;
+    @Setter
     private String title;
-    private Long count = 0L;
     private boolean isUsed = false;
+    private List<AlarmCategory> children;
 
-    public AlarmCategoryCount(Long categoryId, String title, Long count) {
-        setCategoryId(categoryId);
-        setTitle(title);
-        setCount(count);
+    public AlarmCategoryCount(AlarmCategory alarmCategory) {
+        this.alarmCategory = alarmCategory;
+        this.koreanName = alarmCategory.getName();
+        this.children = AlarmCategory.getChildrenByParent(alarmCategory);
     }
-
-    public void addCount(Long count) {
-        this.count += count;
-    }
-
     public void setUsed() {
         this.isUsed = true;
     }
+
 }

@@ -3,7 +3,6 @@ package naeilmolae.domain.member.dto.request;
 import naeilmolae.domain.member.domain.Gender;
 import naeilmolae.domain.member.domain.Role;
 import naeilmolae.domain.member.dto.YouthMemberInfoDto;
-import naeilmolae.domain.member.validation.annotation.ValidRoleBasedRequest;
 
 import java.time.LocalDateTime;
 

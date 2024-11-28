@@ -6,7 +6,6 @@ import lombok.Getter;
 import naeilmolae.domain.member.domain.Gender;
 import naeilmolae.domain.member.domain.Role;
 import naeilmolae.domain.member.dto.YouthMemberInfoDto;
-import org.joda.time.DateTime;
 
 import java.time.LocalDateTime;
 

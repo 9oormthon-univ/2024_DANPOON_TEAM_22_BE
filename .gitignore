@@ -49,3 +49,5 @@ docker-compose.yml
 .DS_Store
 ### log 값 ###
 **/logs
+
+**data.sql

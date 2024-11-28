@@ -1,6 +1,5 @@
 package naeilmolae.global.common.exception;
 
-import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,9 +13,9 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 
 @RestControllerAdvice
-public class ControllerExceptionHandler {
+public class ErrorSender {
 
-    private static final Logger logger = LoggerFactory.getLogger(ControllerExceptionHandler.class);
+    private static final Logger logger = LoggerFactory.getLogger(ErrorSender.class);
 
     private final WebClient webClient;
 
@@ -24,15 +23,26 @@ public class ControllerExceptionHandler {
     private final String discordWebhookUrl;
 
     // Webhook URL은 application.yml 또는 application.properties에서 주입
-    public ControllerExceptionHandler(@Value("${discord.webhook.url}") String discordWebhookUrl, WebClient.Builder webClientBuilder) {
+    public ErrorSender(@Value("${discord.webhook.url}") String discordWebhookUrl, WebClient.Builder webClientBuilder) {
         this.discordWebhookUrl = discordWebhookUrl;
         this.webClient = webClientBuilder.build();
     }
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<Void> handleException(Exception e) {
-
-        // 에러 메시지 생성
+//    @ExceptionHandler(Exception.class)
+//    public ResponseEntity<Void> handleException(Exception e) {
+//
+//        // 에러 메시지 생성
+//        String detailedMessage = buildDetailedErrorMessage(e);
+//
+//        logger.error("An error occurred: {}", e.getMessage(), e);
+//
+//        // 디스코드 알림 전송
+//        sendErrorToDiscord(detailedMessage);
+//
+//        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+//    }
+//
+    public void sendError(Exception e) {
         String detailedMessage = buildDetailedErrorMessage(e);
 
         logger.error("An error occurred: {}", e.getMessage(), e);
@@ -40,8 +50,9 @@ public class ControllerExceptionHandler {
         // 디스코드 알림 전송
         sendErrorToDiscord(detailedMessage);
 
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
+
+
 
     private String buildDetailedErrorMessage(Exception e) {
         StringWriter sw = new StringWriter();
@@ -91,7 +102,7 @@ public class ControllerExceptionHandler {
     }
 
     // 디스코드 메시지에 사용할 간단한 클래스
-        private record DiscordMessage(String content) {
+    private record DiscordMessage(String content) {
 
     }
 }

@@ -12,8 +12,7 @@ public class Alarm {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "alarm_category_id")
+    @Enumerated(EnumType.STRING)
     private AlarmCategory alarmCategory;
 
 

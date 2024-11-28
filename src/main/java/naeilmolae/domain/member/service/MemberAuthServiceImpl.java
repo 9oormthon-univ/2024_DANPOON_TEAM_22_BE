@@ -1,25 +1,18 @@
 package naeilmolae.domain.member.service;
 
 import lombok.RequiredArgsConstructor;
-import naeilmolae.domain.member.client.KakaoMemberClient;
 import naeilmolae.domain.member.domain.LoginType;
 import naeilmolae.domain.member.domain.Member;
-import naeilmolae.domain.member.domain.Role;
 import naeilmolae.domain.member.dto.response.MemberGenerateTokenResponseDto;
 import naeilmolae.domain.member.dto.response.MemberIdResponseDto;
 import naeilmolae.domain.member.dto.response.MemberLoginResponseDto;
-import naeilmolae.domain.member.mapper.MemberMapper;
-import naeilmolae.domain.member.repository.MemberRepository;
 import naeilmolae.domain.member.strategy.context.LoginContext;
 import naeilmolae.global.common.exception.RestApiException;
 import naeilmolae.global.common.exception.code.status.AuthErrorStatus;
 import naeilmolae.global.config.security.jwt.JwtProvider;
-import naeilmolae.global.config.security.jwt.TokenInfo;
 import naeilmolae.global.config.security.jwt.TokenType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 
 @Service
