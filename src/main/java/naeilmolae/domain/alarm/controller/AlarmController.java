@@ -80,9 +80,9 @@ public class AlarmController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "COMMON200", description = "조회 성공"),
     })
-    @GetMapping("/alarm-category/{alarmCategory}/detail")
+    @GetMapping("/alarm-category/{childrenAlarmCategory}/detail")
     public BaseResponse<AlarmCategoryMessageResponseDto> getAlarmCategory(@CurrentMember Member member,
-                                                                          @PathVariable AlarmCategory alarmCategory) {
+                                                                          @PathVariable(value = "childrenAlarmCategory") AlarmCategory alarmCategory) {
         Alarm recommendedAlarm = alarmViewService.findRecommendedAlarm(member.getId(), alarmCategory);
         AlarmCategoryMessage alarmCategoryMessage = alarmCategoryMessageService.findByAlarmCategory(alarmCategory);
         AlarmCategoryMessageResponseDto alarmCategoryMessageResponseDto = new AlarmCategoryMessageResponseDto(recommendedAlarm, alarmCategoryMessage);
