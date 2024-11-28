@@ -75,6 +75,7 @@ public class AlarmController {
         return BaseResponse.onSuccess(new AlarmCategoryWithMessageResponseDto(alarmCategory, alarmCategoryMessage));
     }
 
+    @Deprecated
     @Operation(summary = "[VALID] [Common] ChildrenCategoryId로 AlarmId 조회 / [봉사자] 녹음 2단계 & [청년] 위로 청취 2단계", description = "위로 녹음9 에서 상단에 보여줄 멘트를 제공합니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "COMMON200", description = "조회 성공"),
