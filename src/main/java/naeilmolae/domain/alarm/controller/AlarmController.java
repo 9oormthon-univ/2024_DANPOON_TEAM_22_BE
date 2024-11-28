@@ -67,6 +67,7 @@ public class AlarmController {
         return BaseResponse.onSuccess(collect);
     }
 
+    @Deprecated
     @Operation(summary = "[VALID] [Common] AlarmCategory 로 CategoryMessage 조회 ", description = "위로 목록을 조회합니다. 이후 '[청년] 청취 1단계'로 이동합니다. ")
     @GetMapping("/alarm-category/{alarmCategory}/message") // TODO 문제 발생 응답이 이상함
     public BaseResponse<AlarmCategoryWithMessageResponseDto> getAlarmCategoryMessage(@CurrentMember Member member,
