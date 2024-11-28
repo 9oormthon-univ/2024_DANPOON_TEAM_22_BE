@@ -13,6 +13,7 @@ import naeilmolae.domain.alarm.domain.CategoryType;
 import naeilmolae.domain.alarm.dto.AlarmCategoryCount;
 import naeilmolae.domain.alarm.dto.response.AlarmCategoryMessageResponseDto;
 import naeilmolae.domain.alarm.dto.response.AlarmCategoryWithMessageResponseDto;
+import naeilmolae.domain.alarm.dto.response.CategoryTypeResponseDto;
 import naeilmolae.domain.alarm.service.AlarmCategoryMessageService;
 import naeilmolae.domain.alarm.service.AlarmService;
 import naeilmolae.domain.alarm.service.AlarmViewService;
@@ -37,6 +38,15 @@ import static naeilmolae.domain.alarm.domain.AlarmCategory.ROOT_CATEGORIES;
 public class AlarmController {
     private final AlarmViewService alarmViewService;
     private final AlarmCategoryMessageService alarmCategoryMessageService;
+
+    @Operation(summary = "[VALID] [봉사자] 녹음 0단계: CategoryType 조회", description = "위로 목록을 조회합니다. 이후 '[청년] 청취 1단계'로 이동합니다. ")
+    @GetMapping("/category-type")
+    public BaseResponse<List<CategoryTypeResponseDto>> getCategoryTypeList() {
+        return BaseResponse.onSuccess(List.of(CategoryType.values())
+                .stream()
+                .map(CategoryTypeResponseDto::new)
+                .toList()); // TODO
+    }
 
     // valid
     @Operation(summary = "[VALID] [청년] 위로 청취 1단계: 위로 목록 조회 -> '[Common] ChildrenCategoryId로 AlarmId 조회'로 이동", description = "위로 목록을 조회합니다. 이후 '[청년] 청취 1단계'로 이동합니다. ")
@@ -80,9 +90,9 @@ public class AlarmController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "COMMON200", description = "조회 성공"),
     })
-    @GetMapping("/alarm-category/{alarmCategory}/detail")
+    @GetMapping("/alarm-category/{childrenAlarmCategory}/detail")
     public BaseResponse<AlarmCategoryMessageResponseDto> getAlarmCategory(@CurrentMember Member member,
-                                                                          @PathVariable AlarmCategory alarmCategory) {
+                                                                          @PathVariable(value = "childrenAlarmCategory") AlarmCategory alarmCategory) {
         Alarm recommendedAlarm = alarmViewService.findRecommendedAlarm(member.getId(), alarmCategory);
         AlarmCategoryMessage alarmCategoryMessage = alarmCategoryMessageService.findByAlarmCategory(alarmCategory);
         AlarmCategoryMessageResponseDto alarmCategoryMessageResponseDto = new AlarmCategoryMessageResponseDto(recommendedAlarm, alarmCategoryMessage);
