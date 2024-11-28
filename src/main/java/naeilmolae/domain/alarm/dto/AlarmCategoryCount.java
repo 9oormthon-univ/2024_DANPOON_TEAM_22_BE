@@ -8,10 +8,11 @@ import naeilmolae.domain.alarm.domain.AlarmCategory;
 import java.util.List;
 
 @Getter
-@Setter(value = AccessLevel.PRIVATE)
 public class AlarmCategoryCount {
     private AlarmCategory alarmCategory;
     private String koreanName;
+    @Setter
+    private String title;
     private boolean isUsed = false;
     private List<AlarmCategory> children;
 
@@ -23,4 +24,5 @@ public class AlarmCategoryCount {
     public void setUsed() {
         this.isUsed = true;
     }
+
 }

@@ -36,13 +36,17 @@ public class AlarmService {
                 .orElseThrow(() -> new RestApiException(GlobalErrorStatus._BAD_REQUEST));
     }
 
-    // TODO 값이 일정하므로 캐싱하게 만들어야 함.
-    public List<Alarm> findByCategories(List<AlarmCategory> alarmCategories) {
+    public List<Alarm> findByParentCategories(List<AlarmCategory> alarmCategories) {
         List<AlarmCategory> query = new ArrayList<>();
         for (AlarmCategory alarmCategory : alarmCategories) {
             List<AlarmCategory> childrenByParent = AlarmCategory.getChildrenByParent(alarmCategory);
             query.addAll(childrenByParent);
         }
         return alarmRepository.findByCategories(query);
+    }
+
+    // TODO 값이 일정하므로 캐싱하게 만들어야 함.
+    public List<Alarm> findByChildrenCategories(List<AlarmCategory> alarmCategories) {
+        return alarmRepository.findByCategories(alarmCategories);
     }
 }

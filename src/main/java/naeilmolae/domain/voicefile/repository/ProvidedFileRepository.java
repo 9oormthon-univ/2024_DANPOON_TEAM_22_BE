@@ -2,6 +2,8 @@ package naeilmolae.domain.voicefile.repository;
 
 
 import naeilmolae.domain.voicefile.domain.ProvidedFile;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -9,7 +11,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 import java.util.Optional;
 
-public interface ProvidedFileRepository extends JpaRepository<ProvidedFile, Long>, ProvidedFileRepositoryCustom {
+public interface ProvidedFileRepository extends JpaRepository<ProvidedFile, Long> {
 
     // consumerId, VoiceFileId로 파일 조회
     Optional<ProvidedFile> findByConsumerIdAndVoiceFileId(Long consumerId, Long voiceFileId);
@@ -52,6 +54,34 @@ public interface ProvidedFileRepository extends JpaRepository<ProvidedFile, Long
             "WHERE vf.memberId = :memberId")
         // ProvidedFile의 voiceFile의 member의 id가 memberId인 ProvidedFile의 개수를 찾는 쿼리
     Long findTotalListenersByMemberId(@Param("memberId") Long memberId);
+
+    @Query(value = """
+            select pf 
+            from ProvidedFile pf 
+            JOIN FETCH pf.voiceFile 
+            where pf.voiceFile.memberId = :memberId 
+            and pf.voiceFile.alarmId in :alarmIds
+            """,
+            countQuery = """
+                    select count(pf) 
+                    from ProvidedFile pf 
+                    where pf.voiceFile.memberId = :memberId
+                    and pf.voiceFile.alarmId in :alarmIds
+                    """)
+    Page<ProvidedFile> findByMemberIdAndAlarmId(Long memberId, List<Long> alarmIds, Pageable pageable);
+
+    @Query(value = """
+            select pf 
+            from ProvidedFile pf 
+            JOIN FETCH pf.voiceFile 
+            where pf.voiceFile.memberId = :memberId 
+            """,
+            countQuery = """
+            select count(pf) 
+            from ProvidedFile pf 
+            where pf.voiceFile.memberId = :memberId
+            """)
+    Page<ProvidedFile> findByMemberId(Long memberId, Pageable pageable);
 
 
 }

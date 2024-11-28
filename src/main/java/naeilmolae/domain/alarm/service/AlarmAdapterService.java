@@ -10,6 +10,7 @@ import naeilmolae.domain.alarm.dto.response.AlarmResponseDto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -23,11 +24,13 @@ public class AlarmAdapterService {
     private final AlarmCategoryMessageService alarmCategoryMessageService;
     private final AlarmExampleService alarmExampleService;
 
-    public AlarmCategoryMessageResponseDto findByAlarmCategory(String alarmCategory) {
-        AlarmCategory category = AlarmCategory.valueOf(alarmCategory.toUpperCase());
-        AlarmCategoryMessage alarmCategoryMessage = alarmCategoryMessageService.findByAlarmCategory(category);
-        Alarm alarm = alarmService.findByAlarmCategory(category);
-        return new AlarmCategoryMessageResponseDto(alarm, alarmCategoryMessage);
+    public List<AlarmResponseDto> findAlarmIdsByAlarmCategory(String parentAlarmCategory) {
+        AlarmCategory category = AlarmCategory.valueOf(parentAlarmCategory.toUpperCase());
+        List<AlarmCategory> childrenByParent = AlarmCategory.getChildrenByParent(category);
+        return alarmService.findByChildrenCategories(childrenByParent)
+                .stream()
+                .map(AlarmResponseDto::new)
+                .toList();
     }
 
     public AlarmCategoryMessageResponseDto findById(Long alarmId) {

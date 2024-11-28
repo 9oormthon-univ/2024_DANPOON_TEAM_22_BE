@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -39,7 +40,7 @@ public class AlarmController {
 
     // valid
     @Operation(summary = "[VALID] [청년] 위로 청취 1단계: 위로 목록 조회 -> '[Common] ChildrenCategoryId로 AlarmId 조회'로 이동", description = "위로 목록을 조회합니다. 이후 '[청년] 청취 1단계'로 이동합니다. ")
-    @GetMapping("/alarm-category/comfort") // TODO 문제 발생 응답이 이상함
+    @GetMapping("/alarm-category/comfort")
     public BaseResponse<List<AlarmCategoryWithMessageResponseDto>> getComfortList(@CurrentMember Member member) {
         List<AlarmCategory> list = ROOT_CATEGORIES
                 .stream()
@@ -96,10 +97,22 @@ public class AlarmController {
                                                                @PathVariable CategoryType categoryType) {
         // TODO 여기에 메시지가 제공되어야함
         List<AlarmCategoryCount> collect = alarmViewService.findUserCategoryCount(member.getId(), categoryType);
+        List<AlarmCategory> alarmCategories = collect.stream()
+                .map(AlarmCategoryCount::getAlarmCategory)
+                .collect(Collectors.toList());
+
+        Map<AlarmCategory, AlarmCategoryMessage> map = alarmCategoryMessageService.findByAlarmCategoryIn(alarmCategories)
+                .stream()
+                .collect(Collectors.toMap(AlarmCategoryMessage::getAlarmCategory, alarmCategoryMessage -> alarmCategoryMessage));
+        collect
+                .stream()
+                .forEach(item -> {
+                    AlarmCategoryMessage alarmCategoryMessage = map.get(item.getAlarmCategory());
+                    item.setTitle(alarmCategoryMessage.getTitle());
+                });
+
         return BaseResponse.onSuccess(collect);
     }
-
-
 
     @Operation(summary = "[VALID] [봉사자] 동기부여 1단계: 북두칠성 조회 API", description = "사용자의 북두칠성을 조회합니다.")
     @ApiResponses(value = {
@@ -119,7 +132,7 @@ public class AlarmController {
         return BaseResponse.onSuccess(collect);
     }
 
-    // TDOO 위 아래 중복 로직임
+    // TODO 위 아래 중복 로직임
     @Operation(summary = "[VALID] [봉사자] 동기부여 4단계: 카테고리 목록 조회", description = "위로 목록을 조회합니다. 이후 '[청년] 청취 1단계'로 이동합니다. ")
     @GetMapping("/alarm-category/")
     public BaseResponse<List<AlarmCategoryWithMessageResponseDto>> getAlarmCategoryList(@CurrentMember Member member) {

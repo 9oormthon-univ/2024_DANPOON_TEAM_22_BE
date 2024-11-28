@@ -18,14 +18,14 @@ public class ProvidedFileRepositoryImpl implements ProvidedFileRepositoryCustom 
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Page<ProvidedFile> findByMemberIdAndAlarmId(Long memberId, Long alarmId, Pageable pageable) {
+    public Page<ProvidedFile> findByMemberIdAndAlarmId(Long memberId, List<Long> alarmId, Pageable pageable) {
         // Fetch data with pagination
         List<ProvidedFile> content = queryFactory
                 .selectFrom(providedFile)
                 .join(providedFile.voiceFile, voiceFile).fetchJoin() // Join VoiceFile with fetch join
                 .where(
                         voiceFile.memberId.eq(memberId), // memberId filtering
-                        voiceFile.alarmId.eq(alarmId) // alarmId filtering
+                        voiceFile.alarmId.in(alarmId) // alarmId filtering
                 )
                 .offset(pageable.getOffset()) // Apply pagination offset
                 .limit(pageable.getPageSize()) // Apply pagination limit
@@ -38,7 +38,7 @@ public class ProvidedFileRepositoryImpl implements ProvidedFileRepositoryCustom 
                 .join(providedFile.voiceFile, voiceFile)
                 .where(
                         voiceFile.memberId.eq(memberId),
-                        voiceFile.alarmId.eq(alarmId)
+                        voiceFile.alarmId.in(alarmId)
                 )
                 .fetchOne();
 

@@ -2,6 +2,7 @@ package naeilmolae.domain.voicefile.service;
 
 import lombok.RequiredArgsConstructor;
 import naeilmolae.domain.alarm.dto.response.AlarmCategoryMessageResponseDto;
+import naeilmolae.domain.alarm.dto.response.AlarmResponseDto;
 import naeilmolae.domain.alarm.service.AlarmAdapterService;
 import naeilmolae.domain.member.domain.Member;
 import naeilmolae.domain.member.service.MemberService;
@@ -50,21 +51,24 @@ public class ProvidedFileService {
 
     // 봉사자용 편지 조회
     public Page<ProvidedFile> getProvidedFiles(Long memberId, String parentCategory, Pageable pageable) {
-        // TODO parentCategory에 대한 validation을 알람에게 제공
-
-
         if (parentCategory == null) {
             return providedFileRepository.findByMemberId(memberId, pageable);
         } else {
-            AlarmCategoryMessageResponseDto dto = alarmAdapterService.findByAlarmCategory(parentCategory);
-            return providedFileRepository.findByMemberIdAndAlarmId(memberId, dto.getAlarmId(), pageable);
+            // 부모 카테고리를 받아서 해당하는 자식 카테고리 + alarmId를 List로 받음
+            List<Long> list = alarmAdapterService.findAlarmIdsByAlarmCategory(parentCategory)
+                    .stream()
+                    .map(AlarmResponseDto::getAlarmId)
+                    .toList();
+
+            // List를 가지고 in query로 ProvidedFile을 조회
+            return providedFileRepository.findByMemberIdAndAlarmId(memberId, list, pageable);
         }
     }
 
     // 감사 편지 보내기
     @Transactional
     public boolean likeProvidedFile(Long consumerId, Long providedFileId, String message) {
-        ProvidedFile providedFile = providedFileRepository.findByConsumerId(consumerId,providedFileId)
+        ProvidedFile providedFile = providedFileRepository.findByConsumerId(consumerId, providedFileId)
                 .orElseThrow(() -> new RestApiException(GlobalErrorStatus._BAD_REQUEST));
         return providedFile.addThanksMessage(message);
     }
@@ -72,7 +76,7 @@ public class ProvidedFileService {
     // 음성 파일 북마크하기
     @Transactional
     public boolean bookmarkProvidedFile(Long consumerId, Long providedFileId) {
-        ProvidedFile providedFile = providedFileRepository.findByConsumerId(consumerId,providedFileId)
+        ProvidedFile providedFile = providedFileRepository.findByConsumerId(consumerId, providedFileId)
                 .orElseThrow(() -> new RestApiException(GlobalErrorStatus._BAD_REQUEST));
         return providedFile.setConsumerSaved();
     }
