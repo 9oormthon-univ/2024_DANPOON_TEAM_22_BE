@@ -135,9 +135,12 @@ public class VoiceFileService {
         // TODO 청년만 통과할 수 있게
         // TODO 추후에 음성 제공 알고리즘 적용 예정
 
-        return voiceFileRepository.findUnprovided(memberId, alarmId, LocalDateTime.now().minusWeeks(1))
+        List<VoiceFile> unprovided = voiceFileRepository.findUnprovided(memberId, alarmId, LocalDateTime.now().minusWeeks(1));
+        VoiceFile voiceFile = unprovided
                 .stream()
                 .findFirst()
-                .orElseThrow(() -> new RestApiException(VoiceFileErrorStatus._LACK_OF_MESSAGE)); // 제공할 수 있는 데이터가 없는 경우
+                .orElseThrow(() -> new RestApiException(VoiceFileErrorStatus._LACK_OF_MESSAGE));// 제공할 수 있는 데이터가 없는 경우
+
+        return voiceFile;
     }
 }
