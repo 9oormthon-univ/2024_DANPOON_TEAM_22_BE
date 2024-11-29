@@ -23,10 +23,11 @@ public class PushNotificationService {
     private final AlarmService alarmService;
 
     // 외출 시간 고정 2시
-    private static final LocalDateTime FIXED_OUTING_DATETIME = LocalDateTime.of(2024, 11, 23, 23, 47);
+    private static final LocalDateTime FIXED_OUTING_DATETIME = LocalDateTime.of(2024, 11, 23, 15, 56);
 
     @Transactional(readOnly = true)
     // TODO 수정 필요함
+    //todo fcm 토큰 없는 경우 예외 처리
     public void sendNotificationsAtScheduledTime() {
         // 모든 청년(YOUTH) 유저 가져오기
         List<Member> youthMembers = memberService.getAllYouthMemeber();
@@ -36,6 +37,9 @@ public class PushNotificationService {
 
         for (Member member : youthMembers) {
             YouthMemberInfo info = member.getYouthMemberInfo();
+
+            if(member.getFcmToken().isEmpty())
+                continue;
 
             if (info != null) {
                 // wakeUpTime 알림
