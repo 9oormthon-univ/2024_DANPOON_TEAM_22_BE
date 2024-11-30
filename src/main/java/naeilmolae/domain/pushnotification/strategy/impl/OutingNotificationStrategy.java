@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 public class OutingNotificationStrategy  implements NotificationStrategy {
 
     // 외출 시간 고정 2시
-    private static final LocalDateTime FIXED_OUTING_DATETIME = LocalDateTime.of(2024, 11, 23, 15, 56);
+    private static final LocalDateTime FIXED_OUTING_DATETIME = LocalDateTime.of(2024, 11, 23, 15, 11);
 
 
     @Override
@@ -26,7 +26,7 @@ public class OutingNotificationStrategy  implements NotificationStrategy {
         firebaseMessagingService.sendNotification(
                 member.getFcmToken(),
                 "외출할 일이 있나요? 나가지 전에, 잠깐 들어봐요.",
-                alarmService.findByAlarmCategory(AlarmCategory.MEAL_DINNER).getId()
+                alarmService.findByAlarmCategory(AlarmCategory.GO_OUT_CLEAR).getId()
         );
     }
 }
