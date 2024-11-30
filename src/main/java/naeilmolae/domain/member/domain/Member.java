@@ -68,6 +68,7 @@ public class Member extends BaseEntity {
         this.profileImage = request.profileImage();
         this.role = request.role();
         this.birth = request.birth();
+        this.fcmToken = request.fcmToken();
     }
 
     public boolean changeRole(Role role) {
