@@ -5,10 +5,12 @@ import naeilmolae.domain.member.domain.Member;
 import naeilmolae.domain.member.domain.YouthMemberInfo;
 import naeilmolae.domain.pushnotification.service.FirebaseMessagingService;
 import naeilmolae.domain.pushnotification.strategy.NotificationStrategy;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Component
 public class NotificationContext {
     private final List<NotificationStrategy> strategies;
 
@@ -20,7 +22,7 @@ public class NotificationContext {
         YouthMemberInfo info = member.getYouthMemberInfo();
 
         if (info == null || member.getFcmToken().isEmpty()) {
-            return; // 유효하지 않은 사용자(fcm 토큰 없는 사용자) 예외 처리
+            return; // todo 유효하지 않은 사용자(fcm 토큰 없는 사용자) 예외 처리
         }
 
         for (NotificationStrategy strategy : strategies) {
