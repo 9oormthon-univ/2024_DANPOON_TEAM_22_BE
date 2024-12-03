@@ -23,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -81,10 +82,10 @@ public class VoiceFileService {
     public Long requestAnalysis(Long voiceFileId) {
         // 음성 파일 조회
         VoiceFile voiceFile = voiceFileRepository.findById(voiceFileId)
-                .orElseThrow(() -> new RestApiException(GlobalErrorStatus._NOT_FOUND));
+                .orElseThrow(() -> new RestApiException(VoiceFileErrorStatus._NO_SUCH_FILE));
 
         if (voiceFile.getFileUrl() == null) {
-            throw new RestApiException(GlobalErrorStatus._BAD_REQUEST);
+            throw new RestApiException(VoiceFileErrorStatus._VOICE_FILE_NOT_PROVIDED);
         }
 
         // 분석 요청 이벤트 발행
@@ -98,7 +99,7 @@ public class VoiceFileService {
     // 음성 파일 조회
     public VoiceFile findById(Long fileId) {
         return voiceFileRepository.findById(fileId)
-                .orElseThrow(() -> new RestApiException(GlobalErrorStatus._NOT_FOUND));
+                .orElseThrow(() -> new RestApiException(VoiceFileErrorStatus._NO_SUCH_FILE));
     }
 
     // 분석 결과 조회
@@ -115,14 +116,14 @@ public class VoiceFileService {
             case SUCCESS:
                 return analysisResult;
             default:
-                throw new RestApiException(GlobalErrorStatus._INTERNAL_SERVER_ERROR);
+                throw new RestApiException(AnalysisErrorStatus._ANALYSIS_NOT_YET);
         }
     }
 
     // 음성 파일이 샤용자의 것이 맞는지
     public VoiceFile verifyUserFile(Long memberId, Long fileId) {
         return voiceFileRepository.findByMemberIdAndId(memberId, fileId)
-                .orElseThrow(() -> new RestApiException(GlobalErrorStatus._BAD_REQUEST));
+                .orElseThrow(() -> new RestApiException(VoiceFileErrorStatus._NO_SUCH_FILE));
     }
 
     // 사용자가 특정 시간 사이에 생성한 알람 ID List 조회

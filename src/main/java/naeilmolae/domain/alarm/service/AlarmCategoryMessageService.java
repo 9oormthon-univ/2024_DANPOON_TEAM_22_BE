@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import naeilmolae.domain.alarm.domain.AlarmCategory;
 import naeilmolae.domain.alarm.domain.AlarmCategoryMessage;
 import naeilmolae.domain.alarm.repository.AlarmCategoryMessageRepository;
+import naeilmolae.global.common.exception.RestApiException;
+import naeilmolae.global.common.exception.code.status.AlarmErrorStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,7 +19,7 @@ public class AlarmCategoryMessageService {
 
     public AlarmCategoryMessage findByAlarmCategory(AlarmCategory alarmCategory) {
         return alarmCategoryMessageRepository.findByAlarmCategory(alarmCategory)
-                .orElseThrow(() -> new IllegalArgumentException("해당 카테고리에 대한 메시지가 존재하지 않습니다.")); // TODO 에러 메시지 수정
+                .orElseThrow(() -> new RestApiException(AlarmErrorStatus._NOT_FOUND_BY_CATEGORY));
     }
 
     public List<AlarmCategoryMessage> findByAlarmCategoryIn(List<AlarmCategory> alarmCategories) {
