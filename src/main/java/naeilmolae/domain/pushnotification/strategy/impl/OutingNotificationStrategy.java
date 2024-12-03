@@ -1,15 +1,23 @@
 package naeilmolae.domain.pushnotification.strategy.impl;
 
+import lombok.RequiredArgsConstructor;
 import naeilmolae.domain.alarm.domain.AlarmCategory;
 import naeilmolae.domain.alarm.service.AlarmService;
 import naeilmolae.domain.member.domain.Member;
 import naeilmolae.domain.member.domain.YouthMemberInfo;
 import naeilmolae.domain.pushnotification.service.FirebaseMessagingService;
 import naeilmolae.domain.pushnotification.strategy.NotificationStrategy;
+import org.springframework.context.MessageSource;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.Locale;
 
+@Component
+@RequiredArgsConstructor
 public class OutingNotificationStrategy  implements NotificationStrategy {
+
+    private final MessageSource messageSource;
 
     // 외출 시간 고정 2시
     private static final LocalDateTime FIXED_OUTING_DATETIME = LocalDateTime.of(2024, 11, 23, 15, 11);
@@ -23,9 +31,15 @@ public class OutingNotificationStrategy  implements NotificationStrategy {
 
     @Override
     public void send(Member member, FirebaseMessagingService firebaseMessagingService, AlarmService alarmService) {
+        String message = messageSource.getMessage(
+                "notification.outing.message",
+                null,
+                Locale.getDefault()
+        );
+
         firebaseMessagingService.sendNotification(
                 member.getFcmToken(),
-                "외출할 일이 있나요? 나가지 전에, 잠깐 들어봐요.",
+                message,
                 alarmService.findByAlarmCategory(AlarmCategory.GO_OUT_CLEAR).getId()
         );
     }
