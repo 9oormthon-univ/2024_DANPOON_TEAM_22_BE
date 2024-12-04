@@ -15,4 +15,8 @@ public class YouthMemberInfoDto {
     private LocalDateTime breakfast;
     private LocalDateTime lunch;
     private LocalDateTime dinner;
+    private String address; // 도로명 주소
+    private Double latitude; // 위도
+    private Double longitude; // 경도
+    private String regionCode; // 지역 코드
 }
