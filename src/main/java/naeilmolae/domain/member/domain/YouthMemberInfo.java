@@ -32,14 +32,28 @@ public class YouthMemberInfo extends BaseEntity {
 
     private LocalDateTime dinner;
 
+    private String address; // 도로명 주소
+
+    private Double latitude; // 위도
+
+    private Double longitude; // 경도
+
+    private String regionCode; // 지역 코드
+
     @Builder
     public YouthMemberInfo(
-            LocalDateTime wakeUpTime, LocalDateTime sleepTime, LocalDateTime breakfast, LocalDateTime lunch, LocalDateTime dinner) {
+            LocalDateTime wakeUpTime, LocalDateTime sleepTime,
+            LocalDateTime breakfast, LocalDateTime lunch, LocalDateTime dinner,
+            String address, Double latitude, Double longitude, String regionCode) {
         this.wakeUpTime = wakeUpTime;
         this.sleepTime = sleepTime;
         this.breakfast = breakfast;
         this.lunch = lunch;
         this.dinner = dinner;
+        this.address = address;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.regionCode = regionCode;
     }
 
     public void update(YouthMemberInfoDto youthMemberInfoDto) {
@@ -48,5 +62,9 @@ public class YouthMemberInfo extends BaseEntity {
         this.breakfast = youthMemberInfoDto.getBreakfast();
         this.lunch = youthMemberInfoDto.getLunch();
         this.dinner = youthMemberInfoDto.getDinner();
+        this.address = youthMemberInfoDto.getAddress();
+        this.latitude = youthMemberInfoDto.getLatitude();
+        this.longitude = youthMemberInfoDto.getLongitude();
+        this.regionCode = youthMemberInfoDto.getRegionCode();
     }
 }
