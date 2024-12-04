@@ -7,12 +7,14 @@ import naeilmolae.domain.weather.domain.Grid;
 import naeilmolae.domain.weather.repository.GridRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class GridService {
     private final GridRepository gridRepository;
     private final RestTemplate restTemplate;
@@ -27,6 +29,8 @@ public class GridService {
      * @param longitude 경도
      * @return 그리드 좌표
      */
+    // TODO 테스트 해야함
+    @Transactional
     public Grid getGridCoordinates(Double latitude, Double longitude) {
         String apiUrl = String.format(
                 "https://apihub.kma.go.kr/api/typ01/cgi-bin/url/nph-dfs_xy_lonlat?lon=%f&lat=%f&help=0&authKey=cJGQY1PQTnuRkGNT0H57zQ",

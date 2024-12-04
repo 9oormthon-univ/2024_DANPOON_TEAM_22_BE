@@ -1,9 +1,12 @@
 package naeilmolae.domain.weather.domain;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import naeilmolae.global.common.base.BaseEntity;
 
 @Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Weather extends BaseEntity {
     @Id
     @GeneratedValue
@@ -15,4 +18,10 @@ public class Weather extends BaseEntity {
 
     private WeatherCategory category;
     private Double value;
+
+    public Weather(Grid grid, WeatherCategory category, Double value) {
+        this.grid = grid;
+        this.category = category;
+        this.value = value;
+    }
 }
