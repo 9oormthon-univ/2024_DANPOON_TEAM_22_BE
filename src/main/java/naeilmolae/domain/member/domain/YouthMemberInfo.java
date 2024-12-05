@@ -38,13 +38,18 @@ public class YouthMemberInfo extends BaseEntity {
 
     private Double longitude; // 경도
 
+    private Double gridX; // 격자 좌표의 X (경도)
+
+    private Double gridY; // 격자 좌표의 Y (경도)
+
     private String regionCode; // 지역 코드
 
     @Builder
     public YouthMemberInfo(
             LocalDateTime wakeUpTime, LocalDateTime sleepTime,
             LocalDateTime breakfast, LocalDateTime lunch, LocalDateTime dinner,
-            String address, Double latitude, Double longitude, String regionCode) {
+            String address, Double latitude, Double longitude, String regionCode,
+            Double gridX, Double gridY) {
         this.wakeUpTime = wakeUpTime;
         this.sleepTime = sleepTime;
         this.breakfast = breakfast;
@@ -53,10 +58,12 @@ public class YouthMemberInfo extends BaseEntity {
         this.address = address;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.gridX = gridX;
+        this.gridY = gridY;
         this.regionCode = regionCode;
     }
 
-    public void update(YouthMemberInfoDto youthMemberInfoDto) {
+    public void updateYouthMemberInfoDto(YouthMemberInfoDto youthMemberInfoDto) {
         this.wakeUpTime = youthMemberInfoDto.getWakeUpTime();
         this.sleepTime = youthMemberInfoDto.getSleepTime();
         this.breakfast = youthMemberInfoDto.getBreakfast();
@@ -66,5 +73,10 @@ public class YouthMemberInfo extends BaseEntity {
         this.latitude = youthMemberInfoDto.getLatitude();
         this.longitude = youthMemberInfoDto.getLongitude();
         this.regionCode = youthMemberInfoDto.getRegionCode();
+    }
+
+    public void setGrid(Double gridX, Double gridY) {
+        this.gridX = gridX;
+        this.gridY = gridY;
     }
 }
