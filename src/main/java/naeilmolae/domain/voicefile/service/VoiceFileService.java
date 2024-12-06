@@ -1,6 +1,7 @@
 package naeilmolae.domain.voicefile.service;
 
 import lombok.RequiredArgsConstructor;
+import naeilmolae.domain.alarm.domain.AlarmCategory;
 import naeilmolae.domain.alarm.dto.response.AlarmCategoryMessageResponseDto;
 import naeilmolae.domain.alarm.service.AlarmAdapterService;
 import naeilmolae.domain.chatgpt.dto.ScriptValidationResponseDto;
@@ -41,10 +42,11 @@ public class VoiceFileService {
         AlarmCategoryMessageResponseDto alarmCategoryMessageResponseDto = alarmAdapterService.findById(alarmId);// 알람이 존재하는지 확인
         String title = alarmCategoryMessageResponseDto.getTitle();
 
-        // 스크립트 검증
-        verifyContent(title, content);
+        if (!alarmCategoryMessageResponseDto.getAlarmCategory().equals(AlarmCategory.INFO_INFO)) {
+            // 스크립트 검증
+            verifyContent(title, content);
+        }
         VoiceFile voiceFile = new VoiceFile(memberId, alarmId, content);
-
         return voiceFileRepository.save(voiceFile);
     }
 
@@ -53,7 +55,7 @@ public class VoiceFileService {
         ScriptValidationResponseDto checkScriptRelevancePrompt
                 = chatGptService.getCheckScriptRelevancePrompt(title, content);
         if (!checkScriptRelevancePrompt.isProper()) {
-            throw new RestApiException(AnalysisErrorStatus._DENIED_BY_GPT); // TODO DNEY 이유도 제공해야함
+            throw new RestApiException(AnalysisErrorStatus._DENIED_BY_GPT);
         }
     }
 
