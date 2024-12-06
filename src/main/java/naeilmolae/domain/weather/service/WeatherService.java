@@ -80,6 +80,7 @@ public class WeatherService {
      * @param gridDto
      * @return
      */
+    // TODO Converter 로 변경하면 어떨까
     private List<Weather> parseWeatherData(String xmlData, GridDto gridDto) {
         Grid grid = gridService.findGridByPoint(gridDto.getX().toString(), gridDto.getY().toString());
 

@@ -107,8 +107,6 @@ public class MemberServiceImpl implements MemberService {
                 Grid grid = gridService.getGridCoordinates(youthMemberInfo.getLatitude(), youthMemberInfo.getLongitude());
                 youthMemberInfo.setGrid(grid.getX().doubleValue(), grid.getY().doubleValue());
 
-
-
                 member.setYouthMemberInfo(youthMemberInfo);
                 youthMemberInfoRepository.save(youthMemberInfo);
             } else {
