@@ -18,8 +18,6 @@ public class VoiceFile extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-
     @Column(name = "content", columnDefinition = "TEXT")
     private String content; // 대용량 텍스트
     @Column(unique = true)
