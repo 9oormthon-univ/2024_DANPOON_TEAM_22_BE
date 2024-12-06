@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import naeilmolae.domain.weather.domain.Grid;
+import naeilmolae.domain.weather.dto.GridDto;
 import naeilmolae.domain.weather.repository.GridRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -19,8 +20,12 @@ public class GridService {
     private final GridRepository gridRepository;
     private final RestTemplate restTemplate;
 
-    @Value("${weather.api.transfer}")
-    private String TRANSFER_URL;
+    @Value("${kma.key}")
+    private String apiKey;
+
+    public Grid findGridByPoint(String x, String y) {
+        return gridRepository.findByPoint(x, y).orElseThrow(() -> new IllegalArgumentException("해당 좌표를 찾을 수 없습니다."));
+    }
 
     /**
      * 위도, 경도를 받아서 그리드 좌표를 반환합니다.
@@ -31,10 +36,10 @@ public class GridService {
      */
     // TODO 테스트 해야함
     @Transactional
-    public Grid getGridCoordinates(Double latitude, Double longitude) {
+    public Grid getGridCoordinates(Double latitude, Double longitude) { // 위도, 경도
         String apiUrl = String.format(
-                "https://apihub.kma.go.kr/api/typ01/cgi-bin/url/nph-dfs_xy_lonlat?lon=%f&lat=%f&help=0&authKey=cJGQY1PQTnuRkGNT0H57zQ",
-                longitude, latitude
+                "https://apihub.kma.go.kr/api/typ01/cgi-bin/url/nph-dfs_xy_lonlat?lon=%f&lat=%f&help=0&authKey=%s",
+                longitude, latitude, apiKey
         );
 
         String response = restTemplate.getForObject(apiUrl, String.class);
@@ -84,10 +89,5 @@ public class GridService {
         }
     }
 
-    @AllArgsConstructor
-    @Getter
-    private static class GridDto {
-        private Integer x;
-        private Integer y;
-    }
+
 }

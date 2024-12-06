@@ -2,10 +2,12 @@ package naeilmolae.domain.weather.domain;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import naeilmolae.global.common.base.BaseEntity;
 
 @Entity
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Weather extends BaseEntity {
     @Id
