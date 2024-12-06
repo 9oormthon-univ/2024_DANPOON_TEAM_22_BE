@@ -16,6 +16,7 @@ public enum AlarmCategory {
     SADNESS("우울과 불안", CategoryType.COMFORT, null),
     PRAISE("칭찬과 격려", CategoryType.COMFORT, null),
     CONSOLATION("위로", CategoryType.COMFORT, null),
+    INFO("정보", CategoryType.DAILY, null),
 
     // 자식 카테고리들 - WAKE_UP의 자식들
     WAKE_UP_WEEKDAY("아침 기상 (평일)", CategoryType.DAILY, WAKE_UP),
@@ -55,7 +56,9 @@ public enum AlarmCategory {
     CONSOLATION_PLAN_FAIL("계획대로 되지 않았을 때", CategoryType.COMFORT, CONSOLATION),
     CONSOLATION_FRUSTRATION("좌절감을 느낄 때", CategoryType.COMFORT, CONSOLATION),
     CONSOLATION_FATIGUE("피로를 느낄 때", CategoryType.COMFORT, CONSOLATION),
-    CONSOLATION_INADEQUATE("스스로가 부족하다고 느낄 때", CategoryType.COMFORT, CONSOLATION);
+    CONSOLATION_INADEQUATE("스스로가 부족하다고 느낄 때", CategoryType.COMFORT, CONSOLATION),
+
+    INFO_INFO("정보", CategoryType.DAILY, INFO);
 
     private final String name;
     private final CategoryType categoryType;
