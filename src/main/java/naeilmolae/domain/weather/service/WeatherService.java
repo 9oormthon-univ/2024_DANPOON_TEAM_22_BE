@@ -6,6 +6,8 @@ import naeilmolae.domain.weather.domain.Weather;
 import naeilmolae.domain.weather.domain.WeatherCategory;
 import naeilmolae.domain.weather.dto.GridDto;
 import naeilmolae.domain.weather.repository.WeatherRepository;
+import naeilmolae.global.common.exception.RestApiException;
+import naeilmolae.global.common.exception.code.status.WeatherErrorCode;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -112,7 +114,7 @@ public class WeatherService {
                 }
             }
         } catch (Exception e) {
-            throw new RuntimeException("XML 파싱 중 오류가 발생했습니다: " + e.getMessage(), e);
+            throw new RestApiException(WeatherErrorCode._ERROR);
         }
         return weatherList;
     }

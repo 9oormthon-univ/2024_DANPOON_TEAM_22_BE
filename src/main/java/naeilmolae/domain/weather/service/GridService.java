@@ -1,11 +1,11 @@
 package naeilmolae.domain.weather.service;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import naeilmolae.domain.weather.domain.Grid;
 import naeilmolae.domain.weather.dto.GridDto;
 import naeilmolae.domain.weather.repository.GridRepository;
+import naeilmolae.global.common.exception.RestApiException;
+import naeilmolae.global.common.exception.code.status.GridErrorCode;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -65,7 +65,7 @@ public class GridService {
      */
     private GridDto parseGridCoordinates(String response) {
         if (response == null || response.isEmpty()) {
-            throw new IllegalArgumentException("응답 데이터가 비어있습니다.");
+            throw new RestApiException(GridErrorCode._NO_CONTENT);
         }
 
         // 응답 데이터 줄바꿈으로 분리
@@ -75,7 +75,7 @@ public class GridService {
         try {
             String[] values = lines[lines.length - 1].trim().split(",");
             if (values.length < 4) {
-                throw new IllegalArgumentException("응답 데이터 형식이 올바르지 않습니다.");
+                throw new RestApiException(GridErrorCode._PARSE_ERROR);
             }
 
             // X, Y 값 추출 (세 번째와 네 번째 값)
@@ -85,7 +85,7 @@ public class GridService {
             return new GridDto(x, y);
 
         } catch (Exception e) {
-            throw new IllegalArgumentException("좌표를 파싱하는 중 오류가 발생했습니다: " + e.getMessage(), e);
+            throw new RestApiException(GridErrorCode._ERROR);
         }
     }
 
