@@ -24,8 +24,8 @@
 <br>
 
 ## 🗒️ Convention 🗒️
-> ### 🌟[Git Convention](./docs/git-convention.md)
+> ### ➡️ [Git Convention](./docs/git-convention.md)
 
-> ### 🌟[Branch Convention](./docs/branch-convention.md)
+> ### ➡️ [Branch Convention](./docs/branch-convention.md)
 
-> ### 🌟[Code Convention](./docs/code-convention.md)
+> ### ➡️ [Code Convention](./docs/code-convention.md)
