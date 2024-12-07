@@ -1,10 +1,7 @@
 package naeilmolae.domain.member.domain;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import naeilmolae.domain.member.dto.YouthMemberInfoDto;
 import naeilmolae.domain.weather.domain.Grid;
 import naeilmolae.global.common.base.BaseEntity;
@@ -35,16 +32,15 @@ public class YouthMemberInfo extends BaseEntity {
 
     private Double longitude; // 경도
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "grid_id")
-    private Grid grid;
+    @Setter
+    private Long gridId;
 
 
     @Builder
     public YouthMemberInfo(
             LocalDateTime wakeUpTime, LocalDateTime sleepTime,
             LocalDateTime breakfast, LocalDateTime lunch, LocalDateTime dinner,
-            Double latitude, Double longitude, Grid grid) {
+            Double latitude, Double longitude, Long gridId) {
         this.wakeUpTime = wakeUpTime;
         this.sleepTime = sleepTime;
         this.breakfast = breakfast;
@@ -52,7 +48,7 @@ public class YouthMemberInfo extends BaseEntity {
         this.dinner = dinner;
         this.latitude = latitude;
         this.longitude = longitude;
-        this.grid = grid;
+        this.gridId = gridId;
     }
 
     public void updateYouthMemberInfoDto(YouthMemberInfoDto youthMemberInfoDto) {

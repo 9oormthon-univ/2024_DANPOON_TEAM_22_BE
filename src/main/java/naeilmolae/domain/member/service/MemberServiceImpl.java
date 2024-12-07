@@ -105,7 +105,7 @@ public class MemberServiceImpl implements MemberService {
 
                 // 위치 X, Y 좌표 저장
                 Grid grid = gridService.getGridCoordinates(youthMemberInfo.getLatitude(), youthMemberInfo.getLongitude());
-                youthMemberInfo.setGrid(grid.getX().doubleValue(), grid.getY().doubleValue());
+                youthMemberInfo.setGridId(grid.getId());
 
                 member.setYouthMemberInfo(youthMemberInfo);
                 youthMemberInfoRepository.save(youthMemberInfo);
