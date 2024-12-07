@@ -19,7 +19,7 @@
 <br>
 
 ## ⚒️️ Architecture ⚒️
-![architecture.png](./docs/images/architecture.png)
+![architecture.png](./docs/images/service-architecture.png)
 
 <br>
 
