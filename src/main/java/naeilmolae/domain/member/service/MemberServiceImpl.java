@@ -116,7 +116,6 @@ public class MemberServiceImpl implements MemberService {
         }
     }
 
-    @Override  //todo: 그 뭐냐 회원 정보 요청은 회원가입 완료하는 사람만 요청되게 ㄱㄱ
     public MemberInfoResponseDto getMemberInfo(Member member) {
         Member loginMember = findById(member.getId());
         // 청년인 경우 청년 정보도 함께 반환

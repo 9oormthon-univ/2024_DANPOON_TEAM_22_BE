@@ -22,7 +22,7 @@ public class NotificationContext {
         YouthMemberInfo info = member.getYouthMemberInfo();
 
         if (info == null || member.getFcmToken().isEmpty()) {
-            return; // todo 유효하지 않은 사용자(fcm 토큰 없는 사용자) 예외 처리
+            return;
         }
 
         for (NotificationStrategy strategy : strategies) {

@@ -21,8 +21,6 @@ public class PushNotificationService {
     private final NotificationContext notificationContext;
 
     @Transactional(readOnly = true)
-    // TODO 수정 필요함
-    //todo fcm 토큰 없는 경우 예외 처리 context에서 처리
     public void sendNotificationsAtScheduledTime() {
         List<Member> youthMembers = memberAdapterService.getAllYouthMember();
         LocalDateTime now = LocalDateTime.now();

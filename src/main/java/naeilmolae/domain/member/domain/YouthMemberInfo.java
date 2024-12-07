@@ -3,7 +3,6 @@ package naeilmolae.domain.member.domain;
 import jakarta.persistence.*;
 import lombok.*;
 import naeilmolae.domain.member.dto.YouthMemberInfoDto;
-import naeilmolae.domain.weather.domain.Grid;
 import naeilmolae.global.common.base.BaseEntity;
 
 import java.time.LocalDateTime;
