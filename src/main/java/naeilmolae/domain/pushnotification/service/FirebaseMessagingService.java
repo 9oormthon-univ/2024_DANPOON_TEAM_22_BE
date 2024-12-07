@@ -21,7 +21,6 @@ public class FirebaseMessagingService {
                         .build())
                 .putData("alarmId", String.valueOf(alarmId)) // 파일 ID를 데이터로 추가
                 .build();
-
         try {
             // FCM에 메시지 전송
             String response = FirebaseMessaging.getInstance().send(message);
