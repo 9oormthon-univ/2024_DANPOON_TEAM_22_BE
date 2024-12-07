@@ -1,7 +1,6 @@
 package naeilmolae.domain.pushnotification.strategy.impl;
 
 import lombok.RequiredArgsConstructor;
-import naeilmolae.domain.alarm.domain.AlarmCategory;
 import naeilmolae.domain.alarm.service.AlarmService;
 import naeilmolae.domain.member.domain.Member;
 import naeilmolae.domain.member.domain.YouthMemberInfo;

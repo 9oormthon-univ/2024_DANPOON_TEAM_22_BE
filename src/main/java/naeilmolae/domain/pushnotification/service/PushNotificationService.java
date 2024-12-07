@@ -2,9 +2,7 @@ package naeilmolae.domain.pushnotification.service;
 
 import lombok.RequiredArgsConstructor;
 import naeilmolae.domain.alarm.service.AlarmService;
-import naeilmolae.domain.alarm.service.AlarmViewService;
 import naeilmolae.domain.member.domain.Member;
-import naeilmolae.domain.member.domain.YouthMemberInfo;
 import naeilmolae.domain.member.service.MemberService;
 import naeilmolae.domain.pushnotification.strategy.context.NotificationContext;
 import org.springframework.stereotype.Service;
@@ -13,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static naeilmolae.domain.alarm.domain.AlarmCategory.*;
 
 @Service
 @RequiredArgsConstructor

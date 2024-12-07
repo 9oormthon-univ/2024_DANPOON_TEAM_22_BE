@@ -8,8 +8,4 @@ import org.springframework.stereotype.Service;
 public class MemberAdapterService {
 
     private final MemberService memberService;
-
-//    public MemberIdResponseDto findById(Long memberId) {
-//
-//    }
 }
