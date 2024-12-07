@@ -135,9 +135,6 @@ public class VoiceFileService {
 
     // 알람 Id로 사용자에게 제공되지 않은 데이터 조회
     public VoiceFile getAvailableDataList(Long memberId, Long alarmId) {
-        // TODO 청년만 통과할 수 있게
-        // TODO 추후에 음성 제공 알고리즘 적용 예정
-
         List<VoiceFile> unprovided = voiceFileRepository.findUnprovided(memberId, alarmId, LocalDateTime.now().minusWeeks(1));
         VoiceFile voiceFile = unprovided
                 .stream()

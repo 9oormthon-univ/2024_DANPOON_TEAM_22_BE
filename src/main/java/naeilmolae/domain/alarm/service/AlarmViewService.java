@@ -24,7 +24,6 @@ public class AlarmViewService {
 
 
     // 알림 조회
-    // TODO 메소드 이름 변경
     public Alarm findRecommendedAlarm(Long memberId, AlarmCategory childAlarmCategory) {
         return alarmService.findByAlarmCategory(childAlarmCategory);
     }
@@ -44,13 +43,11 @@ public class AlarmViewService {
 
     // 카테고리 순서 맞추기
     public List<AlarmCategoryCount> findUserCategoryCount(Long memberId, CategoryType categoryType) {
-        // TODO 1. 사용자가 작성한 알람 조회
         Set<AlarmCategory> userUsed = this.findDistinctCreatedCategories(memberId)
                 .stream()
                 .filter(item -> item.getCategoryType().equals(categoryType))
                 .collect(Collectors.toSet());
 
-        // TODO 2. 순서 맞추기
         List<AlarmCategoryCount> collect = AlarmCategory.ROOT_CATEGORIES
                 .stream()
                 .filter(item -> item.getCategoryType().equals(categoryType))

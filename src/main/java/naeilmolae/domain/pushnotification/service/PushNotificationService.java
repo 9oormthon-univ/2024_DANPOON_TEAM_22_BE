@@ -2,10 +2,8 @@ package naeilmolae.domain.pushnotification.service;
 
 import lombok.RequiredArgsConstructor;
 import naeilmolae.domain.alarm.service.AlarmService;
-import naeilmolae.domain.alarm.service.AlarmViewService;
 import naeilmolae.domain.member.domain.Member;
-import naeilmolae.domain.member.domain.YouthMemberInfo;
-import naeilmolae.domain.member.service.MemberService;
+import naeilmolae.domain.member.service.MemberAdapterService;
 import naeilmolae.domain.pushnotification.strategy.context.NotificationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,14 +15,14 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PushNotificationService {
 
-    private final MemberService memberService;
+    private final MemberAdapterService memberAdapterService;
     private final FirebaseMessagingService firebaseMessagingService; // Firebase 연동
     private final AlarmService alarmService;
     private final NotificationContext notificationContext;
 
     @Transactional(readOnly = true)
     public void sendNotificationsAtScheduledTime() {
-        List<Member> youthMembers = memberService.getAllYouthMemeber();
+        List<Member> youthMembers = memberAdapterService.getAllYouthMember();
         LocalDateTime now = LocalDateTime.now();
 
         for (Member member : youthMembers) {

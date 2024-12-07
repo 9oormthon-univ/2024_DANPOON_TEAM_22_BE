@@ -17,13 +17,10 @@ import org.springframework.stereotype.Service;
 public class VoiceFileAnalysisResponseConsumer {
 
     private final VoiceFileService voiceFileService;
-
-    // TODO consumer lag monitoring
     @KafkaListener(topics = KafkaTopic.ANALYSIS_RESPONSE, groupId = "voice-analysis-group1")
     public void handleAnalysisResponse(
             @Payload AnalysisResponseDto analysisResponseDto,
             @Header(KafkaHeaders.RECEIVED_KEY) String key) {
-        // TODO 로깅 잘 해야함
         log.info("Received analysis response: {}", analysisResponseDto);
         voiceFileService.saveResult(Long.valueOf(key), analysisResponseDto);
     }

@@ -36,9 +36,6 @@ public class VoiceFile extends BaseEntity {
     @Column(name = "alarm_id")
     private Long alarmId;
 
-
-    // TODO 음성 파형 넣어야함
-
     public VoiceFile(Long memberId, Long alarmId, String content) {
         this.content = content;
         this.memberId = memberId;
@@ -59,10 +56,9 @@ public class VoiceFile extends BaseEntity {
      *
      * @param fileUrl 저장된 음성 파일 ID
      */
-    // TODO refactor
     public void saveFileUrl(String fileUrl) {
         if (this.content == null) {
-            throw new RestApiException(GlobalErrorStatus._BAD_REQUEST); // TODO 예외 처리
+            throw new RestApiException(GlobalErrorStatus._BAD_REQUEST);
         }
 
         this.fileUrl = fileUrl;
@@ -70,10 +66,9 @@ public class VoiceFile extends BaseEntity {
     }
 
 
-    // TODO 상태 관리 어떻게 할지 고민..
     public void prepareAnalysis() {
         if (this.status != AUDIO_SUBMITTED) {
-            throw new IllegalStateException("분석 요청은 녹음 완료 상태에서만 가능합니다."); // TODO 예외 처ㅣㄹ
+            throw new IllegalStateException("분석 요청은 녹음 완료 상태에서만 가능합니다.");
         }
         if (this.getFileUrl() == null) {
             throw new RestApiException(GlobalErrorStatus._BAD_REQUEST);

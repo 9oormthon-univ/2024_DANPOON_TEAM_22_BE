@@ -23,7 +23,7 @@ import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
-@RequiredArgsConstructor //todo: 세상의 모든 에러를 처리한다.
+@RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
     private final YouthMemberInfoRepository youthMemberInfoRepository;
@@ -105,7 +105,7 @@ public class MemberServiceImpl implements MemberService {
 
                 // 위치 X, Y 좌표 저장
                 Grid grid = gridService.getGridCoordinates(youthMemberInfo.getLatitude(), youthMemberInfo.getLongitude());
-                youthMemberInfo.setGrid(grid.getX().doubleValue(), grid.getY().doubleValue());
+                youthMemberInfo.setGridId(grid.getId());
 
                 member.setYouthMemberInfo(youthMemberInfo);
                 youthMemberInfoRepository.save(youthMemberInfo);
@@ -116,7 +116,6 @@ public class MemberServiceImpl implements MemberService {
         }
     }
 
-    @Override  //todo: 그 뭐냐 회원 정보 요청은 회원가입 완료하는 사람만 요청되게 ㄱㄱ
     public MemberInfoResponseDto getMemberInfo(Member member) {
         Member loginMember = findById(member.getId());
         // 청년인 경우 청년 정보도 함께 반환
@@ -136,7 +135,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public List<Member> getAllYouthMemeber(){
+    public List<Member> getAllYouthMember(){
         return memberRepository.findAllYouthMembersWithInfo(Role.YOUTH);
     }
 }

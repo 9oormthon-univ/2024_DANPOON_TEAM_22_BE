@@ -45,8 +45,6 @@ public class AlarmService {
         }
         return alarmRepository.findByCategories(query);
     }
-
-    // TODO 값이 일정하므로 캐싱하게 만들어야 함.
     public List<Alarm> findByChildrenCategories(List<AlarmCategory> alarmCategories) {
         return alarmRepository.findByCategories(alarmCategories);
     }

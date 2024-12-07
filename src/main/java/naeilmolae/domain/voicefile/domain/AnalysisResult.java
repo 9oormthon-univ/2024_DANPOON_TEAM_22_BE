@@ -28,7 +28,7 @@ public class AnalysisResult extends BaseEntity {
     public AnalysisResult(VoiceFile voiceFile, AnalysisResultStatus analysisFailureReason, String sttContent) {
         this.voiceFile = voiceFile;
         if (analysisFailureReason == null) {
-            throw new IllegalArgumentException("analysisFailureReason must not be null"); // TODO: 예외 메시지 수정
+            throw new IllegalArgumentException("analysisFailureReason must not be null");
         }
         this.analysisResultStatus = analysisFailureReason;
         this.sttContent = sttContent;

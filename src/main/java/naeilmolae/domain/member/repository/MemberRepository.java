@@ -14,6 +14,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     Optional<Member> findByClientIdAndLoginType(String clientId, LoginType loginType);
     Long countAllByRole(Role role);
 
-    @Query("SELECT m FROM Member m JOIN m.youthMemberInfo y WHERE m.role = :role")
+    @Query("SELECT m FROM Member m JOIN FETCH m.youthMemberInfo y WHERE m.role = 'YOUTH'")
     List<Member> findAllYouthMembersWithInfo(@Param("role") Role role);
+
 }

@@ -1,6 +1,7 @@
 package naeilmolae.domain.weather.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import naeilmolae.domain.weather.domain.Grid;
 import naeilmolae.domain.weather.domain.Weather;
 import naeilmolae.domain.weather.domain.WeatherCategory;
@@ -30,6 +31,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
+@Slf4j
 public class WeatherService {
     private final WeatherRepository weatherRepository;
     private final GridService gridService;
@@ -42,47 +44,47 @@ public class WeatherService {
 
     /**
      * 날씨 정보를 가져와서 저장합니다.
-     * @param gridDto
+     * @param x, y
      * @param localDateTime
      * @return
      */
-    // TODO 테스트 해야함
     @Transactional
-    public List<Weather> requestWeatherData(GridDto gridDto, LocalDateTime localDateTime) {
-        String url = buildUrl(gridDto, localDateTime);
+    public List<Weather> requestWeatherData(String x, String y, LocalDateTime localDateTime) {
+        String url = buildUrl(x, y, localDateTime);
         String response = restTemplate.getForObject(url, String.class);
 
-        List<Weather> weathers = parseWeatherData(response, gridDto);
+        List<Weather> weathers = parseWeatherData(response, x, y);
         return weatherRepository.saveAll(weathers);
     }
 
     /**
      * API 요청 URL을 생성합니다.
-     * @param gridDto
+     * @param x, y
      * @param dateTime
      * @return
      */
-    private String buildUrl(GridDto gridDto, LocalDateTime dateTime) {
+    private String buildUrl(String x, String y, LocalDateTime dateTime) {
         dateTime = dateTime.withMinute(0);
 
         String baseDate = dateTime.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
         String baseTime = dateTime.format(DateTimeFormatter.ofPattern("HHmm"));
 
-        return String.format(
-                "%s?pageNo=1&numOfRows=1000&dataType=XML&base_date=%s&base_time=%s&nx=%d&ny=%d&authKey=%s",
-                API_URL, baseDate, baseTime, gridDto.getX(), gridDto.getY(), apiKey
+        String format = String.format(
+                "%s?pageNo=1&numOfRows=1000&dataType=XML&base_date=%s&base_time=%s&nx=%s&ny=%s&authKey=%s",
+                API_URL, baseDate, baseTime, x, y, apiKey
         );
+        log.info(format);
+        return format;
     }
 
     /**
      * XML 데이터를 파싱하여 Weather 객체 리스트를 반환합니다.
      * @param xmlData
-     * @param gridDto
+     * @param x, y
      * @return
      */
-    // TODO Converter 로 변경하면 어떨까
-    private List<Weather> parseWeatherData(String xmlData, GridDto gridDto) {
-        Grid grid = gridService.findGridByPoint(gridDto.getX().toString(), gridDto.getY().toString());
+    private List<Weather> parseWeatherData(String xmlData, String x, String y) {
+        Grid grid = gridService.findGridByPoint(x, y);
 
         List<Weather> weatherList = new ArrayList<>();
         try {
