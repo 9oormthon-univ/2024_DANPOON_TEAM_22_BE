@@ -47,6 +47,8 @@ public class MemberMapper {
                 .breakfast(dto.getBreakfast() != null ? dto.getBreakfast() : DefaultTimeSettings.DEFAULT_BREAKFAST_TIME)
                 .lunch(dto.getLunch() != null ? dto.getLunch() : DefaultTimeSettings.DEFAULT_LUNCH_TIME)
                 .dinner(dto.getDinner() != null ? dto.getDinner() : DefaultTimeSettings.DEFAULT_DINNER_TIME)
+                .latitude(dto.getLatitude())
+                .longitude(dto.getLongitude())
                 .build();
     }
 

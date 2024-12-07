@@ -31,7 +31,7 @@ public class BreakfastNotificationStrategy implements NotificationStrategy {
     @Override
     public void send(Member member, FirebaseMessagingService firebaseMessagingService, AlarmService alarmService) {
         String message = messageSource.getMessage(
-                "notification.breakfast.message",
+                "notification.meal.message",
                 null,
                 Locale.getDefault()
         );

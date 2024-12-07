@@ -1,7 +1,6 @@
 package naeilmolae.domain.voicefile.service;
 
 import lombok.RequiredArgsConstructor;
-import naeilmolae.domain.alarm.dto.response.AlarmCategoryMessageResponseDto;
 import naeilmolae.domain.alarm.dto.response.AlarmResponseDto;
 import naeilmolae.domain.alarm.service.AlarmAdapterService;
 import naeilmolae.domain.member.domain.Member;
@@ -12,7 +11,7 @@ import naeilmolae.domain.voicefile.domain.VoiceReactionType;
 import naeilmolae.domain.voicefile.dto.response.VoiceFileReactionSummaryResponseDto;
 import naeilmolae.domain.voicefile.repository.ProvidedFileRepository;
 import naeilmolae.global.common.exception.RestApiException;
-import naeilmolae.global.common.exception.code.status.GlobalErrorStatus;
+import naeilmolae.global.common.exception.code.status.ProvidedFileErrorStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -37,7 +36,7 @@ public class ProvidedFileService {
         // 이미 제공한 파일인지 확인
         providedFileRepository.findByConsumerIdAndVoiceFileId(memberId, voiceFileId)
                 .ifPresent(file -> {
-                    throw new RestApiException(GlobalErrorStatus._BAD_REQUEST);
+                    throw new RestApiException(ProvidedFileErrorStatus._ALREADY_PROVIDED);
                 });
 
         VoiceFile voiceFile = voiceFileService.findById(voiceFileId);
@@ -69,7 +68,7 @@ public class ProvidedFileService {
     @Transactional
     public boolean likeProvidedFile(Long consumerId, Long providedFileId, String message) {
         ProvidedFile providedFile = providedFileRepository.findByConsumerId(consumerId, providedFileId)
-                .orElseThrow(() -> new RestApiException(GlobalErrorStatus._BAD_REQUEST));
+                .orElseThrow(() -> new RestApiException(ProvidedFileErrorStatus._NOT_FOUND_FILE));
         return providedFile.addThanksMessage(message);
     }
 
@@ -77,7 +76,7 @@ public class ProvidedFileService {
     @Transactional
     public boolean bookmarkProvidedFile(Long consumerId, Long providedFileId) {
         ProvidedFile providedFile = providedFileRepository.findByConsumerId(consumerId, providedFileId)
-                .orElseThrow(() -> new RestApiException(GlobalErrorStatus._BAD_REQUEST));
+                .orElseThrow(() -> new RestApiException(ProvidedFileErrorStatus._NOT_FOUND_FILE));
         return providedFile.setConsumerSaved();
     }
 

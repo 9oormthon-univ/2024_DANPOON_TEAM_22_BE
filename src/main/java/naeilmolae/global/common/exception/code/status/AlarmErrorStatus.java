@@ -6,18 +6,22 @@ import naeilmolae.global.common.exception.code.BaseCodeDto;
 import naeilmolae.global.common.exception.code.BaseCodeInterface;
 import org.springframework.http.HttpStatus;
 
+
 @AllArgsConstructor
 @Getter
-public enum VoiceFileErrorStatus implements BaseCodeInterface {
-    _LACK_OF_MESSAGE(HttpStatus.NOT_FOUND , "VOICE001", "제공할 수 있는 응원 음성이 없습니다."),
-    _NO_SUCH_FILE(HttpStatus.BAD_REQUEST , "VOICE002", "해당 파일은 존재하지 않습니다."),
-    _VOICE_FILE_NOT_PROVIDED(HttpStatus.BAD_REQUEST , "VOICE003", "아직 음성 파일이 제공되지 않은 상태입니다."),
-    _ANALYSIS_NOT_YET(HttpStatus.BAD_REQUEST , "VOICE003", "아직 음성 파일이 제공되지 않은 상태입니다.");
+public enum AlarmErrorStatus implements BaseCodeInterface {
+
+    _NOT_FOUND(HttpStatus.NOT_FOUND, "ALARM001", "알람을 찾을 수 없습니다."),
+    _NOT_FOUND_BY_CATEGORY(HttpStatus.NOT_FOUND, "ALARM002", "해당 카테고리로는 알람을 조회할 수 없습니다. childrenAlarmCategory 로 조회해주세요."),
+    _NO_FOUND_MESSAGE(HttpStatus.NOT_FOUND, "ALARM003", "해당 알람의 안내 메시지가 존재하지 않습니다."),
+    _NO_FOUND_EXAMPLE_MESSAGE(HttpStatus.NOT_FOUND, "ALARM004", "해당 알람의 예시 메시지가 존재하지 않습니다."),;
 
     private final HttpStatus httpStatus;
     private final boolean isSuccess = false;
     private final String code;
     private final String message;
+
+
 
     @Override
     public BaseCodeDto getCode() {

@@ -28,7 +28,7 @@ public class LunchNotificationStrategy implements NotificationStrategy {
 
     public void send(Member member, FirebaseMessagingService firebaseMessagingService, AlarmService alarmService) {
         String message = messageSource.getMessage(
-                "notification.lunch.message",
+                "notification.meal.message",
                 null,
                 Locale.getDefault()
         );

@@ -19,6 +19,8 @@ public class AvailableVoiceFileResponseDto {
     @Schema(description = "음성 파일 URL", example = "https://example.com/voice.mp3")
     private String fileUrl;
 
+    private String content;
+
     private Long providedFileId;
 
     public static AvailableVoiceFileResponseDto from(VoiceFile voiceFile, Long providedFileId) {
@@ -26,6 +28,7 @@ public class AvailableVoiceFileResponseDto {
         availableVoiceFileResponseDto.setVoiceFileId(voiceFile.getId());
         availableVoiceFileResponseDto.setFileUrl(voiceFile.getFileUrl());
         availableVoiceFileResponseDto.setProvidedFileId(providedFileId);
+        availableVoiceFileResponseDto.setContent(voiceFile.getContent());
 
         return availableVoiceFileResponseDto;
     }

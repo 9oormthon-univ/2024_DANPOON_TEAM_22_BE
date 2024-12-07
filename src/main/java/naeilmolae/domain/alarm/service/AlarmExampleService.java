@@ -3,6 +3,8 @@ package naeilmolae.domain.alarm.service;
 import lombok.RequiredArgsConstructor;
 import naeilmolae.domain.alarm.domain.AlarmExample;
 import naeilmolae.domain.alarm.repository.AlarmExampleRepository;
+import naeilmolae.global.common.exception.RestApiException;
+import naeilmolae.global.common.exception.code.status.AlarmErrorStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,7 +21,7 @@ public class AlarmExampleService {
         List<AlarmExample> allByAlarmId = alarmExampleRepository.findAllByAlarmId(alarmId);
 
         if (allByAlarmId.isEmpty()) {
-            throw new IllegalArgumentException("No alarm examples found for alarmId: " + alarmId);
+            throw new RestApiException(AlarmErrorStatus._NO_FOUND_EXAMPLE_MESSAGE);
         }
 
         return allByAlarmId.stream()

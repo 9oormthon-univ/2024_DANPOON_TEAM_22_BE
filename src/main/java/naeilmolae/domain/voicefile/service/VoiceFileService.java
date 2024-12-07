@@ -1,6 +1,7 @@
 package naeilmolae.domain.voicefile.service;
 
 import lombok.RequiredArgsConstructor;
+import naeilmolae.domain.alarm.domain.AlarmCategory;
 import naeilmolae.domain.alarm.dto.response.AlarmCategoryMessageResponseDto;
 import naeilmolae.domain.alarm.service.AlarmAdapterService;
 import naeilmolae.domain.chatgpt.dto.ScriptValidationResponseDto;
@@ -23,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -40,10 +42,11 @@ public class VoiceFileService {
         AlarmCategoryMessageResponseDto alarmCategoryMessageResponseDto = alarmAdapterService.findById(alarmId);// 알람이 존재하는지 확인
         String title = alarmCategoryMessageResponseDto.getTitle();
 
-        // 스크립트 검증
-        verifyContent(title, content);
+        if (!alarmCategoryMessageResponseDto.getAlarmCategory().equals(AlarmCategory.INFO_INFO)) {
+            // 스크립트 검증
+            verifyContent(title, content);
+        }
         VoiceFile voiceFile = new VoiceFile(memberId, alarmId, content);
-
         return voiceFileRepository.save(voiceFile);
     }
 
@@ -52,7 +55,7 @@ public class VoiceFileService {
         ScriptValidationResponseDto checkScriptRelevancePrompt
                 = chatGptService.getCheckScriptRelevancePrompt(title, content);
         if (!checkScriptRelevancePrompt.isProper()) {
-            throw new RestApiException(AnalysisErrorStatus._DENIED_BY_GPT); // TODO DNEY 이유도 제공해야함
+            throw new RestApiException(AnalysisErrorStatus._DENIED_BY_GPT);
         }
     }
 
@@ -81,10 +84,10 @@ public class VoiceFileService {
     public Long requestAnalysis(Long voiceFileId) {
         // 음성 파일 조회
         VoiceFile voiceFile = voiceFileRepository.findById(voiceFileId)
-                .orElseThrow(() -> new RestApiException(GlobalErrorStatus._NOT_FOUND));
+                .orElseThrow(() -> new RestApiException(VoiceFileErrorStatus._NO_SUCH_FILE));
 
         if (voiceFile.getFileUrl() == null) {
-            throw new RestApiException(GlobalErrorStatus._BAD_REQUEST);
+            throw new RestApiException(VoiceFileErrorStatus._VOICE_FILE_NOT_PROVIDED);
         }
 
         // 분석 요청 이벤트 발행
@@ -98,7 +101,7 @@ public class VoiceFileService {
     // 음성 파일 조회
     public VoiceFile findById(Long fileId) {
         return voiceFileRepository.findById(fileId)
-                .orElseThrow(() -> new RestApiException(GlobalErrorStatus._NOT_FOUND));
+                .orElseThrow(() -> new RestApiException(VoiceFileErrorStatus._NO_SUCH_FILE));
     }
 
     // 분석 결과 조회
@@ -115,14 +118,14 @@ public class VoiceFileService {
             case SUCCESS:
                 return analysisResult;
             default:
-                throw new RestApiException(GlobalErrorStatus._INTERNAL_SERVER_ERROR);
+                throw new RestApiException(AnalysisErrorStatus._ANALYSIS_NOT_YET);
         }
     }
 
     // 음성 파일이 샤용자의 것이 맞는지
     public VoiceFile verifyUserFile(Long memberId, Long fileId) {
         return voiceFileRepository.findByMemberIdAndId(memberId, fileId)
-                .orElseThrow(() -> new RestApiException(GlobalErrorStatus._BAD_REQUEST));
+                .orElseThrow(() -> new RestApiException(VoiceFileErrorStatus._NO_SUCH_FILE));
     }
 
     // 사용자가 특정 시간 사이에 생성한 알람 ID List 조회

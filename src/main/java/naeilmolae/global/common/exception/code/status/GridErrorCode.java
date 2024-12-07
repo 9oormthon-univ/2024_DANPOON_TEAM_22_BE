@@ -1,18 +1,17 @@
 package naeilmolae.global.common.exception.code.status;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import naeilmolae.global.common.exception.code.BaseCodeDto;
 import naeilmolae.global.common.exception.code.BaseCodeInterface;
 import org.springframework.http.HttpStatus;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Getter
-public enum VoiceFileErrorStatus implements BaseCodeInterface {
-    _LACK_OF_MESSAGE(HttpStatus.NOT_FOUND , "VOICE001", "제공할 수 있는 응원 음성이 없습니다."),
-    _NO_SUCH_FILE(HttpStatus.BAD_REQUEST , "VOICE002", "해당 파일은 존재하지 않습니다."),
-    _VOICE_FILE_NOT_PROVIDED(HttpStatus.BAD_REQUEST , "VOICE003", "아직 음성 파일이 제공되지 않은 상태입니다."),
-    _ANALYSIS_NOT_YET(HttpStatus.BAD_REQUEST , "VOICE003", "아직 음성 파일이 제공되지 않은 상태입니다.");
+public enum GridErrorCode implements BaseCodeInterface {
+    _NO_CONTENT(HttpStatus.INTERNAL_SERVER_ERROR, "GRID_501", "외부 API 요청중 오류가 발생했습니다."),
+    _PARSE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "GRID_502", "응답 데이터 파싱중 오류가 발생했습니다."),
+    _ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "GRID_503", "알 수 없는 에러가 발생했습니다.");
 
     private final HttpStatus httpStatus;
     private final boolean isSuccess = false;

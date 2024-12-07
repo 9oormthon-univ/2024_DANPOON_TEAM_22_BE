@@ -4,7 +4,9 @@ public enum AnalysisResultStatus {
     INCLUDE_INAPPROPRIATE_CONTENT("INCLUDE_INAPPROPRIATE_CONTENT"), // 부적절한 내용 포함
     NOT_READ_VOICE("NOT_READ_VOICE"), // 음성을 그대로 읽지 않음
     SUCCESS("SUCCESS"),
-    ERROR("ERROR");
+    ERROR("ERROR"),
+    _ANALYSIS_NOT_YET("_ANALYSIS_NOT_YET"); // 아직 분석 중
+
 
     private final String description;
 

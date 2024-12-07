@@ -12,6 +12,8 @@ import naeilmolae.domain.member.mapper.MemberMapper;
 import naeilmolae.domain.member.repository.MemberRepository;
 import naeilmolae.domain.member.repository.YouthMemberInfoRepository;
 import naeilmolae.domain.member.status.MemberErrorStatus;
+import naeilmolae.domain.weather.domain.Grid;
+import naeilmolae.domain.weather.service.GridService;
 import naeilmolae.global.common.exception.RestApiException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -27,6 +29,7 @@ public class MemberServiceImpl implements MemberService {
     private final YouthMemberInfoRepository youthMemberInfoRepository;
 
     private final MemberRefreshTokenService refreshTokenService;
+    private final GridService gridService;
 
     @Override
     public Member findById(Long id) throws UsernameNotFoundException {
@@ -99,11 +102,16 @@ public class MemberServiceImpl implements MemberService {
             if (youthMemberInfo == null) {
                 // 청년 정보가 없으면 새로 저장
                 youthMemberInfo = MemberMapper.toYouthMemberInfo(request.youthMemberInfoDto());
+
+                // 위치 X, Y 좌표 저장
+                Grid grid = gridService.getGridCoordinates(youthMemberInfo.getLatitude(), youthMemberInfo.getLongitude());
+                youthMemberInfo.setGrid(grid.getX().doubleValue(), grid.getY().doubleValue());
+
                 member.setYouthMemberInfo(youthMemberInfo);
                 youthMemberInfoRepository.save(youthMemberInfo);
             } else {
                 // 청년 정보가 있으면 업데이트
-                youthMemberInfo.update(request.youthMemberInfoDto());
+                youthMemberInfo.updateYouthMemberInfoDto(request.youthMemberInfoDto());
             }
         }
     }

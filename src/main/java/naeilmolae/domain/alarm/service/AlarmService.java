@@ -5,6 +5,7 @@ import naeilmolae.domain.alarm.domain.Alarm;
 import naeilmolae.domain.alarm.domain.AlarmCategory;
 import naeilmolae.domain.alarm.repository.AlarmRepository;
 import naeilmolae.global.common.exception.RestApiException;
+import naeilmolae.global.common.exception.code.status.AlarmErrorStatus;
 import naeilmolae.global.common.exception.code.status.GlobalErrorStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,7 +23,7 @@ public class AlarmService {
     // 알람 조회
     public Alarm findById(Long id) {
         return alarmRepository.findById(id)
-                .orElseThrow(() -> new RestApiException(GlobalErrorStatus._NOT_FOUND));
+                .orElseThrow(() -> new RestApiException(AlarmErrorStatus._NOT_FOUND));
     }
 
     public List<Alarm> findByIdIn(Set<Long> alarmIds) {
@@ -33,7 +34,7 @@ public class AlarmService {
     // 알람 카테고리 ID로 알람 조회
     public Alarm findByAlarmCategory(AlarmCategory alarmCategory) {
         return alarmRepository.findByAlarmCategoryId(alarmCategory)
-                .orElseThrow(() -> new RestApiException(GlobalErrorStatus._BAD_REQUEST));
+                .orElseThrow(() -> new RestApiException(AlarmErrorStatus._NOT_FOUND_BY_CATEGORY));
     }
 
     public List<Alarm> findByParentCategories(List<AlarmCategory> alarmCategories) {

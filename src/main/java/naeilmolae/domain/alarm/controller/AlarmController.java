@@ -106,7 +106,6 @@ public class AlarmController {
     @GetMapping("/list/{categoryType}")
     public BaseResponse<List<AlarmCategoryCount>> getAlarmList(@CurrentMember Member member,
                                                                @PathVariable CategoryType categoryType) {
-        // TODO 여기에 메시지가 제공되어야함
         List<AlarmCategoryCount> collect = alarmViewService.findUserCategoryCount(member.getId(), categoryType);
         List<AlarmCategory> alarmCategories = collect.stream()
                 .map(AlarmCategoryCount::getAlarmCategory)

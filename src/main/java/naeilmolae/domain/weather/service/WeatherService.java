@@ -2,61 +2,121 @@ package naeilmolae.domain.weather.service;
 
 import lombok.RequiredArgsConstructor;
 import naeilmolae.domain.weather.domain.Grid;
+import naeilmolae.domain.weather.domain.Weather;
+import naeilmolae.domain.weather.domain.WeatherCategory;
+import naeilmolae.domain.weather.dto.GridDto;
 import naeilmolae.domain.weather.repository.WeatherRepository;
+import naeilmolae.global.common.exception.RestApiException;
+import naeilmolae.global.common.exception.code.status.WeatherErrorCode;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class WeatherService {
     private final WeatherRepository weatherRepository;
+    private final GridService gridService;
     private final RestTemplate restTemplate;
+    private static final String API_URL =
+            "https://apihub.kma.go.kr/api/typ02/openApi/VilageFcstInfoService_2.0/getUltraSrtNcst";
 
-    @Value("${weather.api.transfer}")
-    private String TRANSFER_URL;
-
-    public Grid getGridCoordinates(Double latitude, Double longitude) {
-        String apiUrl = String.format(
-                "https://apihub.kma.go.kr/api/typ01/cgi-bin/url/nph-dfs_xy_lonlat?lon=%f&lat=%f&help=0&authKey=cJGQY1PQTnuRkGNT0H57zQ",
-                longitude, latitude
-        );
-
-        String response = restTemplate.getForObject(apiUrl, String.class);
-        return parseGridCoordinates(response);
-    }
-
+    @Value("${kma.key}")
+    private String apiKey;
 
     /**
-     * 응답 데이터를 받아 X, Y 좌표를 파싱합니다.
-     *
-     * @param response API 응답 문자열
-     * @return X, Y 좌표 배열 (int[0]: X, int[1]: Y)
-     * @throws IllegalArgumentException 응답 형식이 잘못된 경우 예외 발생
+     * 날씨 정보를 가져와서 저장합니다.
+     * @param gridDto
+     * @param localDateTime
+     * @return
      */
-    private Grid parseGridCoordinates(String response) {
-        if (response == null || response.isEmpty()) {
-            throw new IllegalArgumentException("응답 데이터가 비어있습니다.");
-        }
+    // TODO 테스트 해야함
+    @Transactional
+    public List<Weather> requestWeatherData(GridDto gridDto, LocalDateTime localDateTime) {
+        String url = buildUrl(gridDto, localDateTime);
+        String response = restTemplate.getForObject(url, String.class);
 
-        // 응답 데이터 줄바꿈으로 분리
-        String[] lines = response.split("\n");
+        List<Weather> weathers = parseWeatherData(response, gridDto);
+        return weatherRepository.saveAll(weathers);
+    }
 
-        // 마지막 줄을 읽어 ','로 분리
+    /**
+     * API 요청 URL을 생성합니다.
+     * @param gridDto
+     * @param dateTime
+     * @return
+     */
+    private String buildUrl(GridDto gridDto, LocalDateTime dateTime) {
+        dateTime = dateTime.withMinute(0);
+
+        String baseDate = dateTime.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+        String baseTime = dateTime.format(DateTimeFormatter.ofPattern("HHmm"));
+
+        return String.format(
+                "%s?pageNo=1&numOfRows=1000&dataType=XML&base_date=%s&base_time=%s&nx=%d&ny=%d&authKey=%s",
+                API_URL, baseDate, baseTime, gridDto.getX(), gridDto.getY(), apiKey
+        );
+    }
+
+    /**
+     * XML 데이터를 파싱하여 Weather 객체 리스트를 반환합니다.
+     * @param xmlData
+     * @param gridDto
+     * @return
+     */
+    // TODO Converter 로 변경하면 어떨까
+    private List<Weather> parseWeatherData(String xmlData, GridDto gridDto) {
+        Grid grid = gridService.findGridByPoint(gridDto.getX().toString(), gridDto.getY().toString());
+
+        List<Weather> weatherList = new ArrayList<>();
         try {
-            String[] values = lines[lines.length - 1].trim().split(",");
-            if (values.length < 4) {
-                throw new IllegalArgumentException("응답 데이터 형식이 올바르지 않습니다.");
+            // XML 파싱 준비
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = factory.newDocumentBuilder();
+
+            // XML 문자열을 InputStream으로 변환
+            InputStream inputStream = new ByteArrayInputStream(xmlData.getBytes(StandardCharsets.UTF_8));
+            Document document = builder.parse(inputStream);
+            document.getDocumentElement().normalize();
+
+            // <item> 태그 추출
+            NodeList itemList = document.getElementsByTagName("item");
+
+            for (int i = 0; i < itemList.getLength(); i++) {
+                Node itemNode = itemList.item(i);
+
+                if (itemNode.getNodeType() == Node.ELEMENT_NODE) {
+                    Element element = (Element) itemNode;
+
+                    // XML 요소 값 추출
+                    String category = element.getElementsByTagName("category").item(0).getTextContent();
+                    double value = Double.parseDouble(element.getElementsByTagName("obsrValue").item(0).getTextContent());
+
+                    // Weather 객체 생성
+                    Weather weather = new Weather(grid, WeatherCategory.valueOf(category), value);
+
+                    weatherList.add(weather);
+                }
             }
-
-            // X, Y 값 추출 (세 번째와 네 번째 값)
-            Integer x = Integer.parseInt(values[2].trim());
-            Integer y = Integer.parseInt(values[3].trim());
-
-            return new Grid(x, y);
-
         } catch (Exception e) {
-            throw new IllegalArgumentException("좌표를 파싱하는 중 오류가 발생했습니다: " + e.getMessage(), e);
+            throw new RestApiException(WeatherErrorCode._ERROR);
         }
+        return weatherList;
     }
 }
