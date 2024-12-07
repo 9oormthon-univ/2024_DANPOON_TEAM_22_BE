@@ -23,7 +23,7 @@ import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
-@RequiredArgsConstructor //todo: 세상의 모든 에러를 처리한다.
+@RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
     private final YouthMemberInfoRepository youthMemberInfoRepository;

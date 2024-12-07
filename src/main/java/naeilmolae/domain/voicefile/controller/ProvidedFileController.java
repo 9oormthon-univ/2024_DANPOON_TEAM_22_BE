@@ -44,8 +44,6 @@ public class ProvidedFileController {
     public BaseResponse<Page<ProvidedFileResponseDto>> getProvidedFileList(@CurrentMember Member member,
                                                                            @RequestParam(value = "parentCategory", required = false) String parentCategory,
                                                                            @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
-
-        // TODO 아래를 새로운 서비스로 만들어야 한다.
         Page<ProvidedFile> providedFiles =
                 providedFileService.getProvidedFiles(member.getId(), parentCategory, pageable);
 

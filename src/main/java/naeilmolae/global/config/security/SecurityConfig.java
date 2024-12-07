@@ -39,7 +39,6 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/auth/login/**").permitAll()
                         .requestMatchers("/api/v1/chatgpt/**").permitAll()
                         .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
-                        //todo: 비회원 권한 제한하기
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtExceptionFilter, LogoutFilter.class) // filter 등록시 등록되어있는 필터와 순서를 정의해야함

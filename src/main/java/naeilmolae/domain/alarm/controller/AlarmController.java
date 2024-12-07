@@ -45,7 +45,7 @@ public class AlarmController {
         return BaseResponse.onSuccess(List.of(CategoryType.values())
                 .stream()
                 .map(CategoryTypeResponseDto::new)
-                .toList()); // TODO
+                .toList());
     }
 
     // valid
@@ -79,7 +79,7 @@ public class AlarmController {
 
     @Deprecated
     @Operation(summary = "[VALID] [Common] AlarmCategory 로 CategoryMessage 조회 ", description = "위로 목록을 조회합니다. 이후 '[청년] 청취 1단계'로 이동합니다. ")
-    @GetMapping("/alarm-category/{alarmCategory}/message") // TODO 문제 발생 응답이 이상함
+    @GetMapping("/alarm-category/{alarmCategory}/message")
     public BaseResponse<AlarmCategoryWithMessageResponseDto> getAlarmCategoryMessage(@CurrentMember Member member,
                                                                                                        @PathVariable AlarmCategory alarmCategory) {
         AlarmCategoryMessage alarmCategoryMessage = alarmCategoryMessageService.findByAlarmCategory(alarmCategory);
@@ -142,7 +142,6 @@ public class AlarmController {
         return BaseResponse.onSuccess(collect);
     }
 
-    // TODO 위 아래 중복 로직임
     @Operation(summary = "[VALID] [봉사자] 동기부여 4단계: 카테고리 목록 조회", description = "위로 목록을 조회합니다. 이후 '[청년] 청취 1단계'로 이동합니다. ")
     @GetMapping("/alarm-category/")
     public BaseResponse<List<AlarmCategoryWithMessageResponseDto>> getAlarmCategoryList(@CurrentMember Member member) {

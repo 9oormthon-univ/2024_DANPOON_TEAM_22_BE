@@ -21,8 +21,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/auth")
 public class MemberAuthController {
     private final MemberAuthService memberAuthService;
-
-    // TODO 익명인데 anonymous로 안 온 경우 500이 아니라 400이어야 한다.
     @Operation(summary = "로그인 API", description = "카카오, 비회원 로그인을 수행하는 API입니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "COMMON200", description = "로그인 성공")

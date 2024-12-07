@@ -48,7 +48,6 @@ public class WeatherService {
      * @param localDateTime
      * @return
      */
-    // TODO 테스트 해야함
     @Transactional
     public List<Weather> requestWeatherData(String x, String y, LocalDateTime localDateTime) {
         String url = buildUrl(x, y, localDateTime);
@@ -84,7 +83,6 @@ public class WeatherService {
      * @param x, y
      * @return
      */
-    // TODO Converter 로 변경하면 어떨까
     private List<Weather> parseWeatherData(String xmlData, String x, String y) {
         Grid grid = gridService.findGridByPoint(x, y);
 

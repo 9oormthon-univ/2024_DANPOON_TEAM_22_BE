@@ -35,7 +35,6 @@ public class GridService {
      * @param longitude 경도
      * @return 그리드 좌표
      */
-    // TODO 테스트 해야함
     @Transactional
     public Grid getGridCoordinates(Double latitude, Double longitude) { // 위도, 경도
         String apiUrl = String.format(
@@ -63,7 +62,6 @@ public class GridService {
      * @return X, Y 좌표 배열 (int[0]: X, int[1]: Y)
      * @throws IllegalArgumentException 응답 형식이 잘못된 경우 예외 발생
      */
-    // TODO Converter 로 변경하면 어떨까
     private GridDto parseGridCoordinates(String response) {
         if (response == null || response.isEmpty()) {
             throw new RestApiException(GridErrorCode._NO_CONTENT);

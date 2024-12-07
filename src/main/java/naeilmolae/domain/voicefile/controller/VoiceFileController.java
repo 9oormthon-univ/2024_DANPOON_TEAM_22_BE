@@ -46,7 +46,7 @@ public class VoiceFileController {
                 alarmId,
                 uploadContentRequestDto.content());
 
-        return BaseResponse.onSuccess(VoiceFileMetaResponseDto.fromEntity(voiceFile)); // TODO GPT에게 첨삭받고 응답으로 내려주어야 한다.
+        return BaseResponse.onSuccess(VoiceFileMetaResponseDto.fromEntity(voiceFile));
     }
 
     @Operation(summary = "[VALID] [봉사자] 녹음 4단계: 음성 파일 업로드", description = "사용자가 녹음한 음성 파일을 업로드합니다. 분석 결과를 받기 위해 업로드합니다. 업로드시 바로 분석이 진행됩니다.")
@@ -61,7 +61,7 @@ public class VoiceFileController {
         voiceFileService.saveVoiceFileUrl(voiceFileId, fileUrl);
 
         // 성공 시, 파일의 S3 URL을 응답으로 반환
-        return BaseResponse.onSuccess(fileUrl); // TODO 응답
+        return BaseResponse.onSuccess(fileUrl);
     }
 
     @Operation(summary = "[VALID] [봉사자] 녹음 5단계: 분석 결과 조회", description = "제공한 파일의 분석 결과를 조회합니다. N초마다 polling하여 분석 결과를 받아옵니다.")
@@ -78,7 +78,7 @@ public class VoiceFileController {
     public BaseResponse<AvailableVoiceFileResponseDto> getAvailableDataList(@CurrentMember Member member,
                                                                             @RequestParam("alarm-id") Long alarmId) { // 실제는 childrenCategoryId 임
         VoiceFile voiceFile = voiceFileService.getAvailableDataList(member.getId(), alarmId);
-        ProvidedFile save = providedFileService.save(member.getId(), voiceFile.getId());// TODO 나중에 분석 결과 저장하는 API로 변경
+        ProvidedFile save = providedFileService.save(member.getId(), voiceFile.getId());
         return BaseResponse.onSuccess(AvailableVoiceFileResponseDto.from(voiceFile, save.getId()));
     }
 }

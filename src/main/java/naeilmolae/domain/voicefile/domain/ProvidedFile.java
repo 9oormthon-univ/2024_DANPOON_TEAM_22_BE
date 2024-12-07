@@ -19,7 +19,7 @@ public class ProvidedFile extends BaseEntity {
 
     private Long consumerId;
 
-    private String thanksMessage; // TODO 나중에 varchar 255를 늘려야할 수도
+    private String thanksMessage;
 
     private boolean isConsumerSaved = false;
 
@@ -32,11 +32,6 @@ public class ProvidedFile extends BaseEntity {
     }
 
     public boolean addThanksMessage(String message) {
-        // TODO : 감사 메시지 중복 체크
-//        if (thanksMessage != null) {
-//            throw new IllegalStateException("이미 감사 메시지가 존재합니다.");
-//        }
-
         this.thanksMessage = message;
 
 
