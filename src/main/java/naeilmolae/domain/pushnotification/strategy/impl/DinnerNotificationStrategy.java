@@ -29,7 +29,7 @@ public class DinnerNotificationStrategy implements NotificationStrategy {
     @Override
     public void send(Member member, FirebaseMessagingService firebaseMessagingService, AlarmService alarmService) {
         String message = messageSource.getMessage(
-                "notification.dinner.message",
+                "notification.meal.message",
                 null,
                 Locale.getDefault()
         );
