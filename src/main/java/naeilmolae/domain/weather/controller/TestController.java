@@ -44,7 +44,9 @@ public class TestController {
         LocalDateTime localDateTime = LocalDateTime.parse(dateTime);
         GridDto gridDto = new GridDto(gridX, gridY); // Grid 객체 생성
 
-        List<WeatherDto> collect = weatherService.requestWeatherData(gridDto, localDateTime)
+        List<WeatherDto> collect = weatherService.requestWeatherData(gridDto.getX().toString(),
+                        gridDto.getY().toString(),
+                        localDateTime)
                 .stream()
                 .map(WeatherDto::new)
                 .collect(Collectors.toList());

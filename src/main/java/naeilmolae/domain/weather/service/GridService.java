@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -55,7 +56,6 @@ public class GridService {
 
     }
 
-
     /**
      * 응답 데이터를 받아 X, Y 좌표를 파싱합니다.
      *
@@ -90,5 +90,8 @@ public class GridService {
         }
     }
 
+    public List<Grid> findAll() {
+        return gridRepository.findAll();
+    }
 
 }

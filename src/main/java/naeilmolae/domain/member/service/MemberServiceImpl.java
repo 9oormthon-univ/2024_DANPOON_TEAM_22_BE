@@ -136,7 +136,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public List<Member> getAllYouthMemeber(){
+    public List<Member> getAllYouthMember(){
         return memberRepository.findAllYouthMembersWithInfo(Role.YOUTH);
     }
 }

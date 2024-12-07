@@ -27,6 +27,6 @@ public interface MemberService {
     // 회원 수 조회
     MemberNumResponseDto getMemberNum(Role role);
     //청년 회원 조회
-    List<Member> getAllYouthMemeber();
+    List<Member> getAllYouthMember();
 
 }
