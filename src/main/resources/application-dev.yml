@@ -23,3 +23,6 @@ spring:
 logging:
   level:
     org.springframework.web: ERROR
+
+sentry:
+  enabled: false
