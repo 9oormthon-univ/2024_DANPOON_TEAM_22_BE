@@ -10,9 +10,13 @@ import naeilmolae.domain.member.mapper.MemberMapper;
 import naeilmolae.domain.member.repository.MemberRepository;
 import naeilmolae.domain.member.service.MemberService;
 import naeilmolae.domain.member.strategy.LoginStrategy;
+import naeilmolae.global.common.exception.RestApiException;
+import naeilmolae.global.common.exception.code.status.AuthErrorStatus;
 import naeilmolae.global.config.security.jwt.JwtProvider;
 import naeilmolae.global.config.security.jwt.TokenInfo;
+import naeilmolae.global.infrastructure.kakao.dto.KakaoResponse;
 import org.springframework.stereotype.Component;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 import java.util.Optional;
 
@@ -28,8 +32,22 @@ public class KakaoLoginStrategy implements LoginStrategy {
 
     @Override
     public MemberLoginResponseDto login(String accessToken) {
+
+        KakaoResponse kakaoResponse;
+        try {
+            kakaoResponse = kakaoMemberClient.getkakaoResponse(accessToken);
+
+            if (kakaoResponse == null || kakaoResponse.getId() == null) {
+                throw new RestApiException(AuthErrorStatus.FAILED_SOCIAL_LOGIN);
+            }
+
+        } catch (WebClientResponseException.Unauthorized e) {
+            throw new RestApiException(AuthErrorStatus.FAILED_SOCIAL_LOGIN);
+        }
+
         // Kakao-specific logic
-        String clientId = kakaoMemberClient.getClientId(accessToken);
+        String clientId = kakaoResponse.getId();
+
         Optional<Member> getMember = memberRepository.findByClientIdAndLoginType(clientId, LoginType.KAKAO);
 
         if (getMember.isEmpty()) {
