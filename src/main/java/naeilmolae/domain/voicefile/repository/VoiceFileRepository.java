@@ -17,13 +17,13 @@ public interface VoiceFileRepository extends JpaRepository<VoiceFile, Long> {
             "LEFT JOIN vf.analysisResult as vfas " +
             "WHERE vf.alarmId = :alarmId " +
             "AND vfas.analysisResultStatus = 'SUCCESS'" +
-            "AND NOT EXISTS ( " +
-            "    SELECT pf " +
-            "    FROM ProvidedFile pf " +
-            "    WHERE pf.voiceFile = vf " +
-            "    AND pf.consumerId = :memberId " +
-            ") " +
-            "AND vf.createdAt >= :oneWeekAgo " + // 최근 1주일 이내 데이터만
+//            "AND NOT EXISTS ( " +
+//            "    SELECT pf " +
+//            "    FROM ProvidedFile pf " +
+//            "    WHERE pf.voiceFile = vf " +
+//            "    AND pf.consumerId = :memberId " +
+//            ") " +
+//            "AND vf.createdAt >= :oneWeekAgo " + // 최근 1주일 이내 데이터만
             "ORDER BY vf.createdAt ASC")
     List<VoiceFile> findUnprovided(
             @Param("memberId") Long memberId,
