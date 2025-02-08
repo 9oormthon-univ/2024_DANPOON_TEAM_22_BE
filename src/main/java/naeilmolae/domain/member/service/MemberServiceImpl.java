@@ -19,6 +19,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -112,6 +113,13 @@ public class MemberServiceImpl implements MemberService {
             } else {
                 // 청년 정보가 있으면 업데이트
                 youthMemberInfo.updateYouthMemberInfoDto(request.youthMemberInfoDto());
+            }
+        }
+        if(request.role().equals(Role.HELPER)){
+            //나이가 성인이 아니면 예외처리 (만 19세가 아닌 성인이 기준)
+            // 현재 연도 - 태어난 연도 < 19 이면 예외처리
+            if(LocalDateTime.now().getYear() - request.birth().getYear() < 19){
+                throw new RestApiException(MemberErrorStatus.INVALID_HELPER_AGES);
             }
         }
     }

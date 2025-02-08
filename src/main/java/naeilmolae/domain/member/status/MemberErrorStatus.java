@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 public enum MemberErrorStatus implements BaseCodeInterface {
 
     EMPTY_MEMBER(HttpStatus.NOT_FOUND, "MEMBER404", "회원을 찾을 수 없습니다."),
+    INVALID_HELPER_AGES(HttpStatus.BAD_REQUEST, "MEMBER400", "조력자의 나이는 성인이여야 합니다.")
     ;
 
     private final HttpStatus httpStatus;
