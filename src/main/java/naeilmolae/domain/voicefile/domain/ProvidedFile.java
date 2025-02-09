@@ -24,17 +24,12 @@ public class ProvidedFile extends BaseEntity {
     private boolean isConsumerSaved = false;
 
     public ProvidedFile(VoiceFile voiceFile, Long consumerId) {
-//        if(consumer.getRole() == Role.HELPER) {
-//            throw new IllegalArgumentException("파일을 제공할 수 없는 사용자입니다.");
-//        }
         this.voiceFile = voiceFile;
         this.consumerId = consumerId;
     }
 
     public boolean addThanksMessage(String message) {
         this.thanksMessage = message;
-
-
         return true;
     }
 

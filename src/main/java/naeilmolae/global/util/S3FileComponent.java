@@ -1,5 +1,6 @@
 package naeilmolae.global.util;
 
+import com.amazonaws.HttpMethod;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.*;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +13,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.net.URL;
+import java.util.Date;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -76,6 +79,27 @@ public class S3FileComponent {
             return fileName + "_" + random + fileExtension;
         }
         return category + "/" + fileName + "_" + random + fileExtension;
+    }
+
+    /**
+     * Pre-signed URL 생성
+     * @param fileName
+     * @param contentType
+     * @return
+     */
+    public URL generatePresignedUrl(String fileName, String contentType) {
+        // URL 만료 시간 (10분 후)
+        Date expiration = new Date();
+        expiration.setTime(expiration.getTime() + 1000 * 60 * 10); // 10 minutes
+
+        // Pre-signed URL 생성 요청
+        GeneratePresignedUrlRequest generatePresignedUrlRequest =
+                new GeneratePresignedUrlRequest(bucket, fileName)
+                        .withMethod(HttpMethod.PUT) // 업로드를 위한 PUT 요청
+                        .withExpiration(expiration)
+                        .withContentType(contentType); // Content-Type 지정
+
+        return amazonS3Client.generatePresignedUrl(generatePresignedUrlRequest);
     }
 
     /**

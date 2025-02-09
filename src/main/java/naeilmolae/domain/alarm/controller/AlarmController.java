@@ -124,23 +124,23 @@ public class AlarmController {
         return BaseResponse.onSuccess(collect);
     }
 
-    @Operation(summary = "[VALID] [봉사자] 동기부여 1단계: 북두칠성 조회 API", description = "사용자의 북두칠성을 조회합니다.")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "COMMON200",
-                    description = "조회 성공",
-                    content = @Content(schema = @Schema(implementation = AlarmCategoryWithMessageResponseDto.class)))
-    })
-    @GetMapping("/this-week")
-    public BaseResponse<List<AlarmCategoryWithMessageResponseDto>> getDistinctAlarmTypesThisWeek(@CurrentMember Member member) {
-
-        // 이번 주에 사용된 알람의 부모 카테고리 조회
-        Set<AlarmCategory> distinctCreatedCategories = alarmViewService.findDistinctCreatedCategories(member.getId());
-        List<AlarmCategoryWithMessageResponseDto> collect = alarmCategoryMessageService.findByAlarmCategoryIn(distinctCreatedCategories.stream().toList())
-                .stream()
-                .map(alarmCategoryMessage -> new AlarmCategoryWithMessageResponseDto(alarmCategoryMessage.getAlarmCategory(), alarmCategoryMessage))
-                .collect(Collectors.toList());
-        return BaseResponse.onSuccess(collect);
-    }
+//    @Operation(summary = "[VALID] [봉사자] 동기부여 1단계: 북두칠성 조회 API", description = "사용자의 북두칠성을 조회합니다.")
+//    @ApiResponses(value = {
+//            @ApiResponse(responseCode = "COMMON200",
+//                    description = "조회 성공",
+//                    content = @Content(schema = @Schema(implementation = AlarmCategoryWithMessageResponseDto.class)))
+//    })
+//    @GetMapping("/this-week")
+//    public BaseResponse<List<AlarmCategoryWithMessageResponseDto>> getDistinctAlarmTypesThisWeek(@CurrentMember Member member) {
+//
+//        // 이번 주에 사용된 알람의 부모 카테고리 조회
+//        Set<AlarmCategory> distinctCreatedCategories = alarmViewService.findDistinctCreatedCategories(member.getId());
+//        List<AlarmCategoryWithMessageResponseDto> collect = alarmCategoryMessageService.findByAlarmCategoryIn(distinctCreatedCategories.stream().toList())
+//                .stream()
+//                .map(alarmCategoryMessage -> new AlarmCategoryWithMessageResponseDto(alarmCategoryMessage.getAlarmCategory(), alarmCategoryMessage))
+//                .collect(Collectors.toList());
+//        return BaseResponse.onSuccess(collect);
+//    }
 
     @Operation(summary = "[VALID] [봉사자] 동기부여 4단계: 카테고리 목록 조회", description = "위로 목록을 조회합니다. 이후 '[청년] 청취 1단계'로 이동합니다. ")
     @GetMapping("/alarm-category/")

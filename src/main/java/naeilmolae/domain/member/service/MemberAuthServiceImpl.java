@@ -20,15 +20,10 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class MemberAuthServiceImpl implements MemberAuthService {
 
-//    public final MemberRepository memberRepository;
 
     public final MemberService memberService;
     public final MemberRefreshTokenService refreshTokenService;
-
-//    public final KakaoMemberClient kakaoMemberClient;
-
     public final JwtProvider jwtTokenProvider;
-
     private final LoginContext loginContext;
 
     // 소셜 로그인을 수행하는 함수

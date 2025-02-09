@@ -56,18 +56,28 @@ public interface ProvidedFileRepository extends JpaRepository<ProvidedFile, Long
     Long findTotalListenersByMemberId(@Param("memberId") Long memberId);
 
     @Query(value = """
-            select pf 
-            from ProvidedFile pf 
-            JOIN FETCH pf.voiceFile 
-            where pf.voiceFile.memberId = :memberId 
-            and pf.voiceFile.alarmId in :alarmIds
-            """,
+        select pf 
+        from ProvidedFile pf 
+        JOIN FETCH pf.voiceFile 
+        where pf.voiceFile.memberId = :memberId 
+        and pf.voiceFile.alarmId in :alarmIds
+        and not exists (
+            select 1 
+            from ProvidedFileReport pfr 
+            where pfr.providedFile = pf
+        )
+        """,
             countQuery = """
-                    select count(pf) 
-                    from ProvidedFile pf 
-                    where pf.voiceFile.memberId = :memberId
-                    and pf.voiceFile.alarmId in :alarmIds
-                    """)
+        select count(pf) 
+        from ProvidedFile pf 
+        where pf.voiceFile.memberId = :memberId
+        and pf.voiceFile.alarmId in :alarmIds
+        and not exists (
+            select 1 
+            from ProvidedFileReport pfr 
+            where pfr.providedFile = pf
+        )
+        """)
     Page<ProvidedFile> findByMemberIdAndAlarmId(Long memberId, List<Long> alarmIds, Pageable pageable);
 
     @Query(value = """

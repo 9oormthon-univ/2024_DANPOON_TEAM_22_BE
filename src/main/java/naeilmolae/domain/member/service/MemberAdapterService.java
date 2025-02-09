@@ -6,6 +6,7 @@ import naeilmolae.domain.member.domain.Role;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -15,5 +16,9 @@ public class MemberAdapterService {
 
     public List<Member> getAllYouthMember() {
         return memberService.getAllYouthMember();
+    }
+
+    public Member findById(Long id) {
+        return memberService.findById(id);
     }
 }
