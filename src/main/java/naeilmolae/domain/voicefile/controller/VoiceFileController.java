@@ -10,6 +10,7 @@ import naeilmolae.domain.voicefile.dto.request.UploadContentRequestDto;
 import naeilmolae.domain.voicefile.dto.response.AvailableVoiceFileResponseDto;
 import naeilmolae.domain.voicefile.dto.response.GptGenerationResponseDto;
 import naeilmolae.domain.voicefile.dto.response.VoiceFileMetaResponseDto;
+import naeilmolae.domain.voicefile.dto.response.VoiceFileResponseDto;
 import naeilmolae.domain.voicefile.service.ProvidedFileService;
 import naeilmolae.domain.voicefile.service.VoiceFileService;
 import naeilmolae.global.common.base.BaseResponse;
@@ -80,5 +81,11 @@ public class VoiceFileController {
         VoiceFile voiceFile = voiceFileService.getAvailableDataList(member.getId(), alarmId);
         ProvidedFile save = providedFileService.save(member.getId(), voiceFile.getId());
         return BaseResponse.onSuccess(AvailableVoiceFileResponseDto.from(voiceFile, save.getId()));
+    }
+
+    @Operation(summary = "[청년] 튜토리얼 1단계: 예시 음성 데이터 조회", description = "예시 음성 데이터를 조회합니다.")
+    @GetMapping
+    public BaseResponse<VoiceFileResponseDto> getExampleData() { // 실제는 childrenCategoryId 임
+        return BaseResponse.onSuccess(new VoiceFileResponseDto(1L, "아침이야! 일어나서 간단한 스트레칭을 하고 아침의 피로를 날려보자!", "https://naeilmolae.s3.ap-northeast-2.amazonaws.com/voice/1_d9a12d65-278b-4df1-8b91-c70b8c25a8c3.wav"));
     }
 }
