@@ -15,7 +15,12 @@ import naeilmolae.domain.member.dto.response.MemberNumResponseDto;
 import naeilmolae.domain.member.service.MemberService;
 import naeilmolae.global.common.base.BaseResponse;
 import naeilmolae.global.config.security.auth.CurrentMember;
+import naeilmolae.global.util.S3FileComponent;
 import org.springframework.web.bind.annotation.*;
+
+import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
 @Tag(name = "멤버 API", description = "회원 가입, 회원 정보 조회/수정 등 회원 관리 관련 작업 담당 API")
 @RestController
@@ -23,6 +28,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class MemberController {
     private final MemberService memberService;
+    private final S3FileComponent s3FileComponent;
 
     @Operation(summary = "회원가입 API", description = "최초 멤버 정보를 등록하는 API입니다.")
     @ApiResponses( value = {
@@ -79,4 +85,24 @@ public class MemberController {
     public BaseResponse<MemberNumResponseDto> getHelperMemberNum(@CurrentMember Member member) {
         return BaseResponse.onSuccess(memberService.getMemberNum(Role.HELPER));
     }
+
+    @Operation(summary = "프로필 사진 수정 endpoint 조회", description = "사용자 이미지 저장 및 수정을 위한 endpoint를 반환합니다.")
+    @ApiResponses( value = {
+            @ApiResponse(responseCode = "COMMON200", description = "성공")
+    })
+    @GetMapping("/presigned-url")
+    public BaseResponse<Map<String, String>> getPresignedUrl(
+            @RequestParam String fileName,
+            @RequestParam String contentType) {
+
+        URL presignedUrl = s3FileComponent.generatePresignedUrl(fileName, contentType);
+
+        Map<String, String> response = new HashMap<>();
+        response.put("uploadUrl", presignedUrl.toString());
+        response.put("fileUrl", "https://" + "your-bucket-name" + ".s3.amazonaws.com/" + fileName);
+
+        return BaseResponse.onSuccess(response);
+    }
+
+
 }
