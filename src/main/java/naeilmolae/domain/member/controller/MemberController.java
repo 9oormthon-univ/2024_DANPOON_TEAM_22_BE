@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import naeilmolae.domain.member.domain.Member;
 import naeilmolae.domain.member.domain.Role;
 import naeilmolae.domain.member.dto.request.MemberInfoRequestDto;
+import naeilmolae.domain.member.dto.request.WithdrawalReasonRequest;
 import naeilmolae.domain.member.dto.response.MemberIdResponseDto;
 import naeilmolae.domain.member.dto.response.MemberInfoResponseDto;
 import naeilmolae.domain.member.dto.response.MemberNumResponseDto;
@@ -40,13 +41,14 @@ public class MemberController {
         return BaseResponse.onSuccess(memberService.signUp(member, request));
     }
 
-    @Operation(summary = "회원 탈퇴 API", description = "해당 유저 정보를 삭제하는 API입니다.")
+    @Operation(summary = "회원 탈퇴 API", description = "해당 유저 정보를 삭제하는 API입니다. 회원 탈퇴 사유는 그냥 String 값으로 주시면 됩니다.")
     @ApiResponses( value = {
             @ApiResponse(responseCode = "COMMON200", description = "성공")
     })
     @DeleteMapping
-    public BaseResponse<MemberIdResponseDto> withdrawal(@CurrentMember Member member) {
-        return BaseResponse.onSuccess(memberService.withdrawal(member));
+    public BaseResponse<MemberIdResponseDto> withdrawal(@CurrentMember Member member,
+                                                        @RequestBody WithdrawalReasonRequest request) {
+        return BaseResponse.onSuccess(memberService.withdrawal(member, request));
     }
 
     @Operation(summary = "회원 정보 수정 API", description = "멤버 정보 수정하는 API입니다.")

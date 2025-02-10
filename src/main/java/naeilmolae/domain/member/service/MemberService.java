@@ -3,6 +3,7 @@ package naeilmolae.domain.member.service;
 import naeilmolae.domain.member.domain.Member;
 import naeilmolae.domain.member.domain.Role;
 import naeilmolae.domain.member.dto.request.MemberInfoRequestDto;
+import naeilmolae.domain.member.dto.request.WithdrawalReasonRequest;
 import naeilmolae.domain.member.dto.response.MemberIdResponseDto;
 import naeilmolae.domain.member.dto.response.MemberInfoResponseDto;
 import naeilmolae.domain.member.dto.response.MemberNumResponseDto;
@@ -19,7 +20,7 @@ public interface MemberService {
     // 회원가입
     MemberIdResponseDto signUp(Member member, MemberInfoRequestDto request);
     // 회원 탈퇴
-    MemberIdResponseDto withdrawal(Member member);
+    MemberIdResponseDto withdrawal(Member member, WithdrawalReasonRequest request);
     // 회원 정보 수정
     MemberIdResponseDto updateMemberInfo(Member member, MemberInfoRequestDto request);
     // 회원 정보 조회

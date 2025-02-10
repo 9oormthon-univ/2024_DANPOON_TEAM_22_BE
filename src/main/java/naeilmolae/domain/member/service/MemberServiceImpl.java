@@ -2,14 +2,17 @@ package naeilmolae.domain.member.service;
 
 import lombok.RequiredArgsConstructor;
 import naeilmolae.domain.member.domain.Member;
+import naeilmolae.domain.member.domain.MemberWithdrawalReason;
 import naeilmolae.domain.member.domain.Role;
 import naeilmolae.domain.member.domain.YouthMemberInfo;
 import naeilmolae.domain.member.dto.request.MemberInfoRequestDto;
+import naeilmolae.domain.member.dto.request.WithdrawalReasonRequest;
 import naeilmolae.domain.member.dto.response.MemberIdResponseDto;
 import naeilmolae.domain.member.dto.response.MemberInfoResponseDto;
 import naeilmolae.domain.member.dto.response.MemberNumResponseDto;
 import naeilmolae.domain.member.mapper.MemberMapper;
 import naeilmolae.domain.member.repository.MemberRepository;
+import naeilmolae.domain.member.repository.MemberWithdrawalReasonRepository;
 import naeilmolae.domain.member.repository.YouthMemberInfoRepository;
 import naeilmolae.domain.member.status.MemberErrorStatus;
 import naeilmolae.domain.weather.domain.Grid;
@@ -28,6 +31,7 @@ import java.util.List;
 public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
     private final YouthMemberInfoRepository youthMemberInfoRepository;
+    private final MemberWithdrawalReasonRepository memberWithdrawalReasonRepository;
 
     private final MemberRefreshTokenService refreshTokenService;
     private final GridService gridService;
@@ -48,7 +52,7 @@ public class MemberServiceImpl implements MemberService {
     // 회원 탈퇴 함수
     @Override
     @Transactional
-    public MemberIdResponseDto withdrawal(Member member) {
+    public MemberIdResponseDto withdrawal(Member member, WithdrawalReasonRequest request) {
         // 멤버 soft delete
         Member loginMember = findById(member.getId());
 
@@ -57,6 +61,9 @@ public class MemberServiceImpl implements MemberService {
 
         // 멤버 soft delete
         loginMember.delete();
+
+        // 탈퇴 사유 저장
+        memberWithdrawalReasonRepository.save(new MemberWithdrawalReason(request.reason()));
 
         return new MemberIdResponseDto(loginMember.getId());
     }
