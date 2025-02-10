@@ -6,6 +6,7 @@ import naeilmolae.domain.member.dto.request.MemberInfoRequestDto;
 import naeilmolae.global.common.base.BaseEntity;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Entity
 @Getter
@@ -62,13 +63,14 @@ public class Member extends BaseEntity {
         this.deviceId = deviceId;
     }
 
-    public void updateMemberInfo (MemberInfoRequestDto request) {
-        this.name = request.name();
-        this.gender = request.gender();
-        this.profileImage = request.profileImage();
-        this.role = request.role();
-        this.birth = request.birth();
-        this.fcmToken = request.fcmToken();
+    // 널이나 빈 값이 아닌 경우에만 수정
+    public void updateMemberInfo(MemberInfoRequestDto request) {
+        Optional.ofNullable(request.name()).filter(name -> !name.isEmpty()).ifPresent(name -> this.name = name);
+        Optional.ofNullable(request.profileImage()).filter(image -> !image.isEmpty()).ifPresent(image -> this.profileImage = image);
+        Optional.ofNullable(request.gender()).ifPresent(gender -> this.gender = gender);
+        Optional.ofNullable(request.role()).ifPresent(role -> this.role = role);
+        Optional.ofNullable(request.birth()).ifPresent(birth -> this.birth = birth);
+        Optional.ofNullable(request.fcmToken()).filter(token -> !token.isEmpty()).ifPresent(token -> this.fcmToken = token);
     }
 
     public boolean changeRole(Role role) {

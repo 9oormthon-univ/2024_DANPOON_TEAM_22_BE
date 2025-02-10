@@ -51,7 +51,7 @@ public class MemberController {
         return BaseResponse.onSuccess(memberService.withdrawal(member, request));
     }
 
-    @Operation(summary = "회원 정보 수정 API", description = "멤버 정보 수정하는 API입니다.")
+    @Operation(summary = "회원 정보 수정 API", description = "멤버 정보 수정하는 API입니다. 수정할 정보만 넣어주셔도 잘 작동합니다.")
     @ApiResponses( value = {
             @ApiResponse(responseCode = "COMMON200", description = "성공")
     })

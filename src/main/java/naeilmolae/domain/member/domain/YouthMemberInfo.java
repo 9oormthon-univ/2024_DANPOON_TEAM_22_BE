@@ -6,6 +6,7 @@ import naeilmolae.domain.member.dto.YouthMemberInfoDto;
 import naeilmolae.global.common.base.BaseEntity;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Entity
 @Getter
@@ -50,15 +51,17 @@ public class YouthMemberInfo extends BaseEntity {
         this.gridId = gridId;
     }
 
+    // 빈값이거나 없는 값이 아닌 경우에만 업데이트
     public void updateYouthMemberInfoDto(YouthMemberInfoDto youthMemberInfoDto) {
-        this.wakeUpTime = youthMemberInfoDto.getWakeUpTime();
-        this.sleepTime = youthMemberInfoDto.getSleepTime();
-        this.breakfast = youthMemberInfoDto.getBreakfast();
-        this.lunch = youthMemberInfoDto.getLunch();
-        this.dinner = youthMemberInfoDto.getDinner();
-        this.latitude = youthMemberInfoDto.getLatitude();
-        this.longitude = youthMemberInfoDto.getLongitude();
+        Optional.ofNullable(youthMemberInfoDto.getWakeUpTime()).ifPresent(value -> this.wakeUpTime = value);
+        Optional.ofNullable(youthMemberInfoDto.getSleepTime()).ifPresent(value -> this.sleepTime = value);
+        Optional.ofNullable(youthMemberInfoDto.getBreakfast()).ifPresent(value -> this.breakfast = value);
+        Optional.ofNullable(youthMemberInfoDto.getLunch()).ifPresent(value -> this.lunch = value);
+        Optional.ofNullable(youthMemberInfoDto.getDinner()).ifPresent(value -> this.dinner = value);
+        Optional.ofNullable(youthMemberInfoDto.getLatitude()).ifPresent(value -> this.latitude = value);
+        Optional.ofNullable(youthMemberInfoDto.getLongitude()).ifPresent(value -> this.longitude = value);
     }
+
 
 //    public void setGrid(Double gridX, Double gridY) {
 //        this.gridX = gridX;
