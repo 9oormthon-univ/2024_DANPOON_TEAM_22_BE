@@ -135,7 +135,8 @@ public class VoiceFileService {
 
     // 알람 Id로 사용자에게 제공되지 않은 데이터 조회
     public VoiceFile getAvailableDataList(Long memberId, Long alarmId) {
-        List<VoiceFile> unprovided = voiceFileRepository.findUnprovided(memberId, alarmId, LocalDateTime.now().minusWeeks(1));
+//        List<VoiceFile> unprovided = voiceFileRepository.findUnprovided(memberId, alarmId, LocalDateTime.now().minusWeeks(1));
+        List<VoiceFile> unprovided = voiceFileRepository.findUnprovided(memberId, alarmId);
         VoiceFile voiceFile = unprovided
                 .stream()
                 .findFirst()

@@ -21,7 +21,6 @@ public class ProvidedFileReport extends BaseEntity {
     private ProvidedFile providedFile;
 
     // 신고한 사용자의 ID (예: 신고자)
-    @Column(nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
