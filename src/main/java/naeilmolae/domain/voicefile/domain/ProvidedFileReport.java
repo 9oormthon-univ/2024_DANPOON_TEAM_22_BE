@@ -23,6 +23,7 @@ public class ProvidedFileReport extends BaseEntity {
     // 신고한 사용자의 ID (예: 신고자)
     @Column(nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
     private Member member;
 
     // 신고 사유 (길이 제한 등 필요하면 조정)
