@@ -38,7 +38,7 @@ out/
 
 
 application.yml
-docker-compose.yml
+docker-compose-V1.yml
 
 ### Qclass ###
 **/generated
@@ -51,3 +51,4 @@ docker-compose.yml
 **/logs
 
 **data.sql
+/data
