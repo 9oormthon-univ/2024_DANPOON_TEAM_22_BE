@@ -1,6 +1,8 @@
 package naeilmolae.domain.member.dto.request;
 
+import java.util.List;
+
 public record WithdrawalReasonRequest(
-    String reason
+    List<String> reasonList
 ) {
 }

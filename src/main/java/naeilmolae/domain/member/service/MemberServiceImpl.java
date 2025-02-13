@@ -63,7 +63,8 @@ public class MemberServiceImpl implements MemberService {
         loginMember.delete();
 
         // 탈퇴 사유 저장
-        memberWithdrawalReasonRepository.save(new MemberWithdrawalReason(request.reason()));
+        request.reasonList()
+                .forEach(reason -> memberWithdrawalReasonRepository.save(new MemberWithdrawalReason(reason)));
 
         return new MemberIdResponseDto(loginMember.getId());
     }
