@@ -8,8 +8,11 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import naeilmolae.domain.member.domain.Member;
 import naeilmolae.domain.member.domain.Role;
+import naeilmolae.domain.member.dto.YouthMemberInfoDto;
 import naeilmolae.domain.member.dto.request.MemberInfoRequestDto;
 import naeilmolae.domain.member.dto.request.WithdrawalReasonRequest;
+import naeilmolae.domain.member.dto.request.YouthMemberLocationInfoDto;
+import naeilmolae.domain.member.dto.request.YouthMemberPushTimeInfo;
 import naeilmolae.domain.member.dto.response.MemberIdResponseDto;
 import naeilmolae.domain.member.dto.response.MemberInfoResponseDto;
 import naeilmolae.domain.member.dto.response.MemberNumResponseDto;
@@ -31,14 +34,24 @@ public class MemberController {
     private final MemberService memberService;
     private final S3FileComponent s3FileComponent;
 
-    @Operation(summary = "회원가입 API", description = "최초 멤버 정보를 등록하는 API입니다.")
+    @Operation(summary = "회원가입 API (멤버 기본 정보 등록)", description = "최초 멤버 정보를 등록하는 API입니다.")
     @ApiResponses( value = {
             @ApiResponse(responseCode = "COMMON200", description = "성공")
     })
     @PostMapping
-    public BaseResponse<MemberIdResponseDto> signUp(@CurrentMember Member member,
+    public BaseResponse<MemberIdResponseDto> signUpInfo(@CurrentMember Member member,
                                                     @Valid @RequestBody MemberInfoRequestDto request) {
-        return BaseResponse.onSuccess(memberService.signUp(member, request));
+        return BaseResponse.onSuccess(memberService.signUpInfo(member, request));
+    }
+
+    @Operation(summary = "회원가입 API (청년 위치, 알림 시간 정보 등록)", description = "최초 멤버 정보를 등록하는 API입니다.")
+    @ApiResponses( value = {
+            @ApiResponse(responseCode = "COMMON200", description = "성공")
+    })
+    @PostMapping
+    public BaseResponse<MemberIdResponseDto> signUpLocation(@CurrentMember Member member,
+                                                    @Valid @RequestBody YouthMemberInfoDto request) {
+        return BaseResponse.onSuccess(memberService.signUpYouth(member, request));
     }
 
     @Operation(summary = "회원 탈퇴 API", description = "해당 유저 정보를 삭제하는 API입니다. 회원 탈퇴 사유는 그냥 String 값으로 주시면 됩니다.")
@@ -51,7 +64,7 @@ public class MemberController {
         return BaseResponse.onSuccess(memberService.withdrawal(member, request));
     }
 
-    @Operation(summary = "회원 정보 수정 API", description = "멤버 정보 수정하는 API입니다. 수정할 정보만 넣어주셔도 잘 작동합니다.")
+    @Operation(summary = "회원 정보 수정 API", description = "멤버 정보 수정하는 API입니다.")
     @ApiResponses( value = {
             @ApiResponse(responseCode = "COMMON200", description = "성공")
     })
@@ -59,6 +72,16 @@ public class MemberController {
     public BaseResponse<MemberIdResponseDto> patchMemberIfo(@CurrentMember Member member,
                                                             @Valid @RequestBody MemberInfoRequestDto request) {
         return BaseResponse.onSuccess(memberService.updateMemberInfo(member, request));
+    }
+
+    @Operation(summary = "청년 회원 정보 수정 (위치, 알림 시간) API", description = "청년 멤버 정보 수정하는 API입니다.")
+    @ApiResponses( value = {
+            @ApiResponse(responseCode = "COMMON200", description = "성공")
+    })
+    @PatchMapping
+    public BaseResponse<MemberIdResponseDto> patchMemberIfo(@CurrentMember Member member,
+                                                            @Valid @RequestBody YouthMemberInfoDto request) {
+        return BaseResponse.onSuccess(memberService.updateYouthMemberInfo(member, request));
     }
 
     @Operation(summary = "회원 정보 조회 API", description = "멤버 정보 조회하는 API입니다.")

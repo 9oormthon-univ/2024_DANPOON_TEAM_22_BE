@@ -1,4 +1,4 @@
-package naeilmolae.domain.member.dto;
+package naeilmolae.domain.member.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
@@ -9,9 +9,7 @@ import java.time.LocalDateTime;
 @Getter
 @Builder
 @Schema(description = "청년회원 정보 객체")
-public class YouthMemberInfoDto {
-    private Double latitude; // 위도
-    private Double longitude; // 경도
+public class YouthMemberPushTimeInfo {
     private LocalDateTime wakeUpTime;
     private LocalDateTime sleepTime;
     private LocalDateTime breakfast;

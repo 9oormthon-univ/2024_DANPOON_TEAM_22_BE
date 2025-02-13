@@ -5,6 +5,7 @@ import naeilmolae.domain.member.domain.Member;
 import naeilmolae.domain.member.domain.MemberWithdrawalReason;
 import naeilmolae.domain.member.domain.Role;
 import naeilmolae.domain.member.domain.YouthMemberInfo;
+import naeilmolae.domain.member.dto.YouthMemberInfoDto;
 import naeilmolae.domain.member.dto.request.MemberInfoRequestDto;
 import naeilmolae.domain.member.dto.request.WithdrawalReasonRequest;
 import naeilmolae.domain.member.dto.response.MemberIdResponseDto;
@@ -49,6 +50,35 @@ public class MemberServiceImpl implements MemberService {
         return memberRepository.save(member);
     }
 
+    // 회원가입 함수 (멤버 기본 정보 등록)
+    @Override
+    @Transactional
+    public MemberIdResponseDto signUpInfo(Member member, MemberInfoRequestDto request) {
+
+        if(member.getRole().equals(Role.HELPER)){
+            //나이가 성인이 아니면 예외처리 (만 19세가 아닌 성인이 기준)
+            // 현재 연도 - 태어난 연도 < 19 이면 예외처리
+            if(LocalDateTime.now().getYear() - request.birth().getYear() < 19){
+                throw new RestApiException(MemberErrorStatus.INVALID_HELPER_AGES);
+            }
+        }
+
+        // 기본 정보 업데이트
+        updateMemberBasicInfo(member, request);
+
+        return new MemberIdResponseDto(saveEntity(member).getId());
+    }
+
+    // 회원가입 함수 (청년 위치 정보 등록)
+    @Override
+    public MemberIdResponseDto signUpYouth(Member member, YouthMemberInfoDto request) {
+
+        // 기본 정보 업데이트
+        handleRoleSpecificInfo(member, request);
+
+        return new MemberIdResponseDto(saveEntity(member).getId());
+    }
+
     // 회원 탈퇴 함수
     @Override
     @Transactional
@@ -69,20 +99,6 @@ public class MemberServiceImpl implements MemberService {
         return new MemberIdResponseDto(loginMember.getId());
     }
 
-    //회원 가입
-    @Transactional
-    public MemberIdResponseDto signUp(Member member, MemberInfoRequestDto request) {
-        Member loginMember = findById(member.getId());
-
-        // 기본 정보 업데이트
-        updateMemberBasicInfo(loginMember, request);
-
-        // 역할에 따라 추가 정보 처리
-        handleRoleSpecificInfo(loginMember, request);
-
-        return new MemberIdResponseDto(saveEntity(loginMember).getId());
-    }
-
     //회원 정보 수정
     @Override
     @Transactional
@@ -92,7 +108,16 @@ public class MemberServiceImpl implements MemberService {
         // 기본 정보 업데이트
         updateMemberBasicInfo(loginMember, request);
 
-        // 역할에 따라 추가 정보 처리
+        return new MemberIdResponseDto(saveEntity(loginMember).getId());
+    }
+
+    //청년 회원 정보 수정
+    @Override
+    @Transactional
+    public MemberIdResponseDto updateYouthMemberInfo(Member member, YouthMemberInfoDto request) {
+        Member loginMember = findById(member.getId());
+
+        // 기본 정보 업데이트
         handleRoleSpecificInfo(loginMember, request);
 
         return new MemberIdResponseDto(saveEntity(loginMember).getId());
@@ -104,13 +129,13 @@ public class MemberServiceImpl implements MemberService {
     }
 
     // 역할에 따라 추가 정보 처리
-    private void handleRoleSpecificInfo(Member member, MemberInfoRequestDto request) {
-        if (request.role().equals(Role.YOUTH)) {
+    private void handleRoleSpecificInfo(Member member, YouthMemberInfoDto request) {
+        if (member.getRole().equals(Role.YOUTH)) {
             // 청년 정보 처리
             YouthMemberInfo youthMemberInfo = member.getYouthMemberInfo();
             if (youthMemberInfo == null) {
                 // 청년 정보가 없으면 새로 저장
-                youthMemberInfo = MemberMapper.toYouthMemberInfo(request.youthMemberInfoDto());
+                youthMemberInfo = MemberMapper.toYouthMemberInfo(request);
 
                 // 위치 X, Y 좌표 저장
                 Grid grid = gridService.getGridCoordinates(youthMemberInfo.getLatitude(), youthMemberInfo.getLongitude());
@@ -120,14 +145,7 @@ public class MemberServiceImpl implements MemberService {
                 youthMemberInfoRepository.save(youthMemberInfo);
             } else {
                 // 청년 정보가 있으면 업데이트
-                youthMemberInfo.updateYouthMemberInfoDto(request.youthMemberInfoDto());
-            }
-        }
-        if(request.role().equals(Role.HELPER)){
-            //나이가 성인이 아니면 예외처리 (만 19세가 아닌 성인이 기준)
-            // 현재 연도 - 태어난 연도 < 19 이면 예외처리
-            if(LocalDateTime.now().getYear() - request.birth().getYear() < 19){
-                throw new RestApiException(MemberErrorStatus.INVALID_HELPER_AGES);
+                youthMemberInfo.updateYouthMemberInfoDto(request);
             }
         }
     }

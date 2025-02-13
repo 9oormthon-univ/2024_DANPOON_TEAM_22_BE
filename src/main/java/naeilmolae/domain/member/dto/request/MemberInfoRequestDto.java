@@ -12,6 +12,6 @@ public record MemberInfoRequestDto(
         String profileImage,
         Role role,
         LocalDateTime birth,
-        String fcmToken,
-        YouthMemberInfoDto youthMemberInfoDto){
+        String fcmToken
+){
 }
