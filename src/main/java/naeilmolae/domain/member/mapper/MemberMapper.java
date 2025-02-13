@@ -27,6 +27,9 @@ public class MemberMapper {
                 .refreshToken(tokenInfo.refreshToken())
                 .isServiceMember(isServiceMember)
                 .role(role)
+                .infoRegistered(member.getGender() != null && member.getBirth() != null)
+                .locationRegistered(member.getYouthMemberInfo() != null && member.getYouthMemberInfo().getLatitude() != null && member.getYouthMemberInfo().getLongitude() != null)
+                .pushTimeRegistered(member.getYouthMemberInfo() != null && member.getYouthMemberInfo().getWakeUpTime() != null && member.getYouthMemberInfo().getSleepTime() != null && member.getYouthMemberInfo().getBreakfast() != null && member.getYouthMemberInfo().getLunch() != null && member.getYouthMemberInfo().getDinner() != null)
                 .build();
     }
 

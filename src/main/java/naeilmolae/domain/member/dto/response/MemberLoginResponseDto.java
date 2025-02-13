@@ -24,5 +24,14 @@ public class MemberLoginResponseDto {
 
     @Schema(description = "서비스 역할 (YOUTH: 청년, HELPER: 조력자, GUEST: (회원가입 중 or 비회원 로그인)", example = "YOUTH")
     private Role role;
+
+    @Schema(description = "기본 정보 등록 상태", example = "true")
+    private boolean infoRegistered;
+
+    @Schema(description = "위치 정보 등록 상태", example = "true")
+    private boolean locationRegistered;
+
+    @Schema(description = "푸시 알림 시간 정보 등록 상태", example = "true")
+    private boolean pushTimeRegistered;
 }
 
