@@ -7,5 +7,5 @@ import lombok.Data;
 public class ScriptValidationResponseDto {
     @JsonProperty("is_proper") // JSON 키와 매핑
     boolean isProper;
-    String reason;
+    Integer reason;
 }

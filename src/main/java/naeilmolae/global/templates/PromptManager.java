@@ -21,15 +21,15 @@ public class PromptManager {
         return template.fillTemplate(
                 """
                 ## 명령 
-                주어진 문장이 특정 상황에 처한 사람에게 적절한 응원이나 표현인지 판단해 주고, 
-                reason은 그냥 null로 줘도 돼.
+                주어진 문장이 특정 상황에 처한 사람에게 적절한 응원이나 표현인지 판단해 주고, 적절하다면 reason은 그냥 null로 줘도 돼.
+                적절하지 않다면 상황에 맞지 않은 응원이어서이면 reason에 0을 리턴, 듣기 거북한 표현이 있어서라면 1을 리턴해.
                 ## 상황
                 \'%s\' 
                 ## 문장
                 \'%s\' 
                 """.formatted(situation, statement),
                 """
-                {"is_proper":<boolean>, "reason": <부적절한 이유>}
+                {"is_proper":<boolean>, "reason": <integer or null>}
                 """
         );
     }

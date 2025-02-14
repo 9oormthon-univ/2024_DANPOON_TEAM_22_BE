@@ -15,7 +15,6 @@ import naeilmolae.domain.voicefile.repository.AnalysisResultRepository;
 import naeilmolae.domain.voicefile.repository.VoiceFileRepository;
 import naeilmolae.global.common.exception.RestApiException;
 import naeilmolae.global.common.exception.code.status.AnalysisErrorStatus;
-import naeilmolae.global.common.exception.code.status.GlobalErrorStatus;
 import naeilmolae.global.common.exception.code.status.VoiceFileErrorStatus;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -42,20 +41,20 @@ public class VoiceFileService {
         AlarmCategoryMessageResponseDto alarmCategoryMessageResponseDto = alarmAdapterService.findById(alarmId);// 알람이 존재하는지 확인
         String title = alarmCategoryMessageResponseDto.getTitle();
 
-        if (!alarmCategoryMessageResponseDto.getAlarmCategory().equals(AlarmCategory.INFO_INFO)) {
-            // 스크립트 검증
-            verifyContent(title, content);
-        }
+        Integer reasonCode = verifyContent(title, content);
         VoiceFile voiceFile = new VoiceFile(memberId, alarmId, content);
         return voiceFileRepository.save(voiceFile);
     }
 
     // 음성 파일 스크립트 검증 (gpt 사용)
-    private void verifyContent(String title, String content) {
+    public Integer verifyContent(String title, String content) {
         ScriptValidationResponseDto checkScriptRelevancePrompt
                 = chatGptService.getCheckScriptRelevancePrompt(title, content);
         if (!checkScriptRelevancePrompt.isProper()) {
             throw new RestApiException(AnalysisErrorStatus._DENIED_BY_GPT);
+        }
+        else {
+            return checkScriptRelevancePrompt.getReason();
         }
     }
 

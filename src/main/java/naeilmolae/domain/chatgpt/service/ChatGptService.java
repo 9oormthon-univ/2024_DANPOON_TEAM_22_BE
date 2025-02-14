@@ -22,7 +22,7 @@ public final class ChatGptService {
     private final OpenAiApiClient openAiApiClient;
     private final PromptManager promptManager;
 
-    private final String model = "gpt-4o-mini";
+    private final String model = "gpt-4o";
 
     private final String systemRole = "system";
 
@@ -35,6 +35,7 @@ public final class ChatGptService {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
 
+
     public ScriptValidationResponseDto getCheckScriptRelevancePrompt(String sentence, String Situation) {
 
         // 템플릿 생성
@@ -44,7 +45,6 @@ public final class ChatGptService {
                 model,
                 List.of(
                         new ChatGptRequest.ChatGptMessage(systemRole, prompt)
-//                        new ChatGptRequest.ChatGptMessage(userRole, userPrompt + "'" + sentence + "'?")
                 ),
                 maxTokens,
                 temperature
@@ -53,7 +53,21 @@ public final class ChatGptService {
         String content = response.getChoices().get(0).getMessage().getContent().trim().toLowerCase();
         System.out.println(content);
         try {
-            return objectMapper.readValue(content, ScriptValidationResponseDto.class);
+            ScriptValidationResponseDto scriptValidationResponseDto = objectMapper.readValue(content, ScriptValidationResponseDto.class);
+
+            if (scriptValidationResponseDto.getReason() == null) {
+                return scriptValidationResponseDto;
+            }
+
+            switch(scriptValidationResponseDto.getReason()) {
+                case 0:
+                    throw new RestApiException(AnalysisErrorStatus._INVALID_CONTEXT);
+                case 1:
+                    throw new RestApiException(AnalysisErrorStatus._PROFANITY_DETECTED);
+                default:
+                    throw new RestApiException(AnalysisErrorStatus._GPT_ERROR);
+            }
+            
         } catch (JsonMappingException e) {
             throw new RestApiException(AnalysisErrorStatus._GPT_ERROR);
         } catch (JsonProcessingException e) {
