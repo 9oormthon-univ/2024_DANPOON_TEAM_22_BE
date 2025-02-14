@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import naeilmolae.domain.chatgpt.dto.ScriptValidationResponseDto;
 import naeilmolae.global.common.exception.RestApiException;
 import naeilmolae.global.common.exception.code.status.AnalysisErrorStatus;
@@ -17,6 +18,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public final class ChatGptService {
 
     private final OpenAiApiClient openAiApiClient;
@@ -85,24 +87,12 @@ public final class ChatGptService {
                 temperature
         );
 
+        log.info("gpt response : {}", response);
+
         String content = response.getChoices().get(0).getMessage().getContent().trim().toLowerCase();
         System.out.println(content);
         try {
-            ScriptValidationResponseDto scriptValidationResponseDto = objectMapper.readValue(content, ScriptValidationResponseDto.class);
-
-            if (scriptValidationResponseDto.getReason() == null) {
-                return scriptValidationResponseDto;
-            }
-
-            switch(scriptValidationResponseDto.getReason()) {
-                case 0:
-                    throw new RestApiException(AnalysisErrorStatus._INVALID_CONTEXT);
-                case 1:
-                    throw new RestApiException(AnalysisErrorStatus._PROFANITY_DETECTED);
-                default:
-                    throw new RestApiException(AnalysisErrorStatus._GPT_ERROR);
-            }
-
+            return  objectMapper.readValue(content, ScriptValidationResponseDto.class);
         } catch (JsonMappingException e) {
             throw new RestApiException(AnalysisErrorStatus._GPT_ERROR);
         } catch (JsonProcessingException e) {

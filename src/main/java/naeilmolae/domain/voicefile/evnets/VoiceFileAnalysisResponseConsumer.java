@@ -37,11 +37,13 @@ public class VoiceFileAnalysisResponseConsumer {
 
         if (analysisResponseDto.analysisResultStatus().equals("SUCCESS")) {
             ScriptValidationResponseDto scriptValidationResponseDto = chatGptService.getCheckScriptRelevancePrompt2(voiceFile.getContent(), analysisResponseDto.sttContent());
+            log.info("Script Validation Response : {}", scriptValidationResponseDto);
             if (!scriptValidationResponseDto.isProper()) {
                 Integer reason = scriptValidationResponseDto.getReason();
                 AnalysisResultStatus analysisResultStatus = AnalysisResultStatus.of(reason);
                 String description = analysisResultStatus.getDescription();
                 voiceFileService.saveResult(Long.parseLong(key), new AnalysisResponseDto(description, analysisResponseDto.sttContent()));
+                log.info("Script Validation Fail : {}", description);
             } else {
                 voiceFileService.saveResult(Long.parseLong(key), analysisResponseDto);
             }

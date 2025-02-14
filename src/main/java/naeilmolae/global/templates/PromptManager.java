@@ -40,7 +40,7 @@ public class PromptManager {
         return template.fillTemplate(
                 """
                 ## 명령 
-                두 문장을 비교해서 문맥상 비슷한지 확인해주고 그렇다면 is_proper를 true로, 아니라면 is_proper을 false로 리턴하고 reason을 0으로 리턴해.
+                문장2가 문장1을 따라 읽었는지 확인해줘. 맞다면 is_proper를 true로 reason을 null로, 아니라면 is_proper을 false로 리턴하고 reason을 0으로 리턴해.
                 만약에 욕설 및 불쾌한 표현이 포함되어있다면 reason에 1을 리턴하고 부적절한 상황이야. 
                 꼭 제시된 응답형식을 지켜.
                 ## 문장1
