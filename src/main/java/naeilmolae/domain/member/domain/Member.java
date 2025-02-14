@@ -50,7 +50,7 @@ public class Member extends BaseEntity {
 
     @Setter
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "youth_member_info_id") // 외래 키 설정
+    @JoinColumn(name = "helper_member_info_id") // 외래 키 설정
     private HelperMemberInfo helperMemberInfo;
 
     @Builder
