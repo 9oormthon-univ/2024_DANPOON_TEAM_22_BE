@@ -21,7 +21,7 @@ public class LunchNotificationStrategy implements NotificationStrategy {
 
     @Override
     public boolean shouldSend(YouthMemberInfo info, LocalDateTime now) {
-        return info.getLunch() != null &&
+        return info.getLunch() != null && info.isLunchAlarm() &&
                 now.getHour() == info.getLunch().getHour() &&
                 now.getMinute() == info.getLunch().getMinute();
     }

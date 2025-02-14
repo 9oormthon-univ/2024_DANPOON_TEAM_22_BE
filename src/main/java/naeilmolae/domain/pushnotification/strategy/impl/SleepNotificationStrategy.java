@@ -21,7 +21,7 @@ public class SleepNotificationStrategy implements NotificationStrategy {
 
     @Override
     public boolean shouldSend(YouthMemberInfo info, LocalDateTime now) {
-        return info.getSleepTime() != null &&
+        return info.getSleepTime() != null && info.isSleepAlarm() &&
                 now.getHour() == info.getSleepTime().getHour() &&
                 now.getMinute() == info.getSleepTime().getMinute();
     }

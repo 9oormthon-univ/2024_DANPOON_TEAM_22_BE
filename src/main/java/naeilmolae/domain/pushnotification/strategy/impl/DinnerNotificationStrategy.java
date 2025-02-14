@@ -21,7 +21,7 @@ public class DinnerNotificationStrategy implements NotificationStrategy {
 
     @Override
     public boolean shouldSend(YouthMemberInfo info, LocalDateTime now) {
-        return info.getDinner() != null &&
+        return info.getDinner() != null && info.isBreakfastAlarm() &&
                 now.getHour() == info.getDinner().getHour() &&
                 now.getMinute() == info.getDinner().getMinute();
     }

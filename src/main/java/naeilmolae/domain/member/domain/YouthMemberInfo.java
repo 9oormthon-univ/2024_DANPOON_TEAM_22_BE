@@ -18,14 +18,27 @@ public class YouthMemberInfo extends BaseEntity {
     private Long id;
 
     private LocalDateTime wakeUpTime;
+    @Setter
+    private boolean wakeUpAlarm = true;
 
     private LocalDateTime sleepTime;
+    @Setter
+    private boolean sleepAlarm = true;
 
     private LocalDateTime breakfast;
+    @Setter
+    private boolean breakfastAlarm = true;
 
     private LocalDateTime lunch;
+    @Setter
+    private boolean lunchAlarm = true;
 
     private LocalDateTime dinner;
+    @Setter
+    private boolean dinnerAlarm = true;
+
+    @Setter
+    private boolean outgoingAlarm = true;
 
 
     private Double latitude; // 위도

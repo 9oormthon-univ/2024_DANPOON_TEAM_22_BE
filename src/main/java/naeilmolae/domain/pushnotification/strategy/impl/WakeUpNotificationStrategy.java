@@ -22,7 +22,7 @@ public class WakeUpNotificationStrategy implements NotificationStrategy {
 
     @Override
     public boolean shouldSend(YouthMemberInfo info, LocalDateTime now) {
-        return info.getWakeUpTime() != null &&
+        return info.getWakeUpTime() != null && info.isWakeUpAlarm() &&
                 now.getHour() == info.getWakeUpTime().getHour() &&
                 now.getMinute() == info.getWakeUpTime().getMinute();
     }

@@ -34,7 +34,8 @@ public class OutingNotificationStrategy  implements NotificationStrategy {
 
     @Override
     public boolean shouldSend(YouthMemberInfo info, LocalDateTime now) {
-        return now.getHour() == FIXED_OUTING_DATETIME.getHour() &&
+        return info.isOutgoingAlarm() &&
+                now.getHour() == FIXED_OUTING_DATETIME.getHour() &&
                 now.getMinute() == FIXED_OUTING_DATETIME.getMinute();
     }
 

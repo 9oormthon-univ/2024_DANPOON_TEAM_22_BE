@@ -22,7 +22,7 @@ public class BreakfastNotificationStrategy implements NotificationStrategy {
 
     @Override
     public boolean shouldSend(YouthMemberInfo info, LocalDateTime now) {
-        return info.getBreakfast() != null &&
+        return info.getBreakfast() != null && info.isBreakfastAlarm() &&
                 now.getHour() == info.getBreakfast().getHour() &&
                 now.getMinute() == info.getBreakfast().getMinute();
     }
