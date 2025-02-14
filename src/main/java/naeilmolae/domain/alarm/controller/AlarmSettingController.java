@@ -16,7 +16,7 @@ import java.nio.file.Path;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/alarm-setting")
+@RequestMapping("/api/v1/alarm-setting")
 public class AlarmSettingController {
 
     private final AlarmSettingService alarmSettingService;
