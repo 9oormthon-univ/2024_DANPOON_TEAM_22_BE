@@ -48,7 +48,7 @@ public class MemberController {
     @ApiResponses( value = {
             @ApiResponse(responseCode = "COMMON200", description = "성공")
     })
-    @PostMapping
+    @PostMapping("/youth")
     public BaseResponse<MemberIdResponseDto> signUpLocation(@CurrentMember Member member,
                                                     @Valid @RequestBody YouthMemberInfoDto request) {
         return BaseResponse.onSuccess(memberService.signUpYouth(member, request));
@@ -68,8 +68,8 @@ public class MemberController {
     @ApiResponses( value = {
             @ApiResponse(responseCode = "COMMON200", description = "성공")
     })
-    @PatchMapping
-    public BaseResponse<MemberIdResponseDto> patchMemberIfo(@CurrentMember Member member,
+    @PatchMapping("/info")
+    public BaseResponse<MemberIdResponseDto> patchCommonInfo(@CurrentMember Member member,
                                                             @Valid @RequestBody MemberInfoRequestDto request) {
         return BaseResponse.onSuccess(memberService.updateMemberInfo(member, request));
     }
@@ -78,8 +78,8 @@ public class MemberController {
     @ApiResponses( value = {
             @ApiResponse(responseCode = "COMMON200", description = "성공")
     })
-    @PatchMapping
-    public BaseResponse<MemberIdResponseDto> patchMemberIfo(@CurrentMember Member member,
+    @PatchMapping("/info/youth")
+    public BaseResponse<MemberIdResponseDto> patchYouthInfo(@CurrentMember Member member,
                                                             @Valid @RequestBody YouthMemberInfoDto request) {
         return BaseResponse.onSuccess(memberService.updateYouthMemberInfo(member, request));
     }
