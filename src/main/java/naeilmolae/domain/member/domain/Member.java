@@ -48,6 +48,11 @@ public class Member extends BaseEntity {
     @JoinColumn(name = "youth_member_info_id") // 외래 키 설정
     private YouthMemberInfo youthMemberInfo;
 
+    @Setter
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "youth_member_info_id") // 외래 키 설정
+    private HelperMemberInfo helperMemberInfo;
+
     @Builder
     public Member(
             String name, Gender gender, String profileImage
@@ -61,6 +66,7 @@ public class Member extends BaseEntity {
         this.clientId = clientId;
         this.birth = birth;
         this.deviceId = deviceId;
+        this.helperMemberInfo = new HelperMemberInfo();
     }
 
     // 널이나 빈 값이 아닌 경우에만 수정

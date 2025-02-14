@@ -55,10 +55,10 @@ public class MemberServiceImpl implements MemberService {
     @Transactional
     public MemberIdResponseDto signUpInfo(Member member, MemberInfoRequestDto request) {
 
-        if(member.getRole().equals(Role.HELPER)){
+        if (member.getRole().equals(Role.HELPER)) {
             //나이가 성인이 아니면 예외처리 (만 19세가 아닌 성인이 기준)
             // 현재 연도 - 태어난 연도 < 19 이면 예외처리
-            if(LocalDateTime.now().getYear() - request.birth().getYear() < 19){
+            if (LocalDateTime.now().getYear() - request.birth().getYear() < 19) {
                 throw new RestApiException(MemberErrorStatus.INVALID_HELPER_AGES);
             }
         }
@@ -169,7 +169,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public List<Member> getAllYouthMember(){
+    public List<Member> getAllYouthMember() {
         return memberRepository.findAllYouthMembersWithInfo(Role.YOUTH);
     }
 }
