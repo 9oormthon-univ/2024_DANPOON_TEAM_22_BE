@@ -23,11 +23,31 @@ public class PromptManager {
                 ## 명령 
                 주어진 문장이 특정 상황에 처한 사람에게 적절한 응원이나 표현인지 판단해 주고, 적절하다면 reason은 그냥 null로 줘도 돼.
                 적절하지 않다면 상황에 맞지 않은 응원이어서이면 reason에 0을 리턴, 듣기 거북한 표현이 있어서라면 1을 리턴해.
+                꼭 제시된 응답형식을 지켜.
                 ## 상황
                 \'%s\' 
                 ## 문장
                 \'%s\' 
                 """.formatted(situation, statement),
+                """
+                {"is_proper":<boolean>, "reason": <integer or null>}
+                """
+        );
+    }
+
+    public String createCheckForOffensiveLanguagePrompt2(String stat1, String stat2) {
+        PromptTemplate template = new PromptTemplate();
+        return template.fillTemplate(
+                """
+                ## 명령 
+                두 문장을 비교해서 문맥상 비슷한지 확인해주고 그렇다면 is_proper를 true로, 아니라면 is_proper을 false로 리턴하고 reason을 0으로 리턴해.
+                만약에 욕설 및 불쾌한 표현이 포함되어있다면 reason에 1을 리턴하고 부적절한 상황이야. 
+                꼭 제시된 응답형식을 지켜.
+                ## 문장1
+                \'%s\' 
+                ## 문장2
+                \'%s\' 
+                """.formatted(stat1, stat2),
                 """
                 {"is_proper":<boolean>, "reason": <integer or null>}
                 """

@@ -27,7 +27,6 @@ public class KafkaVoiceFileEventListener implements VoiceFileEventListener {
         VoiceFile voiceFile = voiceFileService.findById(event.voiceFileId());
         voiceFile.prepareAnalysis();
         AnalysisRequestDto analysisRequestDto = new AnalysisRequestDto(event.fileUrl(), event.content());
-//        kafkaTemplate.send(KafkaTopic.ANALYSIS_REQUEST, event.voiceFileId().toString(), analysisRequestDto);
         kafkaTemplate.setDefaultTopic(KafkaTopic.ANALYSIS_REQUEST);
         kafkaTemplate.send(MessageBuilder.withPayload(analysisRequestDto)
                 .setHeader(KafkaHeaders.KEY, event.voiceFileId().toString())

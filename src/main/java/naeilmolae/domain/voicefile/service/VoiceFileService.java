@@ -58,6 +58,13 @@ public class VoiceFileService {
         }
     }
 
+    public boolean updateSttContent(Long voiceFileId, String sttContent) {
+        VoiceFile voiceFile = voiceFileRepository.findById(voiceFileId)
+                .orElseThrow(() -> new RestApiException(VoiceFileErrorStatus._NO_SUCH_FILE));
+        voiceFile.updateSttContent(sttContent);
+        return true;
+    }
+
     // 분석 결과 저장
     @Transactional
     public void saveResult(Long voiceFileId, AnalysisResponseDto analysisResponseDto) {
