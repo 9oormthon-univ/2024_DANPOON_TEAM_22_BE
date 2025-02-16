@@ -1,6 +1,7 @@
 package naeilmolae.domain.weather.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import naeilmolae.domain.weather.domain.Grid;
 import naeilmolae.domain.weather.dto.GridDto;
 import naeilmolae.domain.weather.repository.GridRepository;
@@ -16,7 +17,8 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
+@Transactional(readOnly = false)
+@Slf4j
 public class GridService {
     private final GridRepository gridRepository;
     private final RestTemplate restTemplate;
@@ -35,7 +37,6 @@ public class GridService {
      * @param longitude 경도
      * @return 그리드 좌표
      */
-    @Transactional
     public Grid getGridCoordinates(Double latitude, Double longitude) { // 위도, 경도
         String apiUrl = String.format(
                 "https://apihub.kma.go.kr/api/typ01/cgi-bin/url/nph-dfs_xy_lonlat?lon=%f&lat=%f&help=0&authKey=%s",
@@ -44,6 +45,7 @@ public class GridService {
 
         String response = restTemplate.getForObject(apiUrl, String.class);
         GridDto gridDto = parseGridCoordinates(response);
+        log.info("gridDto: {}", gridDto);
 
 
         Optional<Grid> opGrid = gridRepository.findByPoint(gridDto.getX().toString(), gridDto.getY().toString());
