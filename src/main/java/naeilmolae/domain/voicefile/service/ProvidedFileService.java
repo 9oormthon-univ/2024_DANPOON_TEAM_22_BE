@@ -5,6 +5,8 @@ import naeilmolae.domain.alarm.dto.response.AlarmResponseDto;
 import naeilmolae.domain.alarm.service.AlarmAdapterService;
 import naeilmolae.domain.member.domain.Member;
 import naeilmolae.domain.member.service.MemberService;
+import naeilmolae.domain.pushnotification.domain.NotificationType;
+import naeilmolae.domain.pushnotification.service.adapter.PushNotificationAdapterService;
 import naeilmolae.domain.voicefile.domain.ProvidedFile;
 import naeilmolae.domain.voicefile.domain.VoiceFile;
 import naeilmolae.domain.voicefile.domain.VoiceReactionType;
@@ -30,6 +32,7 @@ public class ProvidedFileService {
     private final VoiceFileService voiceFileService;
     // 외부 서비스
     private final AlarmAdapterService alarmAdapterService;
+    private final PushNotificationAdapterService pushNotificationAdapterService;
 
     @Transactional
     public ProvidedFile save(Long memberId, Long voiceFileId) {
@@ -72,6 +75,8 @@ public class ProvidedFileService {
         if (!providedFile.addThanksMessage(message)) {
             throw new RestApiException(ProvidedFileErrorStatus._EXCEED_MESSAGE);
         }
+        // 봉사자에게 알림 보내기
+        pushNotificationAdapterService.sendNotification(providedFile.getVoiceFile().getMemberId(), NotificationType.THANK_YOU_MESSAGE);
 
         return providedFile.getThanksMessagesSet().stream().toList();
     }

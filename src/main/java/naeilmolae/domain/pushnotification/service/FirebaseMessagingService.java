@@ -26,13 +26,13 @@ public class FirebaseMessagingService {
     }
 
     // 이벤트가 발생하면 알림을 보내는 메서드, 제목과 콘텐트와 fcm 토큰을 받고 이 서비스로 알람을 보내줌
-    public void sendNotification(String fcmToken, String title, String content, NotificationType notificationType) {
+    public void sendNotification(String fcmToken, NotificationType notificationType) {
         // FirebaseMessage 생성
         Message message = Message.builder()
                 .setToken(fcmToken)
                 .setNotification(Notification.builder()
-                        .setTitle(title)
-                        .setBody(content)
+                        .setTitle(notificationType.getTitle())
+                        .setBody(notificationType.getContent())
                         .build())
                 .putData("notificationType", notificationType.name()) // 파일 ID를 데이터로 추가
                 .build();

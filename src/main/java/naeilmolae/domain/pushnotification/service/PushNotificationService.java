@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import naeilmolae.domain.alarm.service.AlarmService;
 import naeilmolae.domain.member.domain.Member;
 import naeilmolae.domain.member.service.MemberAdapterService;
+import naeilmolae.domain.pushnotification.domain.NotificationType;
 import naeilmolae.domain.pushnotification.strategy.context.NotificationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,5 +30,11 @@ public class PushNotificationService {
         for (Member member : youthMembers) {
             notificationContext.executeStrategies(member, firebaseMessagingService, alarmService, now);
         }
+    }
+
+    // 이벤트 발생시 알림
+    @Transactional(readOnly = true)
+    public void sendNotification(Long memberId, NotificationType notificationType) {
+        firebaseMessagingService.sendNotification(memberAdapterService.findById(memberId).getFcmToken(), notificationType);
     }
 }
