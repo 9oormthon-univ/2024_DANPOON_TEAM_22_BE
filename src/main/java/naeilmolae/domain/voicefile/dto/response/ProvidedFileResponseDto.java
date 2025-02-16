@@ -28,7 +28,7 @@ public class ProvidedFileResponseDto {
     public static ProvidedFileResponseDto from(ProvidedFile providedFile, String alarmType) {
         return new ProvidedFileResponseDto(providedFile.getId(),
                 providedFile.getCreatedAt(),
-                providedFile.getThanksMessage(),
+                providedFile.getThanksMessages(),
                 alarmType);
     }
 }
