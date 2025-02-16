@@ -19,7 +19,7 @@ public class HelperMemberInfo extends BaseEntity {
     private Long id;
 
     @Setter
-    private boolean alarm1 = true;
+    private boolean isWelcomeReminder = true;
     @Setter
-    private boolean alarm2 = true;
+    private boolean isThankYouMessage = true;
 }

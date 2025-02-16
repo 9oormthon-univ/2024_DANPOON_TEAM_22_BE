@@ -20,6 +20,7 @@ public class PushNotificationService {
     private final AlarmService alarmService;
     private final NotificationContext notificationContext;
 
+    // 매일 정해진 시간에 알림을 보내는 메서드
     @Transactional(readOnly = true)
     public void sendNotificationsAtScheduledTime() {
         List<Member> youthMembers = memberAdapterService.getAllYouthMember();
