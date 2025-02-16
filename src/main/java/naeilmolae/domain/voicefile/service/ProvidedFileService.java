@@ -76,7 +76,7 @@ public class ProvidedFileService {
             throw new RestApiException(ProvidedFileErrorStatus._EXCEED_MESSAGE);
         }
         // 봉사자에게 알림 보내기
-        pushNotificationAdapterService.sendNotification(providedFile.getVoiceFile().getMemberId(), NotificationType.THANK_YOU_MESSAGE);
+        pushNotificationAdapterService.sendNotificationThankYouMessage(providedFile.getVoiceFile().getMemberId());
 
         return providedFile.getThanksMessagesSet().stream().toList();
     }

@@ -14,7 +14,7 @@ import java.util.List;
 public class PushNotificationAdapterService {
     private final PushNotificationService pushNotificationService;
 
-    public void sendNotification(Long memberId, NotificationType notificationType) {
-        pushNotificationService.sendNotification(memberId, notificationType);
+    public void sendNotificationThankYouMessage(Long memberId) {
+        pushNotificationService.sendNotificationThankYouMessage(memberId);
     }
 }

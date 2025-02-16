@@ -42,16 +42,21 @@ public class PushNotificationService {
             LocalDateTime lastLoginDate = memberAdapterService.getLastLoginDate(member);
 
             // 마지막 활동일이 null이 아니고, 3일 이상 경과한 경우 알림 전송
-            if (lastLoginDate != null && lastLoginDate.isBefore(now.minusDays(3))) {
+            if (lastLoginDate != null && lastLoginDate.isBefore(now.minusDays(3)) && member.getHelperMemberInfo().isWelcomeReminder()) {
                 firebaseMessagingService.sendNotification(member.getFcmToken(), NotificationType.WELCOME_REMINDER);
             }
         }
     }
 
-
-    // 이벤트 발생시 알림
     @Transactional(readOnly = true)
-    public void sendNotification(Long memberId, NotificationType notificationType) {
-        firebaseMessagingService.sendNotification(memberAdapterService.findById(memberId).getFcmToken(), notificationType);
+    public void sendNotificationThankYouMessage(Long memberId) {
+        Member member = memberAdapterService.findById(memberId);
+        if (member == null || member.getHelperMemberInfo() == null) {
+            return;
+        }
+
+        if (member.getHelperMemberInfo().isThankYouMessage()) {
+            firebaseMessagingService.sendNotification(member.getFcmToken(), NotificationType.THANK_YOU_MESSAGE);
+        }
     }
 }
