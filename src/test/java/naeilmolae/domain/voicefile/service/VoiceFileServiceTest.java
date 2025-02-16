@@ -17,7 +17,8 @@ class VoiceFileServiceTest {
 
     @Test
     void verifyUserFile_success() {
-        voiceFileService.verifyContent("아침 인사 메시지", "안녕하세요. 오늘도 좋은 하루 되세요.");
+        voiceFileService.verifyContent("일어날 때가 된 청년에게,\n" +
+                "아침을 깨우는 한 마디.", "아침이야. 일어나서 간단한 스트레칭을 하고 아침의 피로를 날려보자.");
 
     }
     @Test

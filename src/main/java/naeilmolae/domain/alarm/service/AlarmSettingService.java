@@ -15,18 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Transactional
 public class AlarmSettingService {
-    private final MemberRepository memberRepository;
     private final YouthMemberInfoRepository youthMemberInfoRepository;
 
-
-    //    WAKE_UP("기상",CategoryType.DAILY, null),
-//    GO_OUT("외출", CategoryType.DAILY, null),
-//    MEAL("식사", CategoryType.DAILY, null),
-//    SLEEP("취침", CategoryType.DAILY, null),
-//    SADNESS("우울과 불안", CategoryType.COMFORT, null),
-//    PRAISE("칭찬과 격려", CategoryType.COMFORT, null),
-//    CONSOLATION("위로", CategoryType.COMFORT, null),
-//    INFO("정보", CategoryType.INFO, null),
     public boolean updateAlarm(Member member, AlarmCategory alarmCategory, boolean alarm) {
         YouthMemberInfo youthMemberInfo = member.getYouthMemberInfo();
         switch (alarmCategory) {
@@ -51,6 +41,7 @@ public class AlarmSettingService {
             default:
                 return false;
         }
+        youthMemberInfoRepository.save(youthMemberInfo);
         return true;
     }
 }
