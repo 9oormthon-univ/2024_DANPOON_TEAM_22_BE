@@ -20,6 +20,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -64,19 +65,28 @@ public class ProvidedFileController {
         return BaseResponse.onSuccess(responseDtos);
     }
 
-    @Operation(summary = "[VALID] [청년] 청취 3단계: 감사 메시지 보내기", description = "청년이 봉사자에게 감사 메시지를 제공합니다.")
+    @Operation(summary = "[VALID] [청년] 청취 3-1단계: 감사 메시지 보내기", description = "청년이 봉사자에게 감사 메시지를 제공합니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "COMMON200", description = "저장 성공"),
     })
     @PostMapping("/{providedFileId}/comment")
-    public BaseResponse<Boolean> likeProvidedFile(@CurrentMember Member member,
+    public BaseResponse<List<String>> likeProvidedFile(@CurrentMember Member member,
                                                   @PathVariable Long providedFileId,
                                                   @RequestBody ThanksMessageRequestDto requestDto) {
-        providedFileService.likeProvidedFile(member.getId(), providedFileId, requestDto.message());
+        List<String> strings = providedFileService.likeProvidedFile(member.getId(), providedFileId, requestDto.message());
+        return BaseResponse.onSuccess(strings);
+    }
 
-        return BaseResponse.onSuccess(providedFileService.likeProvidedFile(member.getId(),
-                providedFileId,
-                requestDto.message()));
+    @Operation(summary = "[VALID] [청년] 청취 3-23단계: 감사 메시지 지우기", description = "청년이 봉사자에게 감사 메시지를 제공합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "COMMON200", description = "저장 성공"),
+    })
+    @DeleteMapping("/{providedFileId}/comment")
+    public BaseResponse<List<String>> deleteLikeProvidedFile(@CurrentMember Member member,
+                                                       @PathVariable Long providedFileId,
+                                                       @RequestBody ThanksMessageRequestDto requestDto) {
+        List<String> strings = providedFileService.deleteLikeProvidedFile(member.getId(), providedFileId, requestDto.message());
+        return BaseResponse.onSuccess(strings);
     }
 
     @Operation(summary = "[VALID] [청년] 청취 4단계: 북마크", description = "청년이 봉사자의 음성을 북마크합니다.")

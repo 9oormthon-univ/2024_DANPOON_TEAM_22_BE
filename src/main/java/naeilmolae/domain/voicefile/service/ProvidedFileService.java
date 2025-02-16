@@ -66,10 +66,24 @@ public class ProvidedFileService {
 
     // 감사 편지 보내기
     @Transactional
-    public boolean likeProvidedFile(Long consumerId, Long providedFileId, String message) {
+    public List<String> likeProvidedFile(Long consumerId, Long providedFileId, String message) {
         ProvidedFile providedFile = providedFileRepository.findByConsumerId(consumerId, providedFileId)
                 .orElseThrow(() -> new RestApiException(ProvidedFileErrorStatus._NOT_FOUND_FILE));
-        return providedFile.addThanksMessage(message);
+        if (!providedFile.addThanksMessage(message)) {
+            throw new RestApiException(ProvidedFileErrorStatus._EXCEED_MESSAGE);
+        }
+
+        return providedFile.getThanksMessagesSet().stream().toList();
+    }
+
+    @Transactional
+    public List<String> deleteLikeProvidedFile(Long consumerId, Long providedFileId, String message) {
+        ProvidedFile providedFile = providedFileRepository.findByConsumerId(consumerId, providedFileId)
+                .orElseThrow(() -> new RestApiException(ProvidedFileErrorStatus._NOT_FOUND_FILE));
+
+        providedFile.removeThanksMessage(message);
+
+        return providedFile.getThanksMessagesSet().stream().toList();
     }
 
     // 음성 파일 북마크하기
