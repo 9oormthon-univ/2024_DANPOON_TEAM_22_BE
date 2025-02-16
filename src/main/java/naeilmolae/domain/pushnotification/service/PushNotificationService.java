@@ -27,10 +27,27 @@ public class PushNotificationService {
         List<Member> youthMembers = memberAdapterService.getAllYouthMember();
         LocalDateTime now = LocalDateTime.now();
 
+        // 알림 시간에 따라 알림 전략 실행
         for (Member member : youthMembers) {
             notificationContext.executeStrategies(member, firebaseMessagingService, alarmService, now);
         }
     }
+
+    // 매일 밤 8시에 실행, 활동 3일 이상 경과한 경우 알림 전송
+    public void sendNotificationsAtScheduledTimeHelper() {
+        List<Member> helperMembers = memberAdapterService.getAllHelperMember();
+
+        LocalDateTime now = LocalDateTime.now();
+        for (Member member : helperMembers) {
+            LocalDateTime lastLoginDate = memberAdapterService.getLastLoginDate(member);
+
+            // 마지막 활동일이 null이 아니고, 3일 이상 경과한 경우 알림 전송
+            if (lastLoginDate != null && lastLoginDate.isBefore(now.minusDays(3))) {
+                firebaseMessagingService.sendNotification(member.getFcmToken(), NotificationType.WELCOME_REMINDER);
+            }
+        }
+    }
+
 
     // 이벤트 발생시 알림
     @Transactional(readOnly = true)
