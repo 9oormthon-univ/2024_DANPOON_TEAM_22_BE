@@ -71,6 +71,7 @@ public class MemberServiceImpl implements MemberService {
 
     // 회원가입 함수 (청년 위치 정보 등록)
     @Override
+    @Transactional
     public MemberIdResponseDto signUpYouth(Member member, YouthMemberInfoDto request) {
 
         // 기본 정보 업데이트

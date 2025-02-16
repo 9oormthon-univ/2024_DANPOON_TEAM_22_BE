@@ -36,6 +36,7 @@ public class GridService {
      * @param latitude  위도
      * @param longitude 경도
      * @return 그리드 좌표
+     *
      */
     public Grid getGridCoordinates(Double latitude, Double longitude) { // 위도, 경도
         String apiUrl = String.format(

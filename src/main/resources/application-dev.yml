@@ -11,9 +11,10 @@ spring:
     name: naeilmolae-local
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-
     config:
       import: classpath:application.yml
+    hikari:
+      read-only: false
 
   jpa:
     show-sql: false
