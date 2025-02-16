@@ -23,7 +23,7 @@ public interface ProvidedFileRepository extends JpaRepository<ProvidedFile, Long
             AND p.id = :providedFileId""")
     Optional<ProvidedFile> findByConsumerId(Long consumerId, Long providedFileId);
 
-    @Query("SELECT pf.thanksMessage " +
+    @Query("SELECT pf.thanksMessages " +
             "FROM ProvidedFile pf " +
             "JOIN pf.voiceFile vf " +
             "WHERE vf.memberId = :memberId")
