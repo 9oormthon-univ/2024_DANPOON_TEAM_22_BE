@@ -9,13 +9,11 @@ import naeilmolae.domain.voicefile.dto.request.ProvidedFileReportRequestDto;
 import naeilmolae.domain.voicefile.service.ProvidedFileReportService;
 import naeilmolae.global.common.base.BaseResponse;
 import naeilmolae.global.config.security.auth.CurrentMember;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api/v1/providedfile")
 public class ProvidedFileReportController {
     private final ProvidedFileReportService providedFileReportService;
 
@@ -26,6 +24,19 @@ public class ProvidedFileReportController {
     })
     @PostMapping("/{providedFileId}/report")
     public BaseResponse<Boolean> likeProvidedFile(@CurrentMember Member member,
+                                                  @PathVariable Long providedFileId,
+                                                  @RequestBody ProvidedFileReportRequestDto requestDto) {
+        providedFileReportService.reportProvidedFile(member.getId(), providedFileId, requestDto.reason());
+
+        return BaseResponse.onSuccess(true);
+    }
+
+    @Operation(summary = "감사 메시지 삭제", description = "감사 메시지를 삭제합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "COMMON200", description = "저장 성공"),
+    })
+    @DeleteMapping("/{providedFileId}")
+    public BaseResponse<Boolean> deleteProvidedFile(@CurrentMember Member member,
                                                   @PathVariable Long providedFileId,
                                                   @RequestBody ProvidedFileReportRequestDto requestDto) {
         providedFileReportService.reportProvidedFile(member.getId(), providedFileId, requestDto.reason());

@@ -46,6 +46,7 @@ public class ProvidedFile extends BaseEntity {
             return false; // 5개 이상이거나 중복이면 추가 안함
         }
         messages.add(message);
+        // TODO spliter를 변경해야할듯 절대 안 쓸 거 같은 문자로 ㅋ.ㅋ.ㅋ.
         this.thanksMessages = String.join(";", messages); // 다시 문자열로 변환하여 저장
         return true;
     }
