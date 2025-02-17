@@ -16,5 +16,12 @@ public class PushNotificationScheduler {
         System.out.println("schedulePushNotifications 실행중~~");
         pushNotificationService.sendNotificationsAtScheduledTime();
     }
+
+    // 매일 밤 8시에 실행
+    @Scheduled(cron = "0 0 20 * * *")
+    public void schedulePushNotificationsAtEight() {
+        System.out.println("schedulePushNotificationsAtEight 실행중~~");
+        pushNotificationService.sendNotificationsAtScheduledTimeHelper();
+    }
 }
 

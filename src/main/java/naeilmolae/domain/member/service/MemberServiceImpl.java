@@ -173,4 +173,14 @@ public class MemberServiceImpl implements MemberService {
     public List<Member> getAllYouthMember() {
         return memberRepository.findAllYouthMembersWithInfo(Role.YOUTH);
     }
+
+    @Override
+    public List<Member> getAllHelperMember() {
+        return memberRepository.findAllHelperMembersWithInfo(Role.HELPER);
+    }
+
+    @Override
+    public LocalDateTime getLastLoginDate(Member member) {
+        return refreshTokenService.getLastIssueAt(member.getRefreshToken());
+    }
 }

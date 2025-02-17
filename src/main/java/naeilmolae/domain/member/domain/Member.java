@@ -39,7 +39,8 @@ public class Member extends BaseEntity {
 
     private String fcmToken;
 
-    // 편의상 DB에 저장, 실제로는 저장하지 않게 해야 함
+    // todo 편의상 DB에 저장, 실제로는 저장하지 않게 해야 함, redis에 저장 추천
+    // 지금 refreshToken의 발급 시간을 기준으로 멤버가 얼마나 접속을 안했는 지 판단하는 중
     @Setter
     private String refreshToken;
 

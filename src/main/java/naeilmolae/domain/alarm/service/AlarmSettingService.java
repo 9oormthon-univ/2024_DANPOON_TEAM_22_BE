@@ -3,19 +3,29 @@ package naeilmolae.domain.alarm.service;
 import lombok.RequiredArgsConstructor;
 import naeilmolae.domain.alarm.domain.AlarmCategory;
 import naeilmolae.domain.alarm.domain.CategoryType;
+import naeilmolae.domain.member.domain.HelperMemberInfo;
 import naeilmolae.domain.member.domain.Member;
+import naeilmolae.domain.member.domain.Role;
 import naeilmolae.domain.member.domain.YouthMemberInfo;
+import naeilmolae.domain.member.repository.HelperMemberInfoRepository;
 import naeilmolae.domain.member.repository.MemberRepository;
 import naeilmolae.domain.member.repository.YouthMemberInfoRepository;
 import naeilmolae.domain.member.service.MemberService;
+import naeilmolae.domain.member.status.MemberErrorStatus;
+import naeilmolae.domain.pushnotification.domain.NotificationType;
+import naeilmolae.global.common.exception.RestApiException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import static naeilmolae.domain.pushnotification.domain.NotificationType.THANK_YOU_MESSAGE;
+import static naeilmolae.domain.pushnotification.domain.NotificationType.WELCOME_REMINDER;
 
 @Service
 @RequiredArgsConstructor
 @Transactional
 public class AlarmSettingService {
     private final YouthMemberInfoRepository youthMemberInfoRepository;
+    private final HelperMemberInfoRepository helperMemberInfoRepository;
 
     public boolean updateAlarm(Member member, AlarmCategory alarmCategory, boolean alarm) {
         YouthMemberInfo youthMemberInfo = member.getYouthMemberInfo();
@@ -42,6 +52,31 @@ public class AlarmSettingService {
                 return false;
         }
         youthMemberInfoRepository.save(youthMemberInfo);
+        return true;
+    }
+
+    public boolean updateHelperAlarm(Member member, NotificationType notificationType, boolean alarm) {
+
+        if(member.getRole()!= Role.HELPER){
+            throw new RestApiException(MemberErrorStatus.NOT_HELPER);
+        }
+
+        HelperMemberInfo helperMemberInfo = member.getHelperMemberInfo();
+        if(helperMemberInfo == null){
+            throw new RestApiException(MemberErrorStatus.EMPTY_HELPER_INFO);
+        }
+
+        switch (notificationType) {
+            case THANK_YOU_MESSAGE:
+                helperMemberInfo.setThankYouMessage(alarm);
+                break;
+            case WELCOME_REMINDER:
+                helperMemberInfo.setWelcomeReminder(alarm);
+                return false;
+            default:
+                return false;
+        }
+        helperMemberInfoRepository.save(helperMemberInfo);
         return true;
     }
 }
