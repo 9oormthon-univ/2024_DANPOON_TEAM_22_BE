@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Getter
 @Builder
@@ -12,9 +13,9 @@ import java.time.LocalDateTime;
 public class YouthMemberInfoDto {
     private Double latitude; // 위도
     private Double longitude; // 경도
-    private LocalDateTime wakeUpTime;
-    private LocalDateTime sleepTime;
-    private LocalDateTime breakfast;
-    private LocalDateTime lunch;
-    private LocalDateTime dinner;
+    private LocalTime wakeUpTime;
+    private LocalTime sleepTime;
+    private LocalTime breakfast;
+    private LocalTime lunch;
+    private LocalTime dinner;
 }

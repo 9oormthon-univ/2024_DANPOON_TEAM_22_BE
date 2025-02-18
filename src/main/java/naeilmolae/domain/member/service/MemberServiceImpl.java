@@ -5,12 +5,14 @@ import naeilmolae.domain.member.domain.Member;
 import naeilmolae.domain.member.domain.MemberWithdrawalReason;
 import naeilmolae.domain.member.domain.Role;
 import naeilmolae.domain.member.domain.YouthMemberInfo;
+import naeilmolae.domain.member.dto.request.YouthMemberInfoUpdateDto;
 import naeilmolae.domain.member.dto.YouthMemberInfoDto;
 import naeilmolae.domain.member.dto.request.MemberInfoRequestDto;
 import naeilmolae.domain.member.dto.request.WithdrawalReasonRequest;
 import naeilmolae.domain.member.dto.response.MemberIdResponseDto;
 import naeilmolae.domain.member.dto.response.MemberInfoResponseDto;
 import naeilmolae.domain.member.dto.response.MemberNumResponseDto;
+import naeilmolae.domain.member.dto.response.YouthMemberInfoResponseDto;
 import naeilmolae.domain.member.mapper.MemberMapper;
 import naeilmolae.domain.member.repository.MemberRepository;
 import naeilmolae.domain.member.repository.MemberWithdrawalReasonRepository;
@@ -115,13 +117,42 @@ public class MemberServiceImpl implements MemberService {
     //청년 회원 정보 수정
     @Override
     @Transactional
-    public MemberIdResponseDto updateYouthMemberInfo(Member member, YouthMemberInfoDto request) {
+    public MemberIdResponseDto updateYouthMemberInfo(Member member, YouthMemberInfoUpdateDto request) {
         Member loginMember = findById(member.getId());
+        YouthMemberInfo youthMemberInfo = member.getYouthMemberInfo();
 
-        // 기본 정보 업데이트
-        handleRoleSpecificInfo(loginMember, request);
+        if (youthMemberInfo == null) {
+            throw new RestApiException(MemberErrorStatus.NOT_YOUTH);
+        }
+
+        // 청년 정보 업데이트
+        youthMemberInfo.setBreakfast(request.getBreakfast());
+        youthMemberInfo.setLunch(request.getLunch());
+        youthMemberInfo.setDinner(request.getDinner());
+        youthMemberInfo.setWakeUpTime(request.getWakeUpTime());
+        youthMemberInfo.setSleepTime(request.getSleepTime());
+        youthMemberInfo.setOutgoingTime(request.getOutgoingTime());
+
+        youthMemberInfo.setBreakfastAlarm(request.isBreakfastAlarm());
+        youthMemberInfo.setLunchAlarm(request.isLunchAlarm());
+        youthMemberInfo.setDinnerAlarm(request.isDinnerAlarm());
+        youthMemberInfo.setWakeUpAlarm(request.isWakeUpAlarm());
+        youthMemberInfo.setSleepAlarm(request.isSleepAlarm());
+        youthMemberInfo.setOutgoingAlarm(request.isOutgoingAlarm());
+
 
         return new MemberIdResponseDto(saveEntity(loginMember).getId());
+    }
+
+    @Override
+    public YouthMemberInfoResponseDto getYouthMemberInfo(Member member) {
+        Member loginMember = findById(member.getId());
+        YouthMemberInfo youthMemberInfo = member.getYouthMemberInfo();
+
+        if (youthMemberInfo == null) {
+            throw new RestApiException(MemberErrorStatus.NOT_YOUTH);
+        }
+        return YouthMemberInfoResponseDto.from(youthMemberInfo);
     }
 
     // 기본 정보 업데이트

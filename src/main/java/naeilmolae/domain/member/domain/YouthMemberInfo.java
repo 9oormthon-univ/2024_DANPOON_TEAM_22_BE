@@ -6,10 +6,12 @@ import naeilmolae.domain.member.dto.YouthMemberInfoDto;
 import naeilmolae.global.common.base.BaseEntity;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Optional;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class YouthMemberInfo extends BaseEntity {
 
@@ -17,27 +19,24 @@ public class YouthMemberInfo extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private LocalDateTime wakeUpTime;
-    @Setter
+    private LocalTime wakeUpTime;
+
     private boolean wakeUpAlarm = true;
+    private LocalTime sleepTime;
 
-    private LocalDateTime sleepTime;
-    @Setter
     private boolean sleepAlarm = true;
+    private LocalTime breakfast;
 
-    private LocalDateTime breakfast;
-    @Setter
     private boolean breakfastAlarm = true;
+    private LocalTime lunch;
 
-    private LocalDateTime lunch;
-    @Setter
     private boolean lunchAlarm = true;
+    private LocalTime dinner;
 
-    private LocalDateTime dinner;
-    @Setter
     private boolean dinnerAlarm = true;
 
-    @Setter
+    private LocalTime outgoingTime = LocalTime.of(8, 30);
+
     private boolean outgoingAlarm = true;
 
 
@@ -45,14 +44,14 @@ public class YouthMemberInfo extends BaseEntity {
 
     private Double longitude; // 경도
 
-    @Setter
+
     private Long gridId;
 
 
     @Builder
     public YouthMemberInfo(
-            LocalDateTime wakeUpTime, LocalDateTime sleepTime,
-            LocalDateTime breakfast, LocalDateTime lunch, LocalDateTime dinner,
+            LocalTime wakeUpTime, LocalTime sleepTime,
+            LocalTime breakfast, LocalTime lunch, LocalTime dinner,
             Double latitude, Double longitude, Long gridId) {
         this.wakeUpTime = wakeUpTime;
         this.sleepTime = sleepTime;

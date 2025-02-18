@@ -8,14 +8,14 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import naeilmolae.domain.member.domain.Member;
 import naeilmolae.domain.member.domain.Role;
+import naeilmolae.domain.member.dto.request.YouthMemberInfoUpdateDto;
 import naeilmolae.domain.member.dto.YouthMemberInfoDto;
 import naeilmolae.domain.member.dto.request.MemberInfoRequestDto;
 import naeilmolae.domain.member.dto.request.WithdrawalReasonRequest;
-import naeilmolae.domain.member.dto.request.YouthMemberLocationInfoDto;
-import naeilmolae.domain.member.dto.request.YouthMemberPushTimeInfo;
 import naeilmolae.domain.member.dto.response.MemberIdResponseDto;
 import naeilmolae.domain.member.dto.response.MemberInfoResponseDto;
 import naeilmolae.domain.member.dto.response.MemberNumResponseDto;
+import naeilmolae.domain.member.dto.response.YouthMemberInfoResponseDto;
 import naeilmolae.domain.member.service.MemberService;
 import naeilmolae.global.common.base.BaseResponse;
 import naeilmolae.global.config.security.auth.CurrentMember;
@@ -80,9 +80,19 @@ public class MemberController {
     })
     @PatchMapping("/info/youth")
     public BaseResponse<MemberIdResponseDto> patchYouthInfo(@CurrentMember Member member,
-                                                            @Valid @RequestBody YouthMemberInfoDto request) {
+                                                            @Valid @RequestBody YouthMemberInfoUpdateDto request) {
         return BaseResponse.onSuccess(memberService.updateYouthMemberInfo(member, request));
     }
+
+    @Operation(summary = "청년 회원 정보 조회 API", description = "청년 멤버 정보 조회하는 API입니다.")
+    @ApiResponses( value = {
+            @ApiResponse(responseCode = "COMMON200", description = "성공")
+    })
+    @GetMapping("/info/youth")
+    public BaseResponse<YouthMemberInfoResponseDto> getYouthInfo(@CurrentMember Member member) {
+        return BaseResponse.onSuccess(memberService.getYouthMemberInfo(member));
+    }
+
 
     @Operation(summary = "회원 정보 조회 API", description = "멤버 정보 조회하는 API입니다.")
     @ApiResponses( value = {
