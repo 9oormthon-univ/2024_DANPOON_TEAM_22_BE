@@ -39,4 +39,6 @@ public interface VoiceFileRepository extends JpaRepository<VoiceFile, Long> {
     List<Long> findAlarmIdsByMemberIdAndBetween(@Param("memberId") Long memberId,
                                         @Param("startDay") LocalDateTime startDay,
                                         @Param("endDay") LocalDateTime endDay);
+
+    Long countByMemberId(Long memberId);
 }

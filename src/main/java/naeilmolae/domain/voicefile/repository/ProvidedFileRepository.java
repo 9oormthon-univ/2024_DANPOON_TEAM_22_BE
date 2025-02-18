@@ -1,7 +1,6 @@
 package naeilmolae.domain.voicefile.repository;
 
 
-import jakarta.persistence.Column;
 import naeilmolae.domain.voicefile.domain.ProvidedFile;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,6 +23,7 @@ public interface ProvidedFileRepository extends JpaRepository<ProvidedFile, Long
     @Query("""
             SELECT p 
             FROM ProvidedFile p 
+            JOIN FETCH p.thanksMessages 
             WHERE p.consumerId = :consumerId 
             AND p.id = :providedFileId""")
     Optional<ProvidedFile> findByConsumerId(Long consumerId, Long providedFileId);
@@ -32,14 +32,12 @@ public interface ProvidedFileRepository extends JpaRepository<ProvidedFile, Long
             "FROM ProvidedFile pf " +
             "JOIN pf.voiceFile vf " +
             "WHERE vf.memberId = :memberId")
-        // ProvidedFile의 voiceFile의 member의 id가 memberId인 ProvidedFile의 thanksMessage를 찾는 쿼리
     List<String> findThankMessagesByMemberId(Long memberId);
 
     @Query("SELECT COUNT(pf) " +
             "FROM ProvidedFile pf " +
             "JOIN pf.voiceFile vf " +
             "WHERE vf.memberId = :memberId")
-        // ProvidedFile의 voiceFile의 member의 id가 memberId인 ProvidedFile의 개수를 찾는 쿼리
     Long findTotalListenersByMemberId(@Param("memberId") Long memberId);
 
     @Query(value = """

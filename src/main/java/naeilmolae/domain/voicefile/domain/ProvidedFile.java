@@ -22,17 +22,15 @@ public class ProvidedFile extends BaseEntity {
     @JoinColumn(name = "voice_file_id")
     private VoiceFile voiceFile;
 
+    @OneToMany(mappedBy = "providedFile", cascade = CascadeType.ALL)
+    private List<ThanksMessage> thanksMessages;
+
     private Long consumerId;
-
-    @Column(length = 1000) // 최대 5개의 메시지를 저장하기 위해 길이를 늘림
-    private String thanksMessages; // 세미콜론(;)으로 구분하여 저장
-
     private boolean isConsumerSaved = false;
 
     public ProvidedFile(VoiceFile voiceFile, Long consumerId) {
         this.voiceFile = voiceFile;
         this.consumerId = consumerId;
-        this.thanksMessages = "";
     }
 
     /**
@@ -43,11 +41,10 @@ public class ProvidedFile extends BaseEntity {
     public boolean addThanksMessage(String message) {
         Set<String> messages = getThanksMessagesSet();
         if (messages.size() >= 5 || messages.contains(message)) {
-            return false; // 5개 이상이거나 중복이면 추가 안함
+            return false; // 5개 이상이거나 중복되면 추가 실패
         }
         messages.add(message);
-        // TODO spliter를 변경해야할듯 절대 안 쓸 거 같은 문자로 ㅋ.ㅋ.ㅋ.
-        this.thanksMessages = String.join(";", messages); // 다시 문자열로 변환하여 저장
+        this.thanksMessages = messages.stream().map((t) -> new ThanksMessage(this, message)).collect(Collectors.toList());
         return true;
     }
 
@@ -58,10 +55,11 @@ public class ProvidedFile extends BaseEntity {
      */
     public boolean removeThanksMessage(String message) {
         Set<String> messages = getThanksMessagesSet();
-        if (!messages.remove(message)) {
-            return false; // 메시지가 없으면 삭제 실패
+        if (!messages.contains(message)) {
+            return false; // 해당 메시지가 없으면 삭제 실패
         }
-        this.thanksMessages = String.join(";", messages); // 다시 문자열로 변환하여 저장
+        messages.remove(message);
+        this.thanksMessages = messages.stream().map((t) -> new ThanksMessage(this, message)).collect(Collectors.toList());
         return true;
     }
 
@@ -75,9 +73,9 @@ public class ProvidedFile extends BaseEntity {
      * @return 중복 없는 감사 메시지 Set
      */
     public Set<String> getThanksMessagesSet() {
-        if (thanksMessages == null || thanksMessages.isEmpty()) {
+        if (this.thanksMessages == null) {
             return new LinkedHashSet<>();
         }
-        return new LinkedHashSet<>(List.of(thanksMessages.split(";")));
+        return this.thanksMessages.stream().map(ThanksMessage::getMessage).collect(Collectors.toSet());
     }
 }

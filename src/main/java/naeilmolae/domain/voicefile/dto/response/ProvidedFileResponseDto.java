@@ -5,8 +5,10 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import naeilmolae.domain.voicefile.domain.ProvidedFile;
+import naeilmolae.domain.voicefile.domain.ThanksMessage;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -20,7 +22,7 @@ public class ProvidedFileResponseDto {
     private LocalDateTime createdAt;
 
     @Schema(description = "감사 메시지", example = "감사합니다")
-    private String thanksMessage;
+    private List<String> thanksMessage;
 
     @Schema(description = "알람 타입", example = "기상")
     private String alarmType;
@@ -28,7 +30,7 @@ public class ProvidedFileResponseDto {
     public static ProvidedFileResponseDto from(ProvidedFile providedFile, String alarmType) {
         return new ProvidedFileResponseDto(providedFile.getId(),
                 providedFile.getCreatedAt(),
-                providedFile.getThanksMessages(),
+                providedFile.getThanksMessages().stream().map(ThanksMessage::getMessage).toList(),
                 alarmType);
     }
 }

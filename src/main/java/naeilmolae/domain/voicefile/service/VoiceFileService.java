@@ -150,4 +150,8 @@ public class VoiceFileService {
 
         return voiceFile;
     }
+
+    public Long getVoiceFileCount(Long memberId) {
+        return voiceFileRepository.countByMemberId(memberId);
+    }
 }

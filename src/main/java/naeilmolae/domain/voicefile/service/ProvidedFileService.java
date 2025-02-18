@@ -10,6 +10,7 @@ import naeilmolae.domain.pushnotification.service.adapter.PushNotificationAdapte
 import naeilmolae.domain.voicefile.domain.ProvidedFile;
 import naeilmolae.domain.voicefile.domain.VoiceFile;
 import naeilmolae.domain.voicefile.domain.VoiceReactionType;
+import naeilmolae.domain.voicefile.dto.response.RetentionDto;
 import naeilmolae.domain.voicefile.dto.response.VoiceFileReactionSummaryResponseDto;
 import naeilmolae.domain.voicefile.repository.ProvidedFileRepository;
 import naeilmolae.global.common.exception.RestApiException;
@@ -19,6 +20,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.lang.annotation.Retention;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -97,6 +99,24 @@ public class ProvidedFileService {
         ProvidedFile providedFile = providedFileRepository.findByConsumerId(consumerId, providedFileId)
                 .orElseThrow(() -> new RestApiException(ProvidedFileErrorStatus._NOT_FOUND_FILE));
         return providedFile.setConsumerSaved();
+    }
+
+    public RetentionDto getRetentionData(Long memberId) {
+        Long voiceCount = voiceFileService.getVoiceFileCount(memberId);
+
+        List<String> reactionValues = providedFileRepository.findThankMessagesByMemberId(memberId);
+
+        Map<VoiceReactionType, Integer> reactionSummary = new HashMap<>();
+        for (VoiceReactionType reaction : VoiceReactionType.values()) {
+            long count = reactionValues.stream()
+                    .filter(value -> value.equals(reaction.getValue()))
+                    .count();
+            reactionSummary.put(reaction, (int) count);
+        }
+
+        return new RetentionDto(voiceCount,
+                reactionSummary.keySet().stream().count(),
+                reactionValues.stream().count());
     }
 
     // 청년의 반응 보여주기

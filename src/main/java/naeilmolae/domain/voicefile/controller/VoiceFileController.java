@@ -7,10 +7,7 @@ import naeilmolae.domain.member.domain.Member;
 import naeilmolae.domain.voicefile.domain.ProvidedFile;
 import naeilmolae.domain.voicefile.domain.VoiceFile;
 import naeilmolae.domain.voicefile.dto.request.UploadContentRequestDto;
-import naeilmolae.domain.voicefile.dto.response.AvailableVoiceFileResponseDto;
-import naeilmolae.domain.voicefile.dto.response.GptGenerationResponseDto;
-import naeilmolae.domain.voicefile.dto.response.VoiceFileMetaResponseDto;
-import naeilmolae.domain.voicefile.dto.response.VoiceFileResponseDto;
+import naeilmolae.domain.voicefile.dto.response.*;
 import naeilmolae.domain.voicefile.service.ProvidedFileService;
 import naeilmolae.domain.voicefile.service.VoiceFileService;
 import naeilmolae.global.common.base.BaseResponse;
@@ -26,8 +23,7 @@ public class VoiceFileController {
     private final VoiceFileService voiceFileService;
     private final ProvidedFileService providedFileService;
     private final S3FileComponent s3FileComponent;
-
-    private final AlarmAdapterService alarmAdapterService; 
+    private final AlarmAdapterService alarmAdapterService;
 
     @Operation(summary = "[VALID] [봉사자] 녹음 3-1단계: 스크립트 GPT에게 작성 요청", description = "GPT에게 스크립트 작성을 요청합니다.")
     @PostMapping("/{alarmId}/gpt")
@@ -89,9 +85,11 @@ public class VoiceFileController {
         return BaseResponse.onSuccess(new VoiceFileResponseDto(1L, "아침이야! 일어나서 간단한 스트레칭을 하고 아침의 피로를 날려보자!", "https://naeilmolae.s3.ap-northeast-2.amazonaws.com/voice/1_d9a12d65-278b-4df1-8b91-c70b8c25a8c3.wav"));
     }
 
-    @Operation(summary = "[청년] 튜토리얼 1단계: 예시 음성 데이터 조회", description = "예시 음성 데이터를 조회합니다.")
+    @Operation(summary = "[봉사자] 탈퇴 1단계: 전체 데이터 보여주기", description = "예시 음성 데이터를 조회합니다.")
     @GetMapping("/retention")
-    public BaseResponse<VoiceFileResponseDto> getRetentionData() { // 실제는 childrenCategoryId 임
-        return BaseResponse.onSuccess(new VoiceFileResponseDto(1L, "아침이야! 일어나서 간단한 스트레칭을 하고 아침의 피로를 날려보자!", "https://naeilmolae.s3.ap-northeast-2.amazonaws.com/voice/1_d9a12d65-278b-4df1-8b91-c70b8c25a8c3.wav"));
+    public BaseResponse<RetentionDto> getRetentionData(@CurrentMember Member member) { // 실제는 childrenCategoryId 임
+        return BaseResponse.onSuccess(providedFileService.getRetentionData(member.getId()));
     }
+
+
 }
