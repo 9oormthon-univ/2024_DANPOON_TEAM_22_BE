@@ -5,7 +5,7 @@ import naeilmolae.domain.voicefile.domain.VoiceFile;
 import naeilmolae.domain.voicefile.dto.request.AnalysisRequestDto;
 import naeilmolae.domain.voicefile.dto.response.AnalysisResponseDto;
 import naeilmolae.domain.voicefile.service.VoiceFileService;
-import naeilmolae.global.util.KafkaTopic;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.event.EventListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.KafkaHeaders;
@@ -20,6 +20,9 @@ public class KafkaVoiceFileEventListener implements VoiceFileEventListener {
     private final KafkaTemplate<String, AnalysisRequestDto> kafkaTemplate;
     private final VoiceFileService voiceFileService;
 
+    @Value("${kafka.topic.analysis.request}")
+    private String TOPIC;
+
     @Override
     @EventListener
     @Transactional
@@ -27,7 +30,7 @@ public class KafkaVoiceFileEventListener implements VoiceFileEventListener {
         VoiceFile voiceFile = voiceFileService.findById(event.voiceFileId());
         voiceFile.prepareAnalysis();
         AnalysisRequestDto analysisRequestDto = new AnalysisRequestDto(event.fileUrl(), event.content());
-        kafkaTemplate.setDefaultTopic(KafkaTopic.ANALYSIS_REQUEST);
+        kafkaTemplate.setDefaultTopic(TOPIC);
         kafkaTemplate.send(MessageBuilder.withPayload(analysisRequestDto)
                 .setHeader(KafkaHeaders.KEY, event.voiceFileId().toString())
                 .setHeader("requiredResponseType", AnalysisResponseDto.class.getName())
