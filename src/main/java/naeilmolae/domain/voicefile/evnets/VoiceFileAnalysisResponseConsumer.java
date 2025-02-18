@@ -28,7 +28,7 @@ public class VoiceFileAnalysisResponseConsumer {
      * @param analysisResponseDto
      * @param key
      */
-    @KafkaListener(topics = "#{@voiceFileAnalysisResponseConsumer.topic}", groupId = "voice-analysis-group1")
+    @KafkaListener(topics = "${kafka.topic.analysis.response}", groupId = "voice-analysis-group1")
     public void handleAnalysisResponse(
             @Payload AnalysisResponseDto analysisResponseDto,
             @Header(KafkaHeaders.RECEIVED_KEY) String key) {
