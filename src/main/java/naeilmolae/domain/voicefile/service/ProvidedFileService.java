@@ -8,6 +8,7 @@ import naeilmolae.domain.member.service.MemberService;
 import naeilmolae.domain.pushnotification.domain.NotificationType;
 import naeilmolae.domain.pushnotification.service.adapter.PushNotificationAdapterService;
 import naeilmolae.domain.voicefile.domain.ProvidedFile;
+import naeilmolae.domain.voicefile.domain.ThanksMessage;
 import naeilmolae.domain.voicefile.domain.VoiceFile;
 import naeilmolae.domain.voicefile.domain.VoiceReactionType;
 import naeilmolae.domain.voicefile.dto.response.RetentionDto;
@@ -103,8 +104,13 @@ public class ProvidedFileService {
 
     public RetentionDto getRetentionData(Long memberId) {
         Long voiceCount = voiceFileService.getVoiceFileCount(memberId);
+        Long thanksCount = 0L;
+        Long messageCount = 0L;
 
-        List<String> reactionValues = providedFileRepository.findThankMessagesByMemberId(memberId);
+        List<ThanksMessage> thankMessagesByMemberId = providedFileRepository.findThankMessagesByMemberId(memberId);
+        List<String> reactionValues = thankMessagesByMemberId.stream()
+                .map(ThanksMessage::getMessage)
+                .toList();
 
         Map<VoiceReactionType, Integer> reactionSummary = new HashMap<>();
         for (VoiceReactionType reaction : VoiceReactionType.values()) {
@@ -114,9 +120,12 @@ public class ProvidedFileService {
             reactionSummary.put(reaction, (int) count);
         }
 
+        thanksCount += (long) reactionSummary.values().stream().mapToInt(Integer::intValue).sum();
+        messageCount += (long) reactionValues.size();
+
         return new RetentionDto(voiceCount,
-                reactionSummary.keySet().stream().count(),
-                reactionValues.stream().count());
+                thanksCount,
+                messageCount);
     }
 
     // 청년의 반응 보여주기
@@ -130,7 +139,10 @@ public class ProvidedFileService {
 
     // 청년의 이모티콘 반응 요약
     private Map<VoiceReactionType, Integer> getReactionSummary(Long memberId) {
-        List<String> reactionValues = providedFileRepository.findThankMessagesByMemberId(memberId);
+        List<ThanksMessage> thankMessagesByMemberId = providedFileRepository.findThankMessagesByMemberId(memberId);
+        List<String> reactionValues = thankMessagesByMemberId.stream()
+                .map(ThanksMessage::getMessage)
+                .toList();
 
         Map<VoiceReactionType, Integer> reactionSummary = new HashMap<>();
         for (VoiceReactionType reaction : VoiceReactionType.values()) {

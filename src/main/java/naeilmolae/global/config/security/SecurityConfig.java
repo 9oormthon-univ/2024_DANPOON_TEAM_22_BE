@@ -47,7 +47,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    @Profile({"dev", "local"})
+    @Profile("!prod")
     public SecurityFilterChain devFilterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)

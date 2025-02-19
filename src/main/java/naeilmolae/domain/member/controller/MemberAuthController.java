@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import naeilmolae.domain.member.domain.LoginType;
 import naeilmolae.domain.member.domain.Member;
 import naeilmolae.domain.member.dto.response.MemberGenerateTokenResponseDto;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/auth")
+@Slf4j
 public class MemberAuthController {
     private final MemberAuthService memberAuthService;
     @Operation(summary = "로그인 API", description = "카카오, 비회원 로그인을 수행하는 API입니다.")
@@ -28,8 +30,8 @@ public class MemberAuthController {
     @PostMapping("/login")
     public BaseResponse<MemberLoginResponseDto> socialLogin(@RequestParam(value = "accessToken") String accessToken,
                                                             @RequestParam(value = "loginType") LoginType loginType) {
+        log.info(accessToken);
         return BaseResponse.onSuccess(memberAuthService.socialLogin(accessToken, loginType));
-
     }
 
     @Operation(summary = "accessToken 재발급 API", description = "refreshToken가 유효하다면 새로운 accessToken을 발급하는 API입니다.")

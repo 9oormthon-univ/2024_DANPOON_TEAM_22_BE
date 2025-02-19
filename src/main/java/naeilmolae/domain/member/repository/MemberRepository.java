@@ -20,4 +20,6 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     @Query("SELECT m FROM Member m JOIN FETCH m.helperMemberInfo h WHERE m.role = 'HELPER'")
     List<Member> findAllHelperMembersWithInfo(@Param("role") Role role);
 
+    Optional<Member> findByName(String name);
+
 }

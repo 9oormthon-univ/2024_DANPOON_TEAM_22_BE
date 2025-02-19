@@ -15,7 +15,7 @@ import naeilmolae.global.common.base.BaseEntity;
 public class HelperMemberInfo extends BaseEntity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
     private Long id;
 
     @Setter

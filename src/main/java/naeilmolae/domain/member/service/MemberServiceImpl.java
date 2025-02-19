@@ -119,7 +119,7 @@ public class MemberServiceImpl implements MemberService {
     @Transactional
     public MemberIdResponseDto updateYouthMemberInfo(Member member, YouthMemberInfoUpdateDto request) {
         Member loginMember = findById(member.getId());
-        YouthMemberInfo youthMemberInfo = member.getYouthMemberInfo();
+        YouthMemberInfo youthMemberInfo = loginMember.getYouthMemberInfo();
 
         if (youthMemberInfo == null) {
             throw new RestApiException(MemberErrorStatus.NOT_YOUTH);
@@ -147,7 +147,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public YouthMemberInfoResponseDto getYouthMemberInfo(Member member) {
         Member loginMember = findById(member.getId());
-        YouthMemberInfo youthMemberInfo = member.getYouthMemberInfo();
+        YouthMemberInfo youthMemberInfo = loginMember.getYouthMemberInfo();
 
         if (youthMemberInfo == null) {
             throw new RestApiException(MemberErrorStatus.NOT_YOUTH);

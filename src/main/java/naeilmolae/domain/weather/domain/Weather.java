@@ -19,6 +19,7 @@ public class Weather extends BaseEntity {
     private Grid grid;
 
     private WeatherCategory category;
+    @Column(name = "weather_value")
     private Double value;
 
     public Weather(Grid grid, WeatherCategory category, Double value) {

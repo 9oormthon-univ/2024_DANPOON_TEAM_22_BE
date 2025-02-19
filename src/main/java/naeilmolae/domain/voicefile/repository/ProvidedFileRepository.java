@@ -2,6 +2,7 @@ package naeilmolae.domain.voicefile.repository;
 
 
 import naeilmolae.domain.voicefile.domain.ProvidedFile;
+import naeilmolae.domain.voicefile.domain.ThanksMessage;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -28,11 +29,12 @@ public interface ProvidedFileRepository extends JpaRepository<ProvidedFile, Long
             AND p.id = :providedFileId""")
     Optional<ProvidedFile> findByConsumerId(Long consumerId, Long providedFileId);
 
-    @Query("SELECT pf.thanksMessages " +
+    @Query("SELECT tm " +
             "FROM ProvidedFile pf " +
+            "JOIN pf.thanksMessages tm " +
             "JOIN pf.voiceFile vf " +
             "WHERE vf.memberId = :memberId")
-    List<String> findThankMessagesByMemberId(Long memberId);
+    List<ThanksMessage> findThankMessagesByMemberId(@Param("memberId") Long memberId);
 
     @Query("SELECT COUNT(pf) " +
             "FROM ProvidedFile pf " +

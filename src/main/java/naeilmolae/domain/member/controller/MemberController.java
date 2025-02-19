@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import naeilmolae.domain.member.domain.Member;
 import naeilmolae.domain.member.domain.Role;
 import naeilmolae.domain.member.dto.request.YouthMemberInfoUpdateDto;
@@ -20,6 +21,8 @@ import naeilmolae.domain.member.service.MemberService;
 import naeilmolae.global.common.base.BaseResponse;
 import naeilmolae.global.config.security.auth.CurrentMember;
 import naeilmolae.global.util.S3FileComponent;
+import org.checkerframework.checker.index.qual.SameLen;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URL;
@@ -30,9 +33,13 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/v1/member")
 @RequiredArgsConstructor
+@Slf4j
 public class MemberController {
     private final MemberService memberService;
     private final S3FileComponent s3FileComponent;
+
+    @Value("${cloud.aws.s3.bucket}")
+    private String bucketName;
 
     @Operation(summary = "회원가입 API (멤버 기본 정보 등록)", description = "최초 멤버 정보를 등록하는 API입니다.")
     @ApiResponses( value = {
@@ -41,6 +48,8 @@ public class MemberController {
     @PostMapping
     public BaseResponse<MemberIdResponseDto> signUpInfo(@CurrentMember Member member,
                                                     @Valid @RequestBody MemberInfoRequestDto request) {
+        log.info("signUpInfo request: {}", request);
+        log.info("member: {}", member);
         return BaseResponse.onSuccess(memberService.signUpInfo(member, request));
     }
 
@@ -134,7 +143,7 @@ public class MemberController {
 
         Map<String, String> response = new HashMap<>();
         response.put("uploadUrl", presignedUrl.toString());
-        response.put("fileUrl", "https://" + "your-bucket-name" + ".s3.amazonaws.com/" + fileName);
+        response.put("fileUrl", "https://" + bucketName + ".s3.amazonaws.com/" + fileName);
 
         return BaseResponse.onSuccess(response);
     }
