@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import naeilmolae.domain.alarm.dto.response.AlarmResponseDto;
 import naeilmolae.domain.alarm.service.AlarmAdapterService;
 import naeilmolae.domain.member.domain.Member;
+import naeilmolae.domain.member.dto.response.SimpleMemberDto;
+import naeilmolae.domain.member.service.MemberAdapterService;
 import naeilmolae.domain.voicefile.domain.ProvidedFile;
 import naeilmolae.domain.voicefile.dto.request.ThanksMessageRequestDto;
 import naeilmolae.domain.voicefile.dto.response.ProvidedFileResponseDto;
@@ -33,6 +35,7 @@ public class ProvidedFileController {
     private final ProvidedFileService providedFileService;
 
     private final AlarmAdapterService alarmAdapterService;
+    private final MemberAdapterService memberAdapterService;
 
     @Operation(summary = "[봉사자] 동기부여 2단계: 자신의 녹음에 대해 사람들이 남긴 정보 요약 API", description = "동기부여 메인 페이지 내용, 자신의 녹음에 대해 사람들이 남긴 정보 요약")
     @GetMapping("/summary")
@@ -56,11 +59,17 @@ public class ProvidedFileController {
         // Step 2: AlarmId를 사용하여 AlarmResponseDto Map 생성
         Map<Long, AlarmResponseDto> alarms = alarmAdapterService.findAlarmsByIds(alarmIds);
 
-        // Step 3: Page의 T를 ProvidedFileResponseDto로 변환
+        // Step 3: 청년 맴버 조회
+        List<Long> ids = providedFiles.stream().map(ProvidedFile::getConsumerId).collect(Collectors.toList());
+        Map<Long, SimpleMemberDto> memberInfoMap = memberAdapterService.getSimpleMemberDtoMapByIds(ids);
+
+        // Step 4: Page의 T를 ProvidedFileResponseDto로 변환
         Page<ProvidedFileResponseDto> responseDtos = providedFiles.map(providedFile -> {
             AlarmResponseDto alarm = alarms.get(providedFile.getVoiceFile().getAlarmId());
-            return ProvidedFileResponseDto.from(providedFile, alarm.getAlarmCategory());
+            return ProvidedFileResponseDto.from(providedFile, alarm.getAlarmCategory(), memberInfoMap.get(providedFile.getConsumerId()));
         });
+
+
 
         return BaseResponse.onSuccess(responseDtos);
     }

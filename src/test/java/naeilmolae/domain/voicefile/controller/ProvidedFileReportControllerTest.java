@@ -32,7 +32,7 @@ class ProvidedFileReportControllerTest extends BaseTest {
     ProvidedFileReportRepository providedFileReportRepository;
 
     @Test
-    void likeProvidedFile() {
+    void 봉사자_감사_메시지_신고_성공() {
         // 이전 조회
         String uriString = UriComponentsBuilder.fromUriString(PREFIX + "/list")
                 .queryParam("parentCategory", AlarmCategory.GO_OUT)

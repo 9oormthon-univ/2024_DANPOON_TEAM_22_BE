@@ -5,7 +5,6 @@ import naeilmolae.domain.alarm.domain.AlarmCategory;
 import naeilmolae.domain.member.domain.Role;
 import naeilmolae.domain.pushnotification.service.adapter.PushNotificationAdapterService;
 import naeilmolae.domain.voicefile.dto.request.ThanksMessageRequestDto;
-import naeilmolae.domain.voicefile.dto.response.ProvidedFileResponseDto;
 import naeilmolae.domain.voicefile.repository.ProvidedFileRepository;
 import naeilmolae.global.common.base.BaseResponse;
 import org.junit.jupiter.api.Test;
@@ -32,7 +31,7 @@ class ProvidedFileControllerTest extends BaseTest {
     private PushNotificationAdapterService pushNotificationAdapterService;
 
     @Test
-    void getProvidedFileList_성공() {
+    void 봉사자_감사_메시지_조회_성공() {
         // given
         String uriString = UriComponentsBuilder.fromUriString(PREFIX + "/list")
                 .queryParam("parentCategory", AlarmCategory.WAKE_UP)
@@ -50,7 +49,7 @@ class ProvidedFileControllerTest extends BaseTest {
     }
 
     @Test
-    void likeProvidedFile_성공() {
+    void 청년_감사_메시지_성공() {
         doNothing().when(pushNotificationAdapterService).sendNotificationThankYouMessage(anyLong());
 
         Long providedFileId = 1L;
@@ -75,7 +74,7 @@ class ProvidedFileControllerTest extends BaseTest {
     }
 
     @Test
-    void likeProvidedFile_성공_중복메시지() {
+    void 청년_감사_메시지_성공_중복메시지() {
         doNothing().when(pushNotificationAdapterService).sendNotificationThankYouMessage(anyLong());
 
         Long providedFileId = 1L;
@@ -99,7 +98,7 @@ class ProvidedFileControllerTest extends BaseTest {
     }
 
     @Test
-    void deleteLikeProvidedFile_성공() {
+    void 청년_감사_메시지_삭제_성공() {
         doNothing().when(pushNotificationAdapterService).sendNotificationThankYouMessage(anyLong());
 
         Long providedFileId = 1L;
@@ -123,7 +122,7 @@ class ProvidedFileControllerTest extends BaseTest {
     }
 
     @Test
-    void deleteLikeProvidedFile_없는_메시지_성공() {
+    void 청년_감사_메시지_삭제_없는_메시지_성공() {
         doNothing().when(pushNotificationAdapterService).sendNotificationThankYouMessage(anyLong());
 
         Long providedFileId = 1L;

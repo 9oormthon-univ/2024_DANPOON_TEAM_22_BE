@@ -32,7 +32,7 @@ class VoiceFileControllerTest extends BaseTest {
     String PREFIX = "/api/v1/voicefiles";
 
     @Test
-    void retention_성공() {
+    void 봉사자_탈퇴전_retention_조회_성공() {
         // when
         String uriString = UriComponentsBuilder.fromUriString(PREFIX + "/retention").toUriString();
         BaseResponse<RetentionDto> body = restTemplate.exchange(
@@ -52,7 +52,7 @@ class VoiceFileControllerTest extends BaseTest {
     }
 
     @Test
-    void uploadContent_성공() {
+    void 봉사자_스크립트_gpt_성공() {
         // when
         Long alarmId = 1L;
         String uriString = UriComponentsBuilder.fromUriString(PREFIX + "/{alarmId}/self")
@@ -78,7 +78,7 @@ class VoiceFileControllerTest extends BaseTest {
     }
 
     @Test
-    void uploadContent_실패_올바르지_않은_내용() {
+    void 봉사자_스크립트_gpt_실패_올바르지_않은_내용() {
         // when
         Long alarmId = 1L;
         String uriString = UriComponentsBuilder.fromUriString(PREFIX + "/{alarmId}/self")
@@ -100,7 +100,7 @@ class VoiceFileControllerTest extends BaseTest {
     }
 
     @Test
-    void uploadContent_실패_비속어() {
+    void 봉사자_스크립트_gpt_실패_비속어() {
         // when
         Long alarmId = 1L;
         String uriString = UriComponentsBuilder.fromUriString(PREFIX + "/{alarmId}/self")
@@ -121,7 +121,7 @@ class VoiceFileControllerTest extends BaseTest {
     }
 
     @Test
-    void analysisVoiceFile_아직_분석_중이지_않음() {
+    void 봉사자_분석_요청_결과_아직_분석_중이지_않음() {
         // given
         Long voiceFileId = 4L;
         String uriString = UriComponentsBuilder.fromUriString(PREFIX + "/analysis/{voiceFileId}")
@@ -141,7 +141,7 @@ class VoiceFileControllerTest extends BaseTest {
     }
 
     @Test
-    void analysisVoiceFile_그대로_읽지_않음() {
+    void 봉사자_분석_요청_결과_그대로_읽지_않음() {
         // given
         Long voiceFileId = 5L;
         String uriString = UriComponentsBuilder.fromUriString(PREFIX + "/analysis/{voiceFileId}")
@@ -161,7 +161,7 @@ class VoiceFileControllerTest extends BaseTest {
     }
 
     @Test
-    void analysisVoiceFile_욕설() {
+    void 봉사자_분석_요청_결과_욕설() {
         // given
         Long voiceFileId = 6L;
         String uriString = UriComponentsBuilder.fromUriString(PREFIX + "/analysis/{voiceFileId}")
@@ -181,7 +181,7 @@ class VoiceFileControllerTest extends BaseTest {
     }
 
     @Test
-    void getAvailableDataList_성공() {
+    void 청년_응원_메시지_조회_성공() {
         // given
         Long alarmId = 1L;
         String uriString = UriComponentsBuilder.fromUriString(PREFIX)

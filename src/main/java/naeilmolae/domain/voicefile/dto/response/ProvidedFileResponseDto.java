@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import naeilmolae.domain.member.dto.response.SimpleMemberDto;
 import naeilmolae.domain.voicefile.domain.ProvidedFile;
 import naeilmolae.domain.voicefile.domain.ThanksMessage;
 
@@ -27,10 +28,13 @@ public class ProvidedFileResponseDto {
     @Schema(description = "알람 타입", example = "기상")
     private String alarmType;
 
-    public static ProvidedFileResponseDto from(ProvidedFile providedFile, String alarmType) {
+    private SimpleMemberDto member;
+
+    public static ProvidedFileResponseDto from(ProvidedFile providedFile, String alarmType, SimpleMemberDto simpleMemberDto) {
         return new ProvidedFileResponseDto(providedFile.getId(),
                 providedFile.getCreatedAt(),
                 providedFile.getThanksMessages().stream().map(ThanksMessage::getMessage).toList(),
-                alarmType);
+                alarmType,
+                simpleMemberDto);
     }
 }

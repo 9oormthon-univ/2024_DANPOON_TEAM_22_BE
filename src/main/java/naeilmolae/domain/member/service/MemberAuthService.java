@@ -2,9 +2,10 @@ package naeilmolae.domain.member.service;
 
 import naeilmolae.domain.member.domain.LoginType;
 import naeilmolae.domain.member.domain.Member;
-import naeilmolae.domain.member.dto.response.MemberGenerateTokenResponseDto;
-import naeilmolae.domain.member.dto.response.MemberIdResponseDto;
-import naeilmolae.domain.member.dto.response.MemberLoginResponseDto;
+import naeilmolae.domain.member.dto.response.*;
+
+import java.util.List;
+import java.util.Map;
 
 public interface MemberAuthService {
     // 소셜 로그인
@@ -13,6 +14,7 @@ public interface MemberAuthService {
     MemberGenerateTokenResponseDto generateNewAccessToken(String refreshToken, Member member);
     // 로그아웃
     MemberIdResponseDto logout(Member member);
+
 
 }
 

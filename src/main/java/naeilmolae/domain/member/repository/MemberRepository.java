@@ -20,6 +20,21 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     @Query("SELECT m FROM Member m JOIN FETCH m.helperMemberInfo h WHERE m.role = 'HELPER'")
     List<Member> findAllHelperMembersWithInfo(@Param("role") Role role);
 
+    List<Member> findByIdIn(List<Long> ids);
+
     Optional<Member> findByName(String name);
+
+    /**
+     * 제공된 파일의 ID 목록을 받아 해당 파일을 제공한 회원 정보를 조회
+     * @param providedFileIds
+     * @return
+     */
+    @Query("select pf.id, m " +
+            "from ProvidedFile pf " +
+            "join pf.voiceFile vf " +
+            "join Member m on vf.memberId = m.id " +
+            "where pf.id in :providedFileIds")
+    List<Object[]> findProvidedFileMemberPairs(@Param("providedFileIds") List<Long> providedFileIds);
+
 
 }
