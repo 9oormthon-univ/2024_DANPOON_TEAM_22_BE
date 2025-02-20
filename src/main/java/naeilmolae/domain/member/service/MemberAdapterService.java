@@ -5,6 +5,8 @@ import naeilmolae.domain.member.domain.Member;
 import naeilmolae.domain.member.domain.Role;
 import naeilmolae.domain.member.dto.response.SimpleMemberDto;
 import naeilmolae.domain.member.repository.MemberRepository;
+import naeilmolae.domain.member.status.MemberErrorStatus;
+import naeilmolae.global.common.exception.RestApiException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -42,6 +44,12 @@ public class MemberAdapterService {
         return members.stream()
                 .map(SimpleMemberDto::from)
                 .collect(Collectors.toMap(SimpleMemberDto::getId, Function.identity()));
+    }
+
+    public SimpleMemberDto getSimpleMemberDtoByVoiceFileId(Long voiceFileId) {
+        Member member = memberRepository.findMemberByVoiceFileId(voiceFileId)
+                .orElseThrow(() -> new RestApiException(MemberErrorStatus.EMPTY_MEMBER));
+        return SimpleMemberDto.from(member);
     }
 
 }

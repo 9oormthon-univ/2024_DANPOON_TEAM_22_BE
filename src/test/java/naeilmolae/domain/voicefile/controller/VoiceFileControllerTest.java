@@ -183,7 +183,7 @@ class VoiceFileControllerTest extends BaseTest {
     @Test
     void 청년_응원_메시지_조회_성공() {
         // given
-        Long alarmId = 1L;
+        Long alarmId = 6L;
         String uriString = UriComponentsBuilder.fromUriString(PREFIX)
                 .queryParam("alarm-id", alarmId)
                 .toUriString();

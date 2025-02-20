@@ -2,6 +2,7 @@ package naeilmolae.domain.voicefile.dto.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
+import naeilmolae.domain.member.dto.response.SimpleMemberDto;
 import naeilmolae.domain.voicefile.domain.VoiceFile;
 
 @Getter
@@ -21,12 +22,15 @@ public class AvailableVoiceFileResponseDto {
 
     private Long providedFileId;
 
-    public static AvailableVoiceFileResponseDto from(VoiceFile voiceFile, Long providedFileId) {
+    private SimpleMemberDto member;
+
+    public static AvailableVoiceFileResponseDto from(VoiceFile voiceFile, Long providedFileId, SimpleMemberDto simpleMemberDto) {
         AvailableVoiceFileResponseDto availableVoiceFileResponseDto = new AvailableVoiceFileResponseDto();
         availableVoiceFileResponseDto.setVoiceFileId(voiceFile.getId());
         availableVoiceFileResponseDto.setFileUrl(voiceFile.getFileUrl());
         availableVoiceFileResponseDto.setProvidedFileId(providedFileId);
         availableVoiceFileResponseDto.setContent(voiceFile.getContent());
+        availableVoiceFileResponseDto.setMember(simpleMemberDto);
 
         return availableVoiceFileResponseDto;
     }

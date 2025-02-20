@@ -36,5 +36,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
             "where pf.id in :providedFileIds")
     List<Object[]> findProvidedFileMemberPairs(@Param("providedFileIds") List<Long> providedFileIds);
 
+    @Query("select m from Member m where m.id = (select v.memberId from VoiceFile v where v.id = :voiceFileId)")
+    Optional<Member> findMemberByVoiceFileId(@Param("voiceFileId") Long voiceFileId);
 
 }

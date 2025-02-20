@@ -49,7 +49,7 @@ class ProvidedFileControllerTest extends BaseTest {
     }
 
     @Test
-    void 청년_감사_메시지_성공() {
+    void 청년_감사_메시지_보내기_성공() {
         doNothing().when(pushNotificationAdapterService).sendNotificationThankYouMessage(anyLong());
 
         Long providedFileId = 1L;

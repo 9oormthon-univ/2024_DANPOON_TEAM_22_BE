@@ -4,6 +4,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import naeilmolae.domain.alarm.service.AlarmAdapterService;
 import naeilmolae.domain.member.domain.Member;
+import naeilmolae.domain.member.dto.response.SimpleMemberDto;
+import naeilmolae.domain.member.service.MemberAdapterService;
 import naeilmolae.domain.voicefile.domain.ProvidedFile;
 import naeilmolae.domain.voicefile.domain.VoiceFile;
 import naeilmolae.domain.voicefile.dto.request.UploadContentRequestDto;
@@ -22,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class VoiceFileController {
     private final VoiceFileService voiceFileService;
     private final ProvidedFileService providedFileService;
+    private final MemberAdapterService memberAdapterService;
     private final S3FileComponent s3FileComponent;
     private final AlarmAdapterService alarmAdapterService;
 
@@ -70,13 +73,14 @@ public class VoiceFileController {
         return BaseResponse.onSuccess("OK");
     }
 
-    @Operation(summary = "[VALID] [청년] 청취 1단계: 사용 가능한 음성 파일 ID 조회", description = "사용자가 청취할 수 있는 음성 파일 ID를 조회합니다.")
+    @Operation(summary = "[VALID]  [청년] 청취 1단계: 사용 가능한 음성 파일 ID 조회", description = "사용자가 청취할 수 있는 음성 파일 ID를 조회합니다.")
     @GetMapping
     public BaseResponse<AvailableVoiceFileResponseDto> getAvailableDataList(@CurrentMember Member member,
                                                                             @RequestParam("alarm-id") Long alarmId) { // 실제는 childrenCategoryId 임
         VoiceFile voiceFile = voiceFileService.getAvailableDataList(member.getId(), alarmId);
         ProvidedFile save = providedFileService.save(member.getId(), voiceFile.getId());
-        return BaseResponse.onSuccess(AvailableVoiceFileResponseDto.from(voiceFile, save.getId()));
+        SimpleMemberDto memberDto = memberAdapterService.getSimpleMemberDtoByVoiceFileId(voiceFile.getId());
+        return BaseResponse.onSuccess(AvailableVoiceFileResponseDto.from(voiceFile, save.getId(), memberDto));
     }
 
     @Operation(summary = "[청년] 튜토리얼 1단계: 예시 음성 데이터 조회", description = "예시 음성 데이터를 조회합니다.")
