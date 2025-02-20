@@ -96,6 +96,4 @@ public class ProvidedFileController {
         providedFileService.bookmarkProvidedFile(member.getId(), providedFileId);
         return BaseResponse.onSuccess(providedFileService.bookmarkProvidedFile(member.getId(), providedFileId));
     }
-
-    // TODO 감사 메시지 삭제 api
 }
