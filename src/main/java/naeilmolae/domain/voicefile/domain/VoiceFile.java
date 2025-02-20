@@ -13,6 +13,10 @@ import static naeilmolae.domain.voicefile.domain.VoiceFileStatus.AUDIO_SUBMITTED
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(indexes = {
+        @Index(name = "idx_voicefile_member", columnList = "member_id"),
+        @Index(name = "idx_voicefile_alarm", columnList = "alarm_id")
+})
 public class VoiceFile extends BaseEntity {
 
     @Id

@@ -45,7 +45,7 @@ public interface ProvidedFileRepository extends JpaRepository<ProvidedFile, Long
     @Query(value = """
         select pf 
         from ProvidedFile pf 
-        JOIN FETCH pf.voiceFile 
+        JOIN FETCH pf.voiceFile pfv
         where pf.voiceFile.memberId = :memberId 
         and pf.voiceFile.alarmId in :alarmIds
         and not exists (
