@@ -62,7 +62,7 @@ public class VoiceFileService {
             } else if (checkScriptRelevancePrompt.getReason() == 1) {
                 throw new RestApiException(AnalysisErrorStatus._PROFANITY_DETECTED);
             } else {
-                throw new RuntimeException("Unknown reason: " + checkScriptRelevancePrompt.getReason());
+                throw new RestApiException(AnalysisErrorStatus._GPT_ERROR);
             }
         }
     }
@@ -126,7 +126,7 @@ public class VoiceFileService {
             case SUCCESS:
                 return analysisResult;
             default:
-                throw new RestApiException(AnalysisErrorStatus._ANALYSIS_NOT_YET);
+                throw new RestApiException(AnalysisErrorStatus._ERROR_STATUS);
         }
     }
 
