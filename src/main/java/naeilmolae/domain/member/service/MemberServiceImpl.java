@@ -161,7 +161,8 @@ public class MemberServiceImpl implements MemberService {
     }
 
     // 역할에 따라 추가 정보 처리
-    private void handleRoleSpecificInfo(Member member, YouthMemberInfoDto request) {
+    @Transactional
+    public void handleRoleSpecificInfo(Member member, YouthMemberInfoDto request) {
         if (member.getRole().equals(Role.YOUTH)) {
             // 청년 정보 처리
             YouthMemberInfo youthMemberInfo = member.getYouthMemberInfo();
