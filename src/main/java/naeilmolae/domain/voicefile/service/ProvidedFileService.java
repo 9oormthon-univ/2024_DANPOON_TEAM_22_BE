@@ -74,6 +74,10 @@ public class ProvidedFileService {
         ProvidedFile providedFile = providedFileRepository.findByConsumerId(consumerId, providedFileId)
                 .orElseThrow(() -> new RestApiException(ProvidedFileErrorStatus._NOT_FOUND_FILE));
 
+        if (providedFile.getThanksMessages().size() >= 5) {
+            throw new RestApiException(ProvidedFileErrorStatus._EXCEED_MESSAGE);
+        }
+
         providedFile.addThanksMessage(message);
         // 봉사자에게 알림 보내기
         pushNotificationAdapterService.sendNotificationThankYouMessage(providedFile.getVoiceFile().getMemberId());
