@@ -1,7 +1,7 @@
 package naeilmolae.domain.voicefile.service;
 
 import lombok.RequiredArgsConstructor;
-import naeilmolae.domain.alarm.domain.AlarmCategory;
+import lombok.extern.slf4j.Slf4j;
 import naeilmolae.domain.alarm.dto.response.AlarmCategoryMessageResponseDto;
 import naeilmolae.domain.alarm.service.AlarmAdapterService;
 import naeilmolae.domain.chatgpt.dto.ScriptValidationResponseDto;
@@ -26,6 +26,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 @Transactional(readOnly = true)
 public class VoiceFileService {
     private final VoiceFileRepository voiceFileRepository;
@@ -42,6 +43,7 @@ public class VoiceFileService {
         String title = alarmCategoryMessageResponseDto.getTitle();
 
         Integer reasonCode = verifyContent(title, content);
+
         VoiceFile voiceFile = new VoiceFile(memberId, alarmId, content);
         return voiceFileRepository.save(voiceFile);
     }
@@ -50,26 +52,26 @@ public class VoiceFileService {
     public Integer verifyContent(String title, String content) {
         ScriptValidationResponseDto checkScriptRelevancePrompt
                 = chatGptService.getCheckScriptRelevancePrompt(title, content);
-        if (!checkScriptRelevancePrompt.isProper()) {
-            throw new RestApiException(AnalysisErrorStatus._DENIED_BY_GPT);
-        }
-        else {
+        log.info("checkScriptRelevancePrompt = {}", checkScriptRelevancePrompt);
+        if (checkScriptRelevancePrompt.isProper()) {
             return checkScriptRelevancePrompt.getReason();
         }
-    }
-
-    public boolean updateSttContent(Long voiceFileId, String sttContent) {
-        VoiceFile voiceFile = voiceFileRepository.findById(voiceFileId)
-                .orElseThrow(() -> new RestApiException(VoiceFileErrorStatus._NO_SUCH_FILE));
-        voiceFile.updateSttContent(sttContent);
-        return true;
+        else {
+            if (checkScriptRelevancePrompt.getReason() == 0) {
+                throw new RestApiException(AnalysisErrorStatus._INVALID_CONTEXT);
+            } else if (checkScriptRelevancePrompt.getReason() == 1) {
+                throw new RestApiException(AnalysisErrorStatus._PROFANITY_DETECTED);
+            } else {
+                throw new RuntimeException("Unknown reason: " + checkScriptRelevancePrompt.getReason());
+            }
+        }
     }
 
     // 분석 결과 저장
     @Transactional
     public void saveResult(Long voiceFileId, AnalysisResponseDto analysisResponseDto) {
         VoiceFile voiceFile = voiceFileRepository.findById(voiceFileId)
-                .orElseThrow(() -> new RestApiException(AnalysisErrorStatus._CANNOT_SAVE_ANALYSIS_RESULT));
+                .orElseThrow();
 
         voiceFile.saveResult(AnalysisResultStatus.fromString(analysisResponseDto.analysisResultStatus()),
                 analysisResponseDto.sttContent());

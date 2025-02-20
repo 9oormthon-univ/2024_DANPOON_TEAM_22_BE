@@ -5,7 +5,6 @@ import naeilmolae.domain.alarm.dto.response.AlarmResponseDto;
 import naeilmolae.domain.alarm.service.AlarmAdapterService;
 import naeilmolae.domain.member.domain.Member;
 import naeilmolae.domain.member.service.MemberService;
-import naeilmolae.domain.pushnotification.domain.NotificationType;
 import naeilmolae.domain.pushnotification.service.adapter.PushNotificationAdapterService;
 import naeilmolae.domain.voicefile.domain.ProvidedFile;
 import naeilmolae.domain.voicefile.domain.ThanksMessage;
@@ -21,7 +20,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.lang.annotation.Retention;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -75,13 +73,12 @@ public class ProvidedFileService {
     public List<String> likeProvidedFile(Long consumerId, Long providedFileId, String message) {
         ProvidedFile providedFile = providedFileRepository.findByConsumerId(consumerId, providedFileId)
                 .orElseThrow(() -> new RestApiException(ProvidedFileErrorStatus._NOT_FOUND_FILE));
-        if (!providedFile.addThanksMessage(message)) {
-            throw new RestApiException(ProvidedFileErrorStatus._EXCEED_MESSAGE);
-        }
+
+        providedFile.addThanksMessage(message);
         // 봉사자에게 알림 보내기
         pushNotificationAdapterService.sendNotificationThankYouMessage(providedFile.getVoiceFile().getMemberId());
 
-        return providedFile.getThanksMessagesSet().stream().toList();
+        return providedFile.getThanksMessages().stream().map(ThanksMessage::getMessage).toList();
     }
 
     @Transactional
@@ -91,7 +88,7 @@ public class ProvidedFileService {
 
         providedFile.removeThanksMessage(message);
 
-        return providedFile.getThanksMessagesSet().stream().toList();
+        return providedFile.getThanksMessages().stream().map(ThanksMessage::getMessage).toList();
     }
 
     // 음성 파일 북마크하기

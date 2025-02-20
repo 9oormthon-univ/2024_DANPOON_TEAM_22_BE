@@ -70,6 +70,7 @@ dependencies {
 
 	runtimeOnly 'com.h2database:h2'
 	testImplementation 'org.apache.httpcomponents.client5:httpclient5:5.2'
+	testImplementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
 }
 
 tasks.named('test') {

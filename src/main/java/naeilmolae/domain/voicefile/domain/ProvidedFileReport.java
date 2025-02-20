@@ -16,7 +16,7 @@ public class ProvidedFileReport extends BaseEntity {
     private Long id;
 
     // 신고된 ProvidedFile과 다대일 관계 설정
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "provided_file_id", nullable = false)
     private ProvidedFile providedFile;
 

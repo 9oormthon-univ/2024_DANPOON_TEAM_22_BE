@@ -38,9 +38,9 @@ public final class ChatGptService {
 
 
 
-    public ScriptValidationResponseDto getCheckScriptRelevancePrompt(String sentence, String Situation) {
+    public ScriptValidationResponseDto getCheckScriptRelevancePrompt(String situation, String sentence) {
         // 템플릿 생성
-        String prompt = promptManager.createCheckForOffensiveLanguagePrompt(Situation, sentence);
+        String prompt = promptManager.createCheckForOffensiveLanguagePrompt(situation, sentence);
 
         ChatGptResponse response = openAiApiClient.sendRequestToModel(
                 model,

@@ -1,16 +1,14 @@
 package naeilmolae.domain.voicefile.dto.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import naeilmolae.domain.voicefile.domain.VoiceFile;
 
 @Getter
 @Setter(value = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Schema(description = "사용 가능한 음성 파일 응답 객체")
+@ToString
 public class AvailableVoiceFileResponseDto {
 
     @Schema(description = "음성 파일 고유 ID (Long)", example = "1")

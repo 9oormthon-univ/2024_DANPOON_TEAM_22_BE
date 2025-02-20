@@ -70,21 +70,5 @@ services:
       KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
       CLUSTER_ID: ${KAFKA_CLUSTER_ID:-MkU3OEVBNTcwNTJENDM2Qk}
 
-
-  kafka-ui:
-    image: provectuslabs/kafka-ui
-    platform: linux/amd64
-    container_name: kafka-ui
-    ports:
-      - "9000:8080"
-    restart: always
-    environment:
-      KAFKA_CLUSTERS_0_NAME: ${PROFILE:-local}
-      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka-1:29092,kafka-2:29092,kafka-3:29092
-    depends_on:
-      - kafka-1
-      - kafka-2
-      - kafka-3
-
 volumes:
   mysql_data:

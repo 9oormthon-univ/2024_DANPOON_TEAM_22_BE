@@ -20,6 +20,7 @@ public class ThanksMessage extends BaseEntity {
     private String message;
 
     public ThanksMessage(ProvidedFile providedFile, String message) {
+        this.providedFile = providedFile;
         this.message = message;
     }
 }

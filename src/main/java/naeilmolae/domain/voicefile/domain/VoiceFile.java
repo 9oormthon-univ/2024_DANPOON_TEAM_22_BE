@@ -21,9 +21,6 @@ public class VoiceFile extends BaseEntity {
     @Column(name = "content", columnDefinition = "TEXT")
     private String content; // 대용량 텍스트
 
-    @Column(name = "stt_content", columnDefinition = "TEXT")
-    private String sttContent;
-
     @Column(unique = true)
     private String fileUrl; // 저장된 음성 url
 
@@ -68,11 +65,6 @@ public class VoiceFile extends BaseEntity {
         this.fileUrl = fileUrl;
         this.status = AUDIO_SUBMITTED;
     }
-
-    public void updateSttContent(String sttContent) {
-        this.sttContent = sttContent;
-    }
-
 
     public void prepareAnalysis() {
         if (this.status != AUDIO_SUBMITTED) {

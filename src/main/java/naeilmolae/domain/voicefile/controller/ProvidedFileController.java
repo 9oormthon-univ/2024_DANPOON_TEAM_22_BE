@@ -77,7 +77,7 @@ public class ProvidedFileController {
         return BaseResponse.onSuccess(strings);
     }
 
-    @Operation(summary = "[VALID] [청년] 청취 3-23단계: 감사 메시지 지우기", description = "청년이 봉사자에게 감사 메시지를 제공합니다.")
+    @Operation(summary = "[VALID] [청년] 청취 3-2단계: 감사 메시지 지우기", description = "청년이 봉사자에게 감사 메시지를 제공합니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "COMMON200", description = "저장 성공"),
     })

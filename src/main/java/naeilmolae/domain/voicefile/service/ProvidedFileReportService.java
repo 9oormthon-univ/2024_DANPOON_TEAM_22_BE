@@ -21,7 +21,7 @@ public class ProvidedFileReportService {
     private final MemberAdapterService memberAdapterService;
 
     @Transactional
-    public boolean reportProvidedFile(Long providedFileId, Long reporterId, String reason) {
+    public boolean reportProvidedFile(Long reporterId, Long providedFileId, String reason) {
         // 신고할 ProvidedFile 조회
         ProvidedFile providedFile = providedFileRepository.findById(providedFileId)
                 .orElseThrow(() -> new IllegalArgumentException("ProvidedFile not found"));
