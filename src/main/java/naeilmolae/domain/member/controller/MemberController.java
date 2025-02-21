@@ -7,21 +7,18 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import naeilmolae.domain.member.domain.HelperMemberInfo;
 import naeilmolae.domain.member.domain.Member;
 import naeilmolae.domain.member.domain.Role;
 import naeilmolae.domain.member.dto.request.YouthMemberInfoUpdateDto;
 import naeilmolae.domain.member.dto.YouthMemberInfoDto;
 import naeilmolae.domain.member.dto.request.MemberInfoRequestDto;
 import naeilmolae.domain.member.dto.request.WithdrawalReasonRequest;
-import naeilmolae.domain.member.dto.response.MemberIdResponseDto;
-import naeilmolae.domain.member.dto.response.MemberInfoResponseDto;
-import naeilmolae.domain.member.dto.response.MemberNumResponseDto;
-import naeilmolae.domain.member.dto.response.YouthMemberInfoResponseDto;
+import naeilmolae.domain.member.dto.response.*;
 import naeilmolae.domain.member.service.MemberService;
 import naeilmolae.global.common.base.BaseResponse;
 import naeilmolae.global.config.security.auth.CurrentMember;
 import naeilmolae.global.util.S3FileComponent;
-import org.checkerframework.checker.index.qual.SameLen;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
@@ -100,6 +97,16 @@ public class MemberController {
     @GetMapping("/info/youth")
     public BaseResponse<YouthMemberInfoResponseDto> getYouthInfo(@CurrentMember Member member) {
         return BaseResponse.onSuccess(memberService.getYouthMemberInfo(member));
+    }
+
+    @Operation(summary = "봉사자 회원 정보 조회 API", description = "봉사자 멤버 정보 조회하는 API입니다.")
+    @ApiResponses( value = {
+            @ApiResponse(responseCode = "COMMON200", description = "성공")
+    })
+    @GetMapping("/info/helper")
+    public BaseResponse<HelperMemberInfoResponseDto> getHelperInfo(@CurrentMember Member member) {
+        HelperMemberInfo helperMemberInfo = memberService.getHelperMemberInfo(member);
+        return BaseResponse.onSuccess(HelperMemberInfoResponseDto.of(helperMemberInfo));
     }
 
 

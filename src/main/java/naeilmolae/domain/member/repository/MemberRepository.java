@@ -20,6 +20,10 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     @Query("SELECT m FROM Member m JOIN FETCH m.helperMemberInfo h WHERE m.role = 'HELPER'")
     List<Member> findAllHelperMembersWithInfo(@Param("role") Role role);
 
+    // 특정 회원이 HelperMemberInfo를 가지고 있는지 확인하는 메서드
+    @Query("SELECT m FROM Member m WHERE m.id = :memberId AND m.helperMemberInfo IS NOT NULL")
+    Optional<Member> findByIdAndHasHelperInfo(@Param("memberId") Long memberId);
+
     List<Member> findByIdIn(List<Long> ids);
 
     Optional<Member> findByName(String name);

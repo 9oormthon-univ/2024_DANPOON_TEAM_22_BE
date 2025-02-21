@@ -10,10 +10,7 @@ import naeilmolae.domain.member.dto.YouthMemberInfoDto;
 import naeilmolae.domain.member.dto.request.MemberInfoRequestDto;
 import naeilmolae.domain.member.dto.request.WithdrawalReasonRequest;
 import naeilmolae.domain.member.dto.request.YouthMemberInfoUpdateDto;
-import naeilmolae.domain.member.dto.response.MemberIdResponseDto;
-import naeilmolae.domain.member.dto.response.MemberInfoResponseDto;
-import naeilmolae.domain.member.dto.response.MemberNumResponseDto;
-import naeilmolae.domain.member.dto.response.YouthMemberInfoResponseDto;
+import naeilmolae.domain.member.dto.response.*;
 import naeilmolae.domain.member.repository.MemberRepository;
 import naeilmolae.domain.member.repository.YouthMemberInfoRepository;
 import naeilmolae.domain.weather.domain.Grid;
@@ -292,6 +289,24 @@ class MemberControllerTest extends BaseTest {
         assertThat(result.getGender()).isEqualTo(Gender.MALE);
         assertThat(result.getProfileImage()).isEqualTo("https://example.com/profile.jpg");
         assertThat(result.getRole()).isEqualTo(Role.GUEST);
+    }
+
+    @Test
+    void 봉사자_정보_조회() {
+        String uriString = UriComponentsBuilder.fromUriString(PREFIX + "/info/helper").toUriString();
+
+        BaseResponse<HelperMemberInfoResponseDto> response = restTemplate.exchange(
+                uriString,
+                HttpMethod.GET,
+                new HttpEntity<>(getAuthHeaders(Role.HELPER)),
+                new ParameterizedTypeReference<BaseResponse<HelperMemberInfoResponseDto>>() {
+                }
+        ).getBody();
+
+        assertThat(response).isNotNull();
+        assertThat(response.getCode()).isEqualTo("COMMON200");
+        assertThat(response.getResult()).isNotNull();
+        System.out.println("response = " + response.getResult());
     }
 
     @Test

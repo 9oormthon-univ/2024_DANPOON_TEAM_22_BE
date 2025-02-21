@@ -1,10 +1,7 @@
 package naeilmolae.domain.member.service;
 
 import lombok.RequiredArgsConstructor;
-import naeilmolae.domain.member.domain.Member;
-import naeilmolae.domain.member.domain.MemberWithdrawalReason;
-import naeilmolae.domain.member.domain.Role;
-import naeilmolae.domain.member.domain.YouthMemberInfo;
+import naeilmolae.domain.member.domain.*;
 import naeilmolae.domain.member.dto.request.YouthMemberInfoUpdateDto;
 import naeilmolae.domain.member.dto.YouthMemberInfoDto;
 import naeilmolae.domain.member.dto.request.MemberInfoRequestDto;
@@ -14,6 +11,7 @@ import naeilmolae.domain.member.dto.response.MemberInfoResponseDto;
 import naeilmolae.domain.member.dto.response.MemberNumResponseDto;
 import naeilmolae.domain.member.dto.response.YouthMemberInfoResponseDto;
 import naeilmolae.domain.member.mapper.MemberMapper;
+import naeilmolae.domain.member.repository.HelperMemberInfoRepository;
 import naeilmolae.domain.member.repository.MemberRepository;
 import naeilmolae.domain.member.repository.MemberWithdrawalReasonRepository;
 import naeilmolae.domain.member.repository.YouthMemberInfoRepository;
@@ -153,6 +151,14 @@ public class MemberServiceImpl implements MemberService {
             throw new RestApiException(MemberErrorStatus.NOT_YOUTH);
         }
         return YouthMemberInfoResponseDto.from(youthMemberInfo);
+    }
+
+    @Override
+    public HelperMemberInfo getHelperMemberInfo(Member member) {
+        Member findMember = memberRepository.findByIdAndHasHelperInfo(member.getId())
+                .orElseThrow(() -> new RestApiException(MemberErrorStatus.NOT_HELPER));
+
+        return findMember.getHelperMemberInfo();
     }
 
     // 기본 정보 업데이트
