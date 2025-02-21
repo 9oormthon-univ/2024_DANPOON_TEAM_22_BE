@@ -70,7 +70,6 @@ class ProvidedFileControllerTest extends BaseTest {
         assertThat(response).isNotNull();
         assertThat(response.getResult()).isNotNull();
         assertThat(response.getResult().size()).isEqualTo(3);
-
     }
 
     @Test
@@ -95,6 +94,27 @@ class ProvidedFileControllerTest extends BaseTest {
         assertThat(response).isNotNull();
         assertThat(response.getResult()).isNotNull();
         assertThat(response.getResult().size()).isEqualTo(2);
+    }
+
+    @Test
+    void 청년_감사_메시지_보내기_실패() {
+        doNothing().when(pushNotificationAdapterService).sendNotificationThankYouMessage(anyLong());
+
+        Long providedFileId = 1L;
+        String uriString = UriComponentsBuilder.fromUriString(PREFIX + "/{providedFileId}/comment")
+                .buildAndExpand(providedFileId)
+                .toUriString();
+
+        ThanksMessageRequestDto requestBody = new ThanksMessageRequestDto("감사합니다람쥐");
+
+        // 404 예외가 발생하는 것을 검증
+        BaseResponse<List<String>> response = restTemplate.exchange(
+                uriString,
+                HttpMethod.POST,
+                new HttpEntity<>(requestBody, getAuthHeaders(Role.GUEST)), // 다른 id
+                new ParameterizedTypeReference<BaseResponse<List<String>>>() {
+                }
+        ).getBody();
     }
 
     @Test

@@ -21,9 +21,13 @@ public class PromptManager {
         return template.fillTemplate(
                 """
                 ## 명령 
-                주어진 문장이 특정 상황에 처한 사람에게 적절한 응원이나 표현인지 판단해 주고, 적절하다면 reason은 그냥 null로 줘도 돼.
-                적절하지 않다면 상황에 맞지 않은 응원이어서이면 reason에 0을 리턴, 듣기 거북한 표현이 있어서라면 1을 리턴해.
-                꼭 제시된 응답형식을 지켜.
+                주어진 문장이 특정 상황에 처한 사람에게 적절한 응원이나 표현인지 판단해줘.
+                적절한 응원이라면, 아래 형식으로 응답해:
+                {"is_proper": true, "reason": null}
+                상황에 맞지 않는 응원이라면, 아래 형식으로 응답해:
+                {"is_proper": false, "reason": 0}
+                듣기 거북한 표현이 포함되어 있다면, 아래 형식으로 응답해:
+                {"is_proper": false, "reason": 1}
                 ## 상황
                 \'%s\' 
                 ## 문장
@@ -40,9 +44,13 @@ public class PromptManager {
         return template.fillTemplate(
                 """
                 ## 명령 
-                문장2가 문장1을 따라 읽었는지 확인해줘. 맞다면 is_proper를 true로 reason을 null로, 아니라면 is_proper을 false로 리턴하고 reason을 0으로 리턴해.
-                만약에 욕설 및 불쾌한 표현이 포함되어있다면 reason에 1을 리턴하고 부적절한 상황이야. 
-                꼭 제시된 응답형식을 지켜.
+                문장2가 문장1을 따라 읽었는지 판단해줘. 문장2는 STT를 통해 변환된 문장이므로, 약간의 오차가 있을 수 있지만 발음을 고려하여 비교해야 해.
+                문장2가 문장1을 올바르게 따라 읽었다면, 아래 형식으로 응답해:
+                {"is_proper": true, "reason": null}
+                문장2가 문장1을 정확히 따라 읽지 않았다면, 아래 형식으로 응답해:
+                {"is_proper": false, "reason": 0}
+                문장2에 욕설이나 불쾌한 표현이 포함되어 있다면, 아래 형식으로 응답해:
+                {"is_proper": false, "reason": 1}
                 ## 문장1
                 \'%s\' 
                 ## 문장2

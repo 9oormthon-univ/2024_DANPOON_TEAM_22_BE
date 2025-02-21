@@ -69,8 +69,6 @@ public class ProvidedFileController {
             return ProvidedFileResponseDto.from(providedFile, alarm.getAlarmCategory(), memberInfoMap.get(providedFile.getConsumerId()));
         });
 
-
-
         return BaseResponse.onSuccess(responseDtos);
     }
 
