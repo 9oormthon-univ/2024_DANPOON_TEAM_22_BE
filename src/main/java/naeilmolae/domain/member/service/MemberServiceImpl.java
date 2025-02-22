@@ -169,6 +169,7 @@ public class MemberServiceImpl implements MemberService {
     // 역할에 따라 추가 정보 처리
     @Transactional
     public void handleRoleSpecificInfo(Member member, YouthMemberInfoDto request) {
+        member.changeRole(Role.YOUTH);
         if (member.getRole().equals(Role.YOUTH)) {
             // 청년 정보 처리
             YouthMemberInfo youthMemberInfo = member.getYouthMemberInfo();
@@ -181,6 +182,7 @@ public class MemberServiceImpl implements MemberService {
                 youthMemberInfo.setGridId(grid.getId());
 
                 member.setYouthMemberInfo(youthMemberInfo);
+
                 youthMemberInfoRepository.save(youthMemberInfo);
             } else {
                 // 청년 정보가 있으면 업데이트
