@@ -1,5 +1,6 @@
 package naeilmolae.domain.member.service;
 
+import com.amazonaws.ResetException;
 import lombok.RequiredArgsConstructor;
 import naeilmolae.domain.member.domain.*;
 import naeilmolae.domain.member.dto.request.YouthMemberInfoUpdateDto;
@@ -25,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -54,8 +56,10 @@ public class MemberServiceImpl implements MemberService {
     @Override
     @Transactional
     public MemberIdResponseDto signUpInfo(Member member, MemberInfoRequestDto request) {
+        Member findMember = memberRepository.findById(member.getId())
+                .orElseThrow(() -> new RestApiException(MemberErrorStatus.EMPTY_MEMBER));
 
-        if (member.getRole().equals(Role.HELPER)) {
+        if (findMember.getRole().equals(Role.HELPER)) {
             //나이가 성인이 아니면 예외처리 (만 19세가 아닌 성인이 기준)
             // 현재 연도 - 태어난 연도 < 19 이면 예외처리
             if (LocalDateTime.now().getYear() - request.birth().getYear() < 19) {
@@ -64,9 +68,9 @@ public class MemberServiceImpl implements MemberService {
         }
 
         // 기본 정보 업데이트
-        updateMemberBasicInfo(member, request);
+        updateMemberBasicInfo(findMember, request);
 
-        return new MemberIdResponseDto(saveEntity(member).getId());
+        return new MemberIdResponseDto(saveEntity(findMember).getId());
     }
 
     // 회원가입 함수 (청년 위치 정보 등록)
