@@ -131,14 +131,6 @@ public class MemberServiceImpl implements MemberService {
         youthMemberInfo.setSleepTime(request.getSleepTime());
         youthMemberInfo.setOutgoingTime(request.getOutgoingTime());
 
-        youthMemberInfo.setBreakfastAlarm(request.isBreakfastAlarm());
-        youthMemberInfo.setLunchAlarm(request.isLunchAlarm());
-        youthMemberInfo.setDinnerAlarm(request.isDinnerAlarm());
-        youthMemberInfo.setWakeUpAlarm(request.isWakeUpAlarm());
-        youthMemberInfo.setSleepAlarm(request.isSleepAlarm());
-        youthMemberInfo.setOutgoingAlarm(request.isOutgoingAlarm());
-
-
         return new MemberIdResponseDto(saveEntity(loginMember).getId());
     }
 

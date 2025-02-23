@@ -25,9 +25,6 @@ public class AlarmSettingController {
 
     private final AlarmSettingService alarmSettingService;
 
-    private final MemberService memberService;
-
-
     @Operation(summary = "청년 알림 설정 수정 API", description = "청년 알림 설정 수정 API")
     @PostMapping("/toggle/{alarmCategory}/{bool}")
     public void toggleAlarmSetting(@CurrentMember Member member, @PathVariable AlarmCategory alarmCategory, @PathVariable boolean bool) {

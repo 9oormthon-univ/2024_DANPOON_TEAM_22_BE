@@ -180,12 +180,6 @@ class MemberControllerTest extends BaseTest {
                 .lunch(LocalTime.of(4, 0))
                 .dinner(LocalTime.of(5, 0))
                 .outgoingTime(LocalTime.of(6, 0))
-                .wakeUpAlarm(true)
-                .sleepAlarm(true)
-                .breakfastAlarm(false)
-                .lunchAlarm(false)
-                .dinnerAlarm(false)
-                .outgoingAlarm(false)
                 .build();
 
         // when
