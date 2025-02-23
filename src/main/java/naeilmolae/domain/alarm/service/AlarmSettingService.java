@@ -26,9 +26,13 @@ import static naeilmolae.domain.pushnotification.domain.NotificationType.WELCOME
 public class AlarmSettingService {
     private final YouthMemberInfoRepository youthMemberInfoRepository;
     private final HelperMemberInfoRepository helperMemberInfoRepository;
+    private final MemberRepository memberRepository;
 
     public boolean updateAlarm(Member member, AlarmCategory alarmCategory, boolean alarm) {
-        YouthMemberInfo youthMemberInfo = member.getYouthMemberInfo();
+//        YouthMemberInfo youthMemberInfo = member.getYouthMemberInfo();
+        Member findMember = memberRepository.findByIdAndHasYouthInfo(member.getId())
+                .orElseThrow(() -> new RestApiException(MemberErrorStatus.NOT_HELPER));
+        YouthMemberInfo youthMemberInfo = findMember.getYouthMemberInfo();
         switch (alarmCategory) {
             case WAKE_UP:
                 youthMemberInfo.setWakeUpAlarm(alarm);

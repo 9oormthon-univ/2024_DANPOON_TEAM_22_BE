@@ -24,6 +24,9 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     @Query("SELECT m FROM Member m WHERE m.id = :memberId AND m.helperMemberInfo IS NOT NULL")
     Optional<Member> findByIdAndHasHelperInfo(@Param("memberId") Long memberId);
 
+    @Query("SELECT m FROM Member m WHERE m.id = :memberId AND m.youthMemberInfo IS NOT NULL")
+    Optional<Member> findByIdAndHasYouthInfo(@Param("memberId") Long memberId);
+
     List<Member> findByIdIn(List<Long> ids);
 
     Optional<Member> findByName(String name);
