@@ -27,7 +27,7 @@ spring:
           time_zone: Asia/Seoul
 
   kafka:
-    bootstrap-servers: localhost:9092  # Kafka 서버 주소
+    bootstrap-servers: localhost:9092,localhost:9093,localhost:9094
     consumer:
       properties:
         spring.json.value.default.type: naeilmolae.domain.voicefile.dto.response.AnalysisResponseDto

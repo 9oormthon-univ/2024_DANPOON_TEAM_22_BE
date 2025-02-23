@@ -44,7 +44,6 @@ public class YouthMemberInfo extends BaseEntity {
 
     private Double longitude; // 경도
 
-
     private Long gridId;
 
 

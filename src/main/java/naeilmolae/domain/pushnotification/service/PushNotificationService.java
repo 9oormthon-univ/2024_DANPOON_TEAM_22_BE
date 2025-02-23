@@ -29,7 +29,9 @@ public class PushNotificationService {
 
         // 알림 시간에 따라 알림 전략 실행
         for (Member member : youthMembers) {
-            notificationContext.executeStrategies(member, firebaseMessagingService, alarmService, now);
+            if (member.getFcmToken() != null && !member.getFcmToken().isEmpty()) {
+                notificationContext.executeStrategies(member, firebaseMessagingService, alarmService, now);
+            }
         }
     }
 

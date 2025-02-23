@@ -51,4 +51,5 @@ docker-compose-V1.yml
 **/logs
 
 **data.sql
+data**.sql
 /data

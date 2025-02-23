@@ -11,7 +11,7 @@ import naeilmolae.global.common.base.BaseEntity;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Weather extends BaseEntity {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne

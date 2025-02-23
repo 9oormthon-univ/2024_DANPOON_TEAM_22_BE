@@ -178,8 +178,8 @@ public class MemberServiceImpl implements MemberService {
                 youthMemberInfo = MemberMapper.toYouthMemberInfo(request);
 
                 // 위치 X, Y 좌표 저장
-                Grid grid = gridService.getGridCoordinates(youthMemberInfo.getLatitude(), youthMemberInfo.getLongitude());
-                youthMemberInfo.setGridId(grid.getId());
+//                Grid grid = gridService.getGridCoordinates(youthMemberInfo.getLatitude(), youthMemberInfo.getLongitude());
+//                youthMemberInfo.setGridId(grid.getId());
 
                 member.setYouthMemberInfo(youthMemberInfo);
 
