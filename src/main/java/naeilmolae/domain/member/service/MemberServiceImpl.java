@@ -1,6 +1,5 @@
 package naeilmolae.domain.member.service;
 
-import com.amazonaws.ResetException;
 import lombok.RequiredArgsConstructor;
 import naeilmolae.domain.member.domain.*;
 import naeilmolae.domain.member.dto.request.YouthMemberInfoUpdateDto;
@@ -17,8 +16,6 @@ import naeilmolae.domain.member.repository.MemberRepository;
 import naeilmolae.domain.member.repository.MemberWithdrawalReasonRepository;
 import naeilmolae.domain.member.repository.YouthMemberInfoRepository;
 import naeilmolae.domain.member.status.MemberErrorStatus;
-import naeilmolae.domain.weather.domain.Grid;
-import naeilmolae.domain.weather.service.GridService;
 import naeilmolae.global.common.exception.RestApiException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -26,7 +23,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -34,10 +30,10 @@ import java.util.Optional;
 public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
     private final YouthMemberInfoRepository youthMemberInfoRepository;
+    private final HelperMemberInfoRepository helperMemberInfoRepository;
     private final MemberWithdrawalReasonRepository memberWithdrawalReasonRepository;
 
     private final MemberRefreshTokenService refreshTokenService;
-    private final GridService gridService;
 
     @Override
     public Member findById(Long id) throws UsernameNotFoundException {
@@ -56,21 +52,24 @@ public class MemberServiceImpl implements MemberService {
     @Override
     @Transactional
     public MemberIdResponseDto signUpInfo(Member member, MemberInfoRequestDto request) {
-        Member findMember = memberRepository.findById(member.getId())
-                .orElseThrow(() -> new RestApiException(MemberErrorStatus.EMPTY_MEMBER));
+        Member findMember = findById(member.getId());
 
-        if (findMember.getRole().equals(Role.HELPER)) {
+        if (request.role().equals(Role.HELPER)) {
             //나이가 성인이 아니면 예외처리 (만 19세가 아닌 성인이 기준)
             // 현재 연도 - 태어난 연도 < 19 이면 예외처리
             if (LocalDateTime.now().getYear() - request.birth().getYear() < 19) {
                 throw new RestApiException(MemberErrorStatus.INVALID_HELPER_AGES);
             }
+
+            // 헬퍼 멤버 INFO 업데이트
+            HelperMemberInfo helperMemberInfo = helperMemberInfoRepository.save(new HelperMemberInfo(true, true));
+            findMember.registerHelperInfo(helperMemberInfo);
         }
 
         // 기본 정보 업데이트
         updateMemberBasicInfo(findMember, request);
 
-        return new MemberIdResponseDto(saveEntity(findMember).getId());
+        return new MemberIdResponseDto(findMember.getId());
     }
 
     // 회원가입 함수 (청년 위치 정보 등록)
@@ -94,8 +93,11 @@ public class MemberServiceImpl implements MemberService {
         // refreshToken 삭제
         refreshTokenService.deleteRefreshToken(loginMember);
 
-        // 멤버 soft delete
-        loginMember.delete();
+        // 멤버 계정 복구 로직이 생기기 전까지는 하드 딜리트
+        memberRepository.delete(loginMember);
+
+        // 멤버 soft delete 하기
+        // loginMember.delete();
 
         // 탈퇴 사유 저장
         request.reasonList()
@@ -123,17 +125,12 @@ public class MemberServiceImpl implements MemberService {
         Member loginMember = findById(member.getId());
         YouthMemberInfo youthMemberInfo = loginMember.getYouthMemberInfo();
 
-        if (youthMemberInfo == null) {
+        if (youthMemberInfo == null || !loginMember.getRole().equals(Role.YOUTH)) {
             throw new RestApiException(MemberErrorStatus.NOT_YOUTH);
         }
 
         // 청년 정보 업데이트
-        youthMemberInfo.setBreakfast(request.getBreakfast());
-        youthMemberInfo.setLunch(request.getLunch());
-        youthMemberInfo.setDinner(request.getDinner());
-        youthMemberInfo.setWakeUpTime(request.getWakeUpTime());
-        youthMemberInfo.setSleepTime(request.getSleepTime());
-        youthMemberInfo.setOutgoingTime(request.getOutgoingTime());
+        youthMemberInfo.updateYouthMemberInfoDto(request);
 
         return new MemberIdResponseDto(saveEntity(loginMember).getId());
     }

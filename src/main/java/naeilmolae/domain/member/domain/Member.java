@@ -67,7 +67,11 @@ public class  Member extends BaseEntity {
         this.clientId = clientId;
         this.birth = birth;
         this.deviceId = deviceId;
-        this.helperMemberInfo = new HelperMemberInfo();
+    }
+
+    // 조력자 정보 등록
+    public void registerHelperInfo(HelperMemberInfo helperMemberInfo) {
+        this.helperMemberInfo = helperMemberInfo;
     }
 
     // 널이나 빈 값이 아닌 경우에만 수정

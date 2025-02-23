@@ -23,6 +23,7 @@ public class MemberMapper {
     public static MemberLoginResponseDto toMemberLoginResponseDto(final Member member, TokenInfo tokenInfo, boolean isServiceMember, Role role) {
         return MemberLoginResponseDto.builder()
                 .memberId(member.getId())
+                .nickname(member.getName())
                 .accessToken(tokenInfo.accessToken())
                 .refreshToken(tokenInfo.refreshToken())
                 .isServiceMember(isServiceMember)

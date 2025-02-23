@@ -23,4 +23,9 @@ public class HelperMemberInfo extends BaseEntity {
     private boolean isWelcomeReminder = true;
     @Setter
     private boolean isThankYouMessage = true;
+
+    public HelperMemberInfo(boolean isWelcomeReminder, boolean isThankYouMessage) {
+        this.isWelcomeReminder = isWelcomeReminder;
+        this.isThankYouMessage = isThankYouMessage;
+    }
 }

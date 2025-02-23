@@ -13,6 +13,9 @@ public class MemberLoginResponseDto {
     @Schema(description = "회원 고유 ID", example = "12345")
     private Long memberId;
 
+    @Schema(description = "회원 닉네임", example = "나일몰래")
+    private String nickname;
+
     @Schema(description = "로그인 시 발급되는 JWT Access Token", example = "eyJhbGciOiJIUzI1NiIsInR...")
     private String accessToken;
 
