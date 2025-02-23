@@ -65,7 +65,10 @@ public class AlarmSettingService {
             throw new RestApiException(MemberErrorStatus.NOT_HELPER);
         }
 
-        HelperMemberInfo helperMemberInfo = member.getHelperMemberInfo();
+        Member findMember = memberRepository.findByIdAndHasHelperInfo(member.getId())
+                .orElseThrow();
+
+        HelperMemberInfo helperMemberInfo = findMember.getHelperMemberInfo();
         if(helperMemberInfo == null){
             throw new RestApiException(MemberErrorStatus.EMPTY_HELPER_INFO);
         }
