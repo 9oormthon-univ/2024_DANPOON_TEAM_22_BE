@@ -63,6 +63,8 @@ public class MemberMapper {
                 .breakfast(youthMemberInfo.getBreakfast())
                 .lunch(youthMemberInfo.getLunch())
                 .dinner(youthMemberInfo.getDinner())
+                .latitude(youthMemberInfo.getLatitude())
+                .longitude(youthMemberInfo.getLongitude())
                 .build();
     }
 
