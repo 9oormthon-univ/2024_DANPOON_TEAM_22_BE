@@ -24,7 +24,7 @@ public interface ProvidedFileRepository extends JpaRepository<ProvidedFile, Long
     @Query("""
             SELECT p 
             FROM ProvidedFile p 
-            JOIN FETCH p.thanksMessages 
+            LEFT JOIN FETCH p.thanksMessages 
             WHERE p.consumerId = :consumerId 
             AND p.id = :providedFileId""")
     Optional<ProvidedFile> findByConsumerId(Long consumerId, Long providedFileId);
