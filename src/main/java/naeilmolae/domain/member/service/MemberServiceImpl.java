@@ -132,6 +132,7 @@ public class MemberServiceImpl implements MemberService {
         // 청년 정보 업데이트
         youthMemberInfo.updateYouthMemberInfoDto(request);
 
+        member.setYouthMemberInfo(youthMemberInfo);
         youthMemberInfoRepository.save(youthMemberInfo);
 
         return new MemberIdResponseDto(saveEntity(loginMember).getId());
