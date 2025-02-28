@@ -76,11 +76,11 @@ public class MemberServiceImpl implements MemberService {
     @Override
     @Transactional
     public MemberIdResponseDto signUpYouth(Member member, YouthMemberInfoDto request) {
-
+        Member findMember = findById(member.getId());
         // 기본 정보 업데이트
-        handleRoleSpecificInfo(member, request);
+        handleRoleSpecificInfo(findMember, request);
 
-        return new MemberIdResponseDto(saveEntity(member).getId());
+        return new MemberIdResponseDto(saveEntity(findMember).getId());
     }
 
     // 회원 탈퇴 함수
@@ -169,10 +169,6 @@ public class MemberServiceImpl implements MemberService {
             if (youthMemberInfo == null) {
                 // 청년 정보가 없으면 새로 저장
                 youthMemberInfo = MemberMapper.toYouthMemberInfo(request);
-
-                // 위치 X, Y 좌표 저장
-//                Grid grid = gridService.getGridCoordinates(youthMemberInfo.getLatitude(), youthMemberInfo.getLongitude());
-//                youthMemberInfo.setGridId(grid.getId());
 
                 member.setYouthMemberInfo(youthMemberInfo);
 

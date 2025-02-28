@@ -20,19 +20,26 @@ public class PromptManager {
         PromptTemplate template = new PromptTemplate();
         return template.fillTemplate(
                 """
-                ## 명령 
-                주어진 문장이 특정 상황에 처한 사람에게 적절한 응원이나 표현인지 판단해줘.
-                적절한 응원이라면, 아래 형식으로 응답해:
-                {"is_proper": true, "reason": null}
-                상황에 맞지 않는 응원이라면, 아래 형식으로 응답해:
-                {"is_proper": false, "reason": 0}
-                듣기 거북한 표현이 포함되어 있다면, 아래 형식으로 응답해:
-                {"is_proper": false, "reason": 1}
-                ## 상황
-                \'%s\' 
-                ## 문장
-                \'%s\' 
-                """.formatted(situation, statement),
+               ## 명령 
+               주어진 문장이 특정 상황에 처한 사람에게 적절한 응원이나 표현인지 판단해줘.
+               **상황과 약간이라도 관련 있으면** 적절한 응원으로 간주해.
+               적절한 응원이라면, 아래 형식으로 응답해:
+               {"is_proper": true, "reason": null}
+
+               **문장이 상황과 다소 다르지만 긍정적인 의미라면**, 부적절하지 않은 것으로 판단해.  
+               그래도 다소 어긋난 경우 아래 형식으로 응답해:
+               {"is_proper": false, "reason": 0}
+
+               **문장에 욕설이나 듣기 거북한 표현이 포함되어 있다면**, 아래 형식으로 응답해:
+               {"is_proper": false, "reason": 1}
+
+               ## 상황
+               '%s' 
+
+               ## 문장
+               '%s' 
+
+               """.formatted(situation, statement),
                 """
                 {"is_proper":<boolean>, "reason": <integer or null>}
                 """
