@@ -56,7 +56,7 @@ public class SecurityConfig {
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html", "/webjars/**").permitAll()
-                        .requestMatchers("/api/v1/auth/login/**").permitAll()
+                        .requestMatchers("/api/v1/auth/login/**", "/api/v1/auth/token/refresh").permitAll()
                         .requestMatchers("/api/v1/chatgpt/**").permitAll()
                         .requestMatchers("/h2-console/**", "/h2-console").permitAll()
                         .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
