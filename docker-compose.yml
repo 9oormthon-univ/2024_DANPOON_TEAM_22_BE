@@ -10,6 +10,7 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: ssw030422123!
       MYSQL_DATABASE: spring-test
+      TZ: Asia/Seoul
     volumes:
       - mysql_data:/var/lib/mysql
 
