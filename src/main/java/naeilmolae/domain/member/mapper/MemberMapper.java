@@ -58,15 +58,16 @@ public class MemberMapper {
 
     public static YouthMemberInfoDto toYouthMemberInfoDto(YouthMemberInfo youthMemberInfo) {
         return YouthMemberInfoDto.builder()
-                .wakeUpTime(youthMemberInfo.getWakeUpTime())
-                .sleepTime(youthMemberInfo.getSleepTime())
-                .breakfast(youthMemberInfo.getBreakfast())
-                .lunch(youthMemberInfo.getLunch())
-                .dinner(youthMemberInfo.getDinner())
-                .latitude(youthMemberInfo.getLatitude())
-                .longitude(youthMemberInfo.getLongitude())
+                .wakeUpTime(youthMemberInfo.getWakeUpTime() != null ? youthMemberInfo.getWakeUpTime() : null)
+                .sleepTime(youthMemberInfo.getSleepTime() != null ? youthMemberInfo.getSleepTime() : null)
+                .breakfast(youthMemberInfo.getBreakfast() != null ? youthMemberInfo.getBreakfast() : null)
+                .lunch(youthMemberInfo.getLunch() != null ? youthMemberInfo.getLunch() : null)
+                .dinner(youthMemberInfo.getDinner() != null ? youthMemberInfo.getDinner() : null)
+                .latitude(youthMemberInfo.getLatitude() != null ? youthMemberInfo.getLatitude() : null)
+                .longitude(youthMemberInfo.getLongitude() != null ? youthMemberInfo.getLongitude() : null)
                 .build();
     }
+
 
     public static MemberInfoResponseDto toMemberInfoResponseDto(Member member) {
         return MemberInfoResponseDto.builder()
