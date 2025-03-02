@@ -9,6 +9,7 @@ import naeilmolae.domain.member.strategy.context.LoginContext;
 import naeilmolae.global.common.exception.RestApiException;
 import naeilmolae.global.common.exception.code.status.AuthErrorStatus;
 import naeilmolae.global.config.security.jwt.JwtProvider;
+import naeilmolae.global.config.security.jwt.TokenInfo;
 import naeilmolae.global.config.security.jwt.TokenType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,9 +49,11 @@ public class MemberAuthServiceImpl implements MemberAuthService {
         Member member = memberRepository.findByRefreshToken(refreshToken)
                 .orElseThrow(() -> new RestApiException(AuthErrorStatus.INVALID_REFRESH_TOKEN));
 
-
+        // 새로운 토큰
         return new MemberGenerateTokenResponseDto(
                 jwtTokenProvider.generateToken(
+                        member.getId().toString(), member.getRole().toString(), TokenType.REFRESH)
+                ,jwtTokenProvider.generateToken(
                         member.getId().toString(), member.getRole().toString(), TokenType.ACCESS)
         );
     }
