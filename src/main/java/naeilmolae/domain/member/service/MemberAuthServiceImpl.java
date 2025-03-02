@@ -50,11 +50,16 @@ public class MemberAuthServiceImpl implements MemberAuthService {
                 .orElseThrow(() -> new RestApiException(AuthErrorStatus.INVALID_REFRESH_TOKEN));
 
         // 새로운 토큰
+        String newAccessToken = jwtTokenProvider.generateToken(
+                member.getId().toString(), member.getRole().toString(), TokenType.ACCESS);
+        String newRefreshToken = jwtTokenProvider.generateToken(
+                member.getId().toString(), member.getRole().toString(), TokenType.REFRESH);
+
+        // 새로운 토큰 저장
+        refreshTokenService.saveRefreshToken(newRefreshToken, member);
+
         return new MemberGenerateTokenResponseDto(
-                jwtTokenProvider.generateToken(
-                        member.getId().toString(), member.getRole().toString(), TokenType.REFRESH)
-                ,jwtTokenProvider.generateToken(
-                        member.getId().toString(), member.getRole().toString(), TokenType.ACCESS)
+                newRefreshToken, newAccessToken
         );
     }
 
