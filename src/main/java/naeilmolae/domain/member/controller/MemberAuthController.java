@@ -40,9 +40,8 @@ public class MemberAuthController {
             @ApiResponse(responseCode = "AUTH006", description = "유효하지 않는 RefreshToken일 경우 발생")
     })
     @GetMapping("/token/refresh")
-    public BaseResponse<MemberGenerateTokenResponseDto> regenerateToken(@CurrentMember Member member,
-                                                                        @RequestHeader(value = "refreshToken") String refreshToken) {
-        return BaseResponse.onSuccess(memberAuthService.generateNewAccessToken(refreshToken, member));
+    public BaseResponse<MemberGenerateTokenResponseDto> regenerateToken(@RequestHeader(value = "refreshToken") String refreshToken) {
+        return BaseResponse.onSuccess(memberAuthService.generateNewAccessToken(refreshToken));
     }
 
     @Operation(summary = "로그아웃 API", description = "해당 유저의 refreshToken을 삭제하는 API입니다.")

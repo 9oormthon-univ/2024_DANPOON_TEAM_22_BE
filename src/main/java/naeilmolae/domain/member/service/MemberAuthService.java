@@ -11,7 +11,7 @@ public interface MemberAuthService {
     // 소셜 로그인
     MemberLoginResponseDto socialLogin(final String accessToken, LoginType loginType);
     // 새로운 액세스 토큰 발급
-    MemberGenerateTokenResponseDto generateNewAccessToken(String refreshToken, Member member);
+    MemberGenerateTokenResponseDto generateNewAccessToken(String refreshToken);
     // 로그아웃
     MemberIdResponseDto logout(Member member);
 

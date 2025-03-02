@@ -31,6 +31,8 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     Optional<Member> findByName(String name);
 
+    Optional<Member> findByRefreshToken(String refreshToken);
+
     /**
      * 제공된 파일의 ID 목록을 받아 해당 파일을 제공한 회원 정보를 조회
      * @param providedFileIds

@@ -38,24 +38,20 @@ public class MemberAuthServiceImpl implements MemberAuthService {
     // 새로운 액세스 토큰 발급 함수
     @Override
     @Transactional
-    public MemberGenerateTokenResponseDto generateNewAccessToken(String refreshToken, Member member) {
-
-        Member loginMember = memberService.findById(member.getId());
+    public MemberGenerateTokenResponseDto generateNewAccessToken(String refreshToken) {
 
         // 만료된 refreshToken인지 확인
         if (!jwtTokenProvider.validateToken(refreshToken))
             throw new RestApiException(AuthErrorStatus.EXPIRED_REFRESH_TOKEN);
 
-        //편의상 refreshToken을 DB에 저장 후 비교하는 방식으로 감 (비추천)
-        String savedRefreshToken = loginMember.getRefreshToken();
+        //편의상 refreshToken으로 회원을 조회하는 방식으로 감 (무조건 고쳐야 함)
+        Member member = memberRepository.findByRefreshToken(refreshToken)
+                .orElseThrow(() -> new RestApiException(AuthErrorStatus.INVALID_REFRESH_TOKEN));
 
-        // 디비에 저장된 refreshToken과 동일하지 않다면 유효하지 않음
-        if (!refreshToken.equals(savedRefreshToken))
-            throw new RestApiException(AuthErrorStatus.INVALID_REFRESH_TOKEN);
 
         return new MemberGenerateTokenResponseDto(
                 jwtTokenProvider.generateToken(
-                        loginMember.getId().toString(), member.getRole().toString(), TokenType.ACCESS)
+                        member.getId().toString(), member.getRole().toString(), TokenType.ACCESS)
         );
     }
 
