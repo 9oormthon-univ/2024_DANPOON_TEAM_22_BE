@@ -8,6 +8,7 @@ import naeilmolae.domain.member.domain.Role;
 import naeilmolae.domain.member.dto.response.MemberLoginResponseDto;
 import naeilmolae.domain.member.mapper.MemberMapper;
 import naeilmolae.domain.member.repository.MemberRepository;
+import naeilmolae.domain.member.service.MemberRefreshTokenService;
 import naeilmolae.domain.member.service.MemberService;
 import naeilmolae.domain.member.strategy.LoginStrategy;
 import naeilmolae.global.config.security.jwt.JwtProvider;
@@ -25,6 +26,7 @@ public class KakaoLoginStrategy implements LoginStrategy {
     private final MemberService memberService;
     private final JwtProvider jwtProvider;
     private final KakaoMemberClient kakaoMemberClient;
+    private final MemberRefreshTokenService memberRefreshTokenService;
 
     @Override
     public MemberLoginResponseDto login(String accessToken) {
@@ -52,7 +54,12 @@ public class KakaoLoginStrategy implements LoginStrategy {
     }
 
     private TokenInfo generateToken(Member member) {
-        return jwtProvider.generateToken(member.getId().toString(), member.getRole().toString());
+
+        TokenInfo tokenInfo = jwtProvider.generateToken(member.getId().toString(), member.getRole().toString());
+
+        memberRefreshTokenService.saveRefreshToken(tokenInfo.refreshToken(), member);
+
+        return tokenInfo;
     }
 }
 
