@@ -279,7 +279,7 @@ class MemberControllerTest extends BaseTest {
         MemberInfoResponseDto result = response.getResult();
         assertThat(result).isNotNull();
 
-        assertThat(result.getName()).isEqualTo("게스트");
+        assertThat(result.getNickname()).isEqualTo("게스트");
         assertThat(result.getGender()).isEqualTo(Gender.MALE);
         assertThat(result.getProfileImage()).isEqualTo("https://example.com/profile.jpg");
         assertThat(result.getRole()).isEqualTo(Role.GUEST);
