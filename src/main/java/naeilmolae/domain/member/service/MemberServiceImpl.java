@@ -185,15 +185,13 @@ public class MemberServiceImpl implements MemberService {
 
     public MemberInfoResponseDto getMemberInfo(Member member) {
         Member loginMember = findById(member.getId());
-        // 청년인 경우 청년 정보도 함께 반환
-        if (loginMember.getRole().equals(Role.YOUTH)) {
-            return MemberMapper.toMemberInfoResponseDto(
-                    loginMember,
-                    MemberMapper.toYouthMemberInfoDto(loginMember.getYouthMemberInfo())
-            );
-        }
-        // 청년이 아닌 경우(조력자)
-        return MemberMapper.toMemberInfoResponseDto(loginMember);
+        // loginMember.getYouthMemberInfo()가 존재하면 함께 반환
+        return loginMember.getYouthMemberInfo() != null
+                ? MemberMapper.toMemberInfoResponseDto(
+                loginMember,
+                MemberMapper.toYouthMemberInfoDto(loginMember.getYouthMemberInfo())
+        )
+                : MemberMapper.toMemberInfoResponseDto(loginMember);
     }
 
     @Override
