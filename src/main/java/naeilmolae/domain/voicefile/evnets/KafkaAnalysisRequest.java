@@ -41,7 +41,6 @@ public class KafkaAnalysisRequest implements VoiceFileEventListener {
         );
 
         boolean sent = streamBridge.send(topic, MessageBuilder.withPayload(analysisRequestDto)
-                .setHeader("requiredResponseType", AnalysisResponseDto.class.getName())
                 .build());
 
         if (sent) {
