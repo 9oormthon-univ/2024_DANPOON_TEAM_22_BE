@@ -23,7 +23,7 @@ public class SqsAnalysisResponse {
     private final ChatGptService chatGptService;
 
     @SqsListener("${kafka.topic.analysis.response}")
-    public void handleAnalysisResponse(@Payload AnalysisResponseDto analysisResponseDto) {
+    public void analysisResponseConsumer(@Payload AnalysisResponseDto analysisResponseDto) {
         // 파일 조회
         Long voiceFileId = analysisResponseDto.voiceFileId();
         VoiceFile voiceFile = voiceFileService.findById(voiceFileId);
