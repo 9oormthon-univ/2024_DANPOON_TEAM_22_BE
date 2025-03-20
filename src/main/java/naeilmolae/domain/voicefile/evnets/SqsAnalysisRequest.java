@@ -1,29 +1,27 @@
 package naeilmolae.domain.voicefile.evnets;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import naeilmolae.domain.voicefile.domain.VoiceFile;
 import naeilmolae.domain.voicefile.dto.request.AnalysisRequestDto;
 import naeilmolae.domain.voicefile.service.VoiceFileService;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cloud.stream.function.StreamBridge;
+import org.springframework.cloud.aws.messaging.core.QueueMessagingTemplate;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.EventListener;
-import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
-@Profile("local")
-public class KafkaAnalysisRequest implements VoiceFileEventListener {
-
+@Profile("prod")
+public class SqsAnalysisRequest implements VoiceFileEventListener{
     private final VoiceFileService voiceFileService;
-    private final StreamBridge streamBridge;
+    private final QueueMessagingTemplate queueMessagingTemplate;
 
     @Value("${kafka.topic.analysis.request}")
-    private String topic;
+    private String queueName;
 
     @Override
     @EventListener
@@ -39,13 +37,11 @@ public class KafkaAnalysisRequest implements VoiceFileEventListener {
                 event.content()
         );
 
-        boolean sent = streamBridge.send(topic, MessageBuilder.withPayload(analysisRequestDto)
-                .build());
-
-        if (sent) {
-            log.info("Sent message via StreamBridge: {}", analysisRequestDto);
-        } else {
-            log.error("Failed to send message via StreamBridge");
+        try {
+            queueMessagingTemplate.convertAndSend(queueName, analysisRequestDto);
+            log.info("Sent message via SQS: {}", analysisRequestDto);
+        } catch (Exception e) {
+            log.error("Failed to send message via SQS", e);
         }
     }
 }

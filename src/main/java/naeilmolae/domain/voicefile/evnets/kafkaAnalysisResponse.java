@@ -22,7 +22,7 @@ import java.util.function.Consumer;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-@Profile("!prod")
+@Profile("local")
 public class kafkaAnalysisResponse {
 
     private final VoiceFileService voiceFileService;
