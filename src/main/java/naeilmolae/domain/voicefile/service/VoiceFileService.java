@@ -69,8 +69,8 @@ public class VoiceFileService {
 
     // 분석 결과 저장
     @Transactional
-    public void saveResult(Long voiceFileId, AnalysisResponseDto analysisResponseDto) {
-        VoiceFile voiceFile = voiceFileRepository.findById(voiceFileId)
+    public void saveResult(AnalysisResponseDto analysisResponseDto) {
+        VoiceFile voiceFile = voiceFileRepository.findById(analysisResponseDto.voiceFileId())
                 .orElseThrow();
 
         voiceFile.saveResult(AnalysisResultStatus.fromString(analysisResponseDto.analysisResultStatus()),

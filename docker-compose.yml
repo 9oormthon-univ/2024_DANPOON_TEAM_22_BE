@@ -17,31 +17,31 @@ services:
       - kafka_network
 
   kafka:
-    container_name: kafka
+    container_name: morae_kafka
     image: bitnami/kafka:latest
     environment:
-      # KRaft 모드 활성화 (컨트롤러 및 브로커 역할 모두 수행)
       KAFKA_CFG_PROCESS_ROLES: "broker,controller"
-      # 노드 식별자 (각 브로커마다 고유해야 함)
       KAFKA_CFG_NODE_ID: 1
-      # 컨트롤러 쿼럼 구성 (형식: "<노드ID>@<호스트>:<컨트롤러 포트>")
       KAFKA_CFG_CONTROLLER_QUORUM_VOTERS: "1@kafka:9093"
-      # 브로커와 컨트롤러가 수신할 리스너 구성
-      KAFKA_CFG_LISTENERS: "PLAINTEXT://:9092,CONTROLLER://:9093"
-      # 클라이언트에 노출할 리스너 주소 (호스트 IP 또는 도메인으로 변경 가능)
-      KAFKA_CFG_ADVERTISED_LISTENERS: "PLAINTEXT://localhost:9092"
-      # 컨트롤러 전용 리스너 이름 지정
+
+      KAFKA_CFG_LISTENERS: "INTERNAL://:9092,CONTROLLER://:9093,EXTERNAL://:9094"
+      KAFKA_CFG_ADVERTISED_LISTENERS: "INTERNAL://localhost:9092,CONTROLLER://localhost:9093,EXTERNAL://kafka:9094"
+      KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: "INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT,CONTROLLER:PLAINTEXT"
+
+      KAFKA_CFG_INTER_BROKER_LISTENER_NAME: "INTERNAL"
       KAFKA_CFG_CONTROLLER_LISTENER_NAMES: "CONTROLLER"
-      # 주키퍼 없이도 토픽 자동 생성 허용 (선택 사항)
       KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE: "true"
-      # 단순 PLAINTEXT 연결 허용
       ALLOW_PLAINTEXT_LISTENER: "yes"
     ports:
       - "9092:9092"
+      - "9093:9093"
+      - "9094:9094"
+    networks:
+      - kafka_network
 
 volumes:
   mysql_data:
 
 networks:
   kafka_network:
-    driver: bridge
+    external: true
