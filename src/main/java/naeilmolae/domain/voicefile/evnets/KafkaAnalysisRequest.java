@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-@Profile("local")
+@Profile("!prod")
 public class KafkaAnalysisRequest implements VoiceFileEventListener {
 
     private final VoiceFileService voiceFileService;

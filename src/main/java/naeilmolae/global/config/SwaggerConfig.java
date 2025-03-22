@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Profile;
 @Configuration
 public class SwaggerConfig {
 
-    @Profile("dev")
+    @Profile("local")
     @Bean
     public OpenAPI openAPI() {
 
@@ -35,7 +35,7 @@ public class SwaggerConfig {
                 .addServersItem(new Server().url("https://api.naeilmorae.co.kr").description("Production Server"));
     }
 
-    @Profile("local")
+    @Profile("dev")
     @Bean
     public OpenAPI openAPI_dev() {
 
