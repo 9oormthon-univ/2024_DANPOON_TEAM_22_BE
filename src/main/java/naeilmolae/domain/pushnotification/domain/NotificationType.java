@@ -1,6 +1,5 @@
 package naeilmolae.domain.pushnotification.domain;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
