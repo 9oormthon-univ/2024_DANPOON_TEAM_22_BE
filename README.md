@@ -1,6 +1,12 @@
 # 2024_DANPOON_TEAM_22_BE
 내일 모래 - 사람의 목소리로 자립 준비 청년의 일상을 밝히는 서비스 
 
+> **배포링크**  
+> App Store : https://apps.apple.com/kr/app/%EB%82%B4%EC%9D%BC%EB%AA%A8%EB%9E%98/id6744867439  
+> Google Play Store : https://play.google.com/store/apps/details?id=com.jeong.naeilmorae&amp;pcampaignid=web_share&pli=1
+
+_내일모래 서버팀은 구름톤 종료 후 Sercret ORG에서 개발 진행중입니다!_
+
 ## 🏝️ 서비스 설명 🏝️
 ***내일모래’는 사람의 목소리로 자립 준비 청년의 일상을 밝히는 서비스 입니다.***
 
